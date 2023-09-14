@@ -20,7 +20,7 @@ public class ProyectoIntegrador_Equipo10 {
 
     public static void main(String[] args) {
         
-        String Archivo = ("P1ASM.asm.txt"); //Variable auxiliar para leer el archivo
+        String Archivo = ("P1ASM.asm"); //Variable auxiliar para leer el archivo
     
         //Leer el archivo P1ASM.asm
         try { //Leer archivo
@@ -108,7 +108,7 @@ public class ProyectoIntegrador_Equipo10 {
                             Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
 
                             if (!matcher.matches()) { // Verificar si la palabra no cumple con el patrón
-                               System.out.println("Error: La palabra '" + Codop + "' no comienza con una letra en mayúscula o minúscula."); //Si no cumple el patron entonces manda un mensaje de error
+                               System.out.println("Error: La palabra '" + Codop + "' Error"); //Si no cumple el patron entonces manda un mensaje de error
                             } //Fin de if       
                         } //Fin de else if
                         
