@@ -10,7 +10,7 @@ Proyecto Integrador | Parte 1
 
 package proyectointegrador_equipo10;
 
-//Librerias
+//Libreria
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.regex.Matcher;
