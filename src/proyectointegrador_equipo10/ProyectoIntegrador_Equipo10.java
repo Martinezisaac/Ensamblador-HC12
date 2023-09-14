@@ -94,36 +94,37 @@ public class ProyectoIntegrador_Equipo10 {
                         // Verificar si se encontraron caracteres fuera del rango
                         if (matcher1.find()) {
                         System.out.println("Error: La palabra '" + Codop + "' contiene caracteres fuera del rango ASCII .");
-                    }*/
+                        }*/
                         
                         //Las variables ya estan inicializadas en null, por lo tanto siempre entra a la condicion
+                        //Validacion CODOP
                         else if(Codop == null) { //Si el codigo operando es igual a null                        
-                         Codop = Palabra; //La palabra identificada se guardara en el String Codop
-                        
-                         
-                    // Validar que la palabra comience con una letra en mayúscula o minúscula
-                    // puede tener hasta 4 caracteres adicionales (que pueden ser letras, números u otros caracteres).
-                    Pattern patron = Pattern.compile("[a-zA-Z][a-zA-Z0-9]{0,4}.");
-                    // Crear un Matcher para verificar si Palabra cumple con el patrón
-                    Matcher matcher = patron.matcher(Palabra);
-                    // Verificar si la palabra no cumple con el patrón
-                    if (!matcher.matches()) {
-                        System.out.println("Error: La palabra '" + Codop + "' no comienza con una letra en mayúscula o minúscula.");
-                    }        
+                            Codop = Palabra; //La palabra identificada se guardara en el String Codop
+
+                            //Validar que la palabra comience con una letra en mayúscula o minúscula
+                            //Su longitud maxima es de 5 caracteres
+                            //Cualquier otro caracter es un error
+                            Pattern patron = Pattern.compile("[a-zA-Z.]{0,5}+$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 5 caracteres                 
+                            Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
+
+                            if (!matcher.matches()) { // Verificar si la palabra no cumple con el patrón
+                               System.out.println("Error: La palabra '" + Codop + "' no comienza con una letra en mayúscula o minúscula."); //Si no cumple el patron entonces manda un mensaje de error
+                            } //Fin de if       
                         } //Fin de else if
-                           
                         
+                        //Validacion Operando
+                        //Pueden comenzar con cualquier caracter
+                        //Pueden tener cualquier longitud
                         else if(Operando == null) { //Si el operando es igual a null
-                            Operando = Palabra; //La palabra identificada se guardara en el String Operando
-                        } //Fin de else if                       
-                    } //Fin de for                                         
-                    
+                                Operando = Palabra; //La palabra identificada se guardara en el String Operando
+                            } //Fin de else if                       
+                        } //Fin de for                                         
                     
                        // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
                        if (Etiqueta != null && (Etiqueta.contains(" ") || Etiqueta.contains("\t"))) {
-                           System.out.println("Error: La etiqueta contiene espacios en blanco o tabuladores.");
+                           System.out.println("Error: La etiqueta contiene espacios en blanco o tabuladores");
                            Etiqueta = null; // Restablecer etiqueta si es inválida
-                       }
+                       } //Fin de if
                     
                     //Etiqueta
                     //CODOP                   
