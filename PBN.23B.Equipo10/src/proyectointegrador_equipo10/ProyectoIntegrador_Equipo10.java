@@ -143,4 +143,4 @@ public class ProyectoIntegrador_Equipo10 {
         } //Fin de catch
         
     } //Fin de main    
-} //Fin de la clase
+} //Fin de la clase //Github ya funciona :)
