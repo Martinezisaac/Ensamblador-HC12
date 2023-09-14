@@ -30,13 +30,11 @@ public class ProyectoIntegrador_Equipo10 {
             //Guardar cada linea en la variable Linea
             while((Linea = Read.readLine()) != null) {
                 
-                
                 //Inicializar Variables
                 String Etiqueta = null;
                 String Codop = null;
                 String Operando = null;
-                String Comentario = null;
-                
+                String Comentario = null;       
                 
                 Linea = Linea.trim();
                 //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
@@ -45,17 +43,16 @@ public class ProyectoIntegrador_Equipo10 {
                 if(Linea.isEmpty()) { //Si la linea esta vacia
                     continue; //Continuar con las demas lineas
                 }//Fin de if 
-               
-                //Me quede aqui
                 
                // Validar si es comentario
-              else if (Linea.startsWith(";")) { // Si la línea empieza con ;
-              if (!Linea.matches("^;.{0,80}$")) { // Verificar que después del ";" pueda tener hasta 80 caracteres
-              System.out.println("Error: Caracteres excedidos despues del';'");
-              } else {
-              System.out.println("COMENTARIO \n"); // Escribir comentario
-                }
-                    } // Fin de else if
+                else if (Linea.startsWith(";")) { // Si la línea empieza con ;
+                    if (!Linea.matches("^;.{0,80}$")) { // Verificar que después del ";" pueda tener hasta 80 caracteres
+                        System.out.println("Error de comentario");
+                    } //Fin de if 
+                    else { //Entonces hay menos de 80 caracteres 
+                        System.out.println("COMENTARIO \n"); // Escribir comentario
+                    } //Fin de else 
+                } // Fin de else if
               
                 //Valifacion para terminar el archivo
                 else if(Linea.equalsIgnoreCase("END")) {//Si la linea termina en "END", entonces deja de leer el archivo
@@ -63,12 +60,9 @@ public class ProyectoIntegrador_Equipo10 {
                     System.out.println("ETIQUETA = null");
                     System.out.println("CODOP = END");
                     System.out.println("OPERANDO = null");
-            //Esta validacion puede mejorar...
                     Read.close(); // Funcion para cerrar el archivo de lectura
                     break; //El break indica el fin del ciclo 
                 } //Fin de else if
-                
-                
                 
                 //Leer palabras 
                 else {
@@ -84,32 +78,30 @@ public class ProyectoIntegrador_Equipo10 {
                         //Validar Etiqueta
                         if(Palabra.endsWith(":")) { //Validacion para etiqueta          
                             Etiqueta = Palabra; //La palabra identificada se guardara en el String Etiqueta
-                        
-                            //Validador de longitud maximo 8 caracteres
-                            if (Etiqueta.length() >= 8) {
+                                                   
+                            if (Etiqueta.length() >= 8) { //Validador de longitud maximo 8 caracteres
                                 System.out.println("Error: La etiqueta '" + Etiqueta + "' excede la longitud máxima de 8 caracteres.");
                                 Etiqueta = null; // Restablecer etiqueta solo si excede la longitud máxima
-                            }
-                                           
+                            } //Fin de if            
                         } //Fin de if
                         
                         //cualquier otro caracter representado es un error
-                    // Verificar si la palabra contiene algún carácter fuera del rango ASCII 59-126
-                    //que no sea 59,58,,, y 33
-                    /*Pattern patron1 = Pattern.compile("[^#-#] [^&-,][^/-/][^<-?][^@-@]");
+                        // Verificar si la palabra contiene algún carácter fuera del rango ASCII 59-126
+                        //que no sea 59,58,,, y 33
+                        /*Pattern patron1 = Pattern.compile("[^#-#] [^&-,][^/-/][^<-?][^@-@]");
                         Matcher matcher1 = patron1.matcher(Palabra);
 
                         // Verificar si se encontraron caracteres fuera del rango
                         if (matcher1.find()) {
-                            System.out.println("Error: La palabra '" + Codop + "' contiene caracteres fuera del rango ASCII .");
-    }*/
+                        System.out.println("Error: La palabra '" + Codop + "' contiene caracteres fuera del rango ASCII .");
+                    }*/
                         
                         //Las variables ya estan inicializadas en null, por lo tanto siempre entra a la condicion
                         else if(Codop == null) { //Si el codigo operando es igual a null                        
                          Codop = Palabra; //La palabra identificada se guardara en el String Codop
                         
                          
-                     // Validar que la palabra comience con una letra en mayúscula o minúscula
+                    // Validar que la palabra comience con una letra en mayúscula o minúscula
                     // puede tener hasta 4 caracteres adicionales (que pueden ser letras, números u otros caracteres).
                     Pattern patron = Pattern.compile("[a-zA-Z][a-zA-Z0-9]{0,4}.");
                     // Crear un Matcher para verificar si Palabra cumple con el patrón
