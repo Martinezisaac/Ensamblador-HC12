@@ -79,7 +79,7 @@ public class ProyectoIntegrador_Equipo10 {
                         if(Palabra.endsWith(":")) { //Validacion para etiqueta          
                             Etiqueta = Palabra; //La palabra identificada se guardara en el String Etiqueta
                                                    
-                            if (Etiqueta.length() >= 8) { //Validador de longitud maximo 8 caracteres
+                            if (Etiqueta.length() >= 8 || cracteretq(Etiqueta) != true && valespacios(Etiqueta) != true) { //Validador de longitud maximo 8 caracteres
                                 System.out.println("Error: La etiqueta '" + Etiqueta + "' excede la longitud máxima de 8 caracteres.");
                                 Etiqueta = null; // Restablecer etiqueta solo si excede la longitud máxima
                             } //Fin de if            
@@ -107,7 +107,7 @@ public class ProyectoIntegrador_Equipo10 {
                             Pattern patron = Pattern.compile("[a-zA-Z.]{0,5}+$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 5 caracteres                 
                             Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
 
-                            if (!matcher.matches()) { // Verificar si la palabra no cumple con el patrón
+                            if (!matcher.matches() && codops(Codop) != true) { // Verificar si la palabra no cumple con el patrón
                                System.out.println("Error: La palabra '" + Codop + "' Error"); //Si no cumple el patron entonces manda un mensaje de error
                             } //Fin de if       
                         } //Fin de else if
@@ -142,5 +142,37 @@ public class ProyectoIntegrador_Equipo10 {
             System.out.println("Error " + e.getMessage()); //Mensaje de error
         } //Fin de catch
         
-    } //Fin de main    
+    } //Fin de main 
+    static boolean valespacios(String y){
+        String cet2 = ":\t\s";//Caracteres permitidos en la comparacion.
+        for(int i=0; i < y.length();i++){//Recorre la cadena y, que se ingresa a la funcion. 
+            char vals = y.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+            if(cet2.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet2.
+                return false;
+            }
+        }
+        return true;
+    }//Fin vlaespacios
+    
+    static boolean cracteretq(String x){
+        String cet1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:_";//Caracteres permitidos en la comparacion.
+        String etqupper = x.toUpperCase();//Convierte la variable en mayusculas para la comparacion.
+        for(int i=0; i < etqupper.length(); i++){//Recorre la cadena x, que se ingresa a la funcion.
+            char charetq = etqupper.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+            if(cet1.indexOf(charetq) == -1){//Se revisa si los caracteres si estan en cet1.
+                return false;
+            }
+        }
+        return true;
+    }//Fin de caracteretq
+    static boolean codops(String o){
+        String cet3 = "\t\s";//Caracteres permitidos en la comparacion.
+        for(int i=0; i < o.length();i++){//Recorre la cadena o, que se ingresa a la funcion.
+            char vals = o.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+            if(cet3.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet3.
+                return false;
+            }
+        }
+        return true;
+    }//FIn de codops
 } //Fin de la clase //Alexs hizo este commit
