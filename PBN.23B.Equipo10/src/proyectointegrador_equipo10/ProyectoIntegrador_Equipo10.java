@@ -33,8 +33,7 @@ public class ProyectoIntegrador_Equipo10 {
                 //Inicializar Variables
                 String Etiqueta = null;
                 String Codop = null;
-                String Operando = null;
-                String Comentario = null;       
+                String Operando = null;      
                 
                 Linea = Linea.trim();
                 //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
@@ -80,21 +79,10 @@ public class ProyectoIntegrador_Equipo10 {
                             Etiqueta = Palabra; //La palabra identificada se guardara en el String Etiqueta
                                                    
                             if (Etiqueta.length() >= 8 || cracteretq(Etiqueta) != true && valespacios(Etiqueta) != true) { //Validador de longitud maximo 8 caracteres
-                                System.out.println("Error: La etiqueta '" + Etiqueta + "' excede la longitud máxima de 8 caracteres.");
-                                Etiqueta = null; // Restablecer etiqueta solo si excede la longitud máxima
+                                System.out.println("Error de Etiqueta: La etiqueta '" + Etiqueta + "' excede la longitud maxima de 8 caracteres.");
+                                Etiqueta = "Error"; // Restablecer etiqueta solo si excede la longitud máxima
                             } //Fin de if            
                         } //Fin de if
-                        
-                        //cualquier otro caracter representado es un error
-                        // Verificar si la palabra contiene algún carácter fuera del rango ASCII 59-126
-                        //que no sea 59,58,,, y 33
-                        /*Pattern patron1 = Pattern.compile("[^#-#] [^&-,][^/-/][^<-?][^@-@]");
-                        Matcher matcher1 = patron1.matcher(Palabra);
-
-                        // Verificar si se encontraron caracteres fuera del rango
-                        if (matcher1.find()) {
-                        System.out.println("Error: La palabra '" + Codop + "' contiene caracteres fuera del rango ASCII .");
-                        }*/
                         
                         //Las variables ya estan inicializadas en null, por lo tanto siempre entra a la condicion
                         //Validacion CODOP
@@ -108,7 +96,8 @@ public class ProyectoIntegrador_Equipo10 {
                             Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
 
                             if (!matcher.matches() && codops(Codop) != true) { // Verificar si la palabra no cumple con el patrón
-                               System.out.println("Error: La palabra '" + Codop + "' Error"); //Si no cumple el patron entonces manda un mensaje de error
+                               System.out.println("Error Codop: El Codop '" + Codop + "' excede la longitud maxima de caracteres o contiene un simbolo invalidado"); //Si no cumple el patron entonces manda un mensaje de error
+                               Codop = "Error"; //Mensaje de error
                             } //Fin de if       
                         } //Fin de else if
                         
@@ -122,13 +111,9 @@ public class ProyectoIntegrador_Equipo10 {
                     
                        // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
                        if (Etiqueta != null && (Etiqueta.contains(" ") || Etiqueta.contains("\t"))) {
-                           System.out.println("Error: La etiqueta contiene espacios en blanco o tabuladores");
+                           System.out.println("Error Etiqueta: La etiqueta contiene espacios en blanco o tabuladores");
                            Etiqueta = null; // Restablecer etiqueta si es inválida
-                       } //Fin de if
-                    
-                    //Etiqueta
-                    //CODOP                   
-                    //Operando 
+                       } //Fin de if                  
                     
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + Etiqueta);
@@ -149,8 +134,8 @@ public class ProyectoIntegrador_Equipo10 {
             char vals = y.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
             if(cet2.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet2.
                 return false;
-            }
-        }
+            } //Fin de if
+        } //Fin de for
         return true;
     }//Fin vlaespacios
     
@@ -161,18 +146,20 @@ public class ProyectoIntegrador_Equipo10 {
             char charetq = etqupper.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
             if(cet1.indexOf(charetq) == -1){//Se revisa si los caracteres si estan en cet1.
                 return false;
-            }
-        }
+            } //Fin de if
+        } //Fin de for
         return true;
     }//Fin de caracteretq
+    
     static boolean codops(String o){
         String cet3 = "\t\s";//Caracteres permitidos en la comparacion.
         for(int i=0; i < o.length();i++){//Recorre la cadena o, que se ingresa a la funcion.
             char vals = o.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
             if(cet3.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet3.
                 return false;
-            }
-        }
+            } //Fin de if
+        } //Fin de for
         return true;
     }//FIn de codops
-} //Fin de la clase //Alexs hizo este commit
+    
+} //Fin de la clase
