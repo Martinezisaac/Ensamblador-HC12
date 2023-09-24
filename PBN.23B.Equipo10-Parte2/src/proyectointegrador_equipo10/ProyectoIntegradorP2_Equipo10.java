@@ -13,6 +13,7 @@ public class ProyectoIntegradorP2_Equipo10 {
     public static void main(String[] args) {
     
     String Archivo = ("P1ASM.asm"); //Variable auxiliar para leer el archivo
+    String patrondecimal = "[0-9]+$"; //Variable auxiliar para comparar
     
     //Instanciar objeto linea con variables inicializadas en null
     Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea
@@ -105,12 +106,13 @@ public class ProyectoIntegradorP2_Equipo10 {
                         } //Fin de if       
                     } //Fin de else if
 
-                    //Validaciones de Operando
+                    //Validaciones de Operando                    
                     else if(linea.getOperando() == null) { //Si el operando es igual a null
                         linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
                         
                         if(linea.getOperando().startsWith("%")) { //Validar si es binario
                             IsBinario(linea.getOperando()); //Validar sintaxis del binario
+                            System.out.println("Hola binario");
                         } //Fin de if
                         else if(linea.getOperando().startsWith("$")) { //Validar si es hexadecimal
                             System.out.println("Holahexa");
@@ -118,7 +120,8 @@ public class ProyectoIntegradorP2_Equipo10 {
                         else if(linea.getOperando().startsWith("@")) { //Validar si octal
                             System.out.println("hola octal");
                         } //Fin de else if
-                        else if(linea.getOperando().startsWith("1")) { //Validar si es decimal 
+                        else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal 
+                            IsDecimal(linea.getOperando()); //Validar sintaxis de un decimal 
                             System.out.println("hola decimal");
                         } //Fin de else if
                         else { //Si no es nignuno de los poibles tipos de operandos, entonces es invalido
@@ -208,5 +211,13 @@ public class ProyectoIntegradorP2_Equipo10 {
         
         return matcher.matches(); //Retorna el valor           
     } //Fin de la funcion para comprobar binario
+    
+    public static Boolean IsDecimal(String decimal) {
+        String patrondecimal = "[0-9]+$"; //Variable auxiliar para comparar
+        Pattern pattern = Pattern.compile(patrondecimal); //Junta los caracteres en un objeto para ser comparados
+        Matcher matcher = pattern.matcher(decimal);
 
-} //Fin de la clase principal //Hola
+        return matcher.matches();
+        } //Fin de la funcion para comprobar decimal
+
+} //Fin de la clase principal
