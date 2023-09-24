@@ -15,7 +15,7 @@ public class ProyectoIntegradorP2_Equipo10 {
     String Archivo = ("P1ASM.asm"); //Variable auxiliar para leer el archivo
     
     //Instanciar objeto linea con variables inicializadas en null
-    Linea linea = new Linea(null , null , null); // Instanciar objeto Linea
+    Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea
     
     //Leer el archivo 
     try { //Leer archivo
@@ -29,6 +29,8 @@ public class ProyectoIntegradorP2_Equipo10 {
         linea.setEtiqueta(null);
         linea.setCodop(null);
         linea.setOperando(null);
+        linea.setDireccion(null);
+        linea.setTamaño(null);
 
             Linea = Linea.trim();
             //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
@@ -54,6 +56,8 @@ public class ProyectoIntegradorP2_Equipo10 {
                 System.out.println("ETIQUETA = null");
                 System.out.println("CODOP = END");
                 System.out.println("OPERANDO = null");
+                System.out.println("DIRECCION = " + linea.getDireccion());
+                System.out.println("TAMANO = " + linea.getTamaño() + "\n");
                 Read.close(); // Funcion para cerrar el archivo de lectura
                 break; //El break indica el fin del ciclo 
             } //Fin de else if
@@ -118,7 +122,9 @@ public class ProyectoIntegradorP2_Equipo10 {
                 //Impresion de las variables
                 System.out.println("ETIQUETA = " + linea.getEtiqueta());
                 System.out.println("CODOP = " + linea.getCodop());
-                System.out.println("OPERANDO = " + linea.getOperando() + "\n");
+                System.out.println("OPERANDO = " + linea.getOperando());
+                System.out.println("DIRECCION = " + linea.getDireccion());
+                System.out.println("TAMANO = " + linea.getTamaño() + "\n");
             } //Fin de else 
         } //Fin de while       
         
