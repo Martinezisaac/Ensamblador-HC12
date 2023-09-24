@@ -108,25 +108,31 @@ public class ProyectoIntegradorP2_Equipo10 {
                     //Validaciones de Operando
                     else if(linea.getOperando() == null) { //Si el operando es igual a null
                         linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
-                        //Validar si es binario 
-                        if(IsBinario(linea.getOperando())){ //Validar en caso de numero binario 
-                            linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
-                        } //Fin de la validacion de binario   
-                        else {
-                              linea.setOperando("Error de binario - " + linea.getOperando());      
-                        } //Fin de else 
-                                       
-                        //System.out.println("Si es binario!"); //Mensaje de confirmacion 
-                        //De momento esta aqui para imprimir todo 
-                        //linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
-                        } //Fin de else if                       
-                    } //Fin de for                                         
+                        
+                        if(linea.getOperando().startsWith("%")) { //Validar si es binario
+                            IsBinario(linea.getOperando()); //Validar sintaxis del binario
+                        } //Fin de if
+                        else if(linea.getOperando().startsWith("$")) { //Validar si es hexadecimal
+                            System.out.println("Holahexa");
+                        } //Fin de else if
+                        else if(linea.getOperando().startsWith("@")) { //Validar si octal
+                            System.out.println("hola octal");
+                        } //Fin de else if
+                        else if(linea.getOperando().startsWith("1")) { //Validar si es decimal 
+                            System.out.println("hola decimal");
+                        } //Fin de else if
+                        else { //Si no es nignuno de los poibles tipos de operandos, entonces es invalido
+                            linea.setOperando("Error Operando");
+                        } //Fin de else if 
+                        
+                    } //Fin de else if                       
+                } //Fin de for                                         
 
-                   // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
-                   if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
-                       System.out.println("Error Etiqueta: La etiqueta contiene espacios en blanco o tabuladores");
-                       linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
-                   } //Fin de if                  
+               // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
+               if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
+                   System.out.println("Error Etiqueta: La etiqueta contiene espacios en blanco o tabuladores");
+                   linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
+               } //Fin de if                  
 
                 //Impresion de las variables
                 System.out.println("ETIQUETA = " + linea.getEtiqueta());
@@ -181,24 +187,15 @@ public class ProyectoIntegradorP2_Equipo10 {
     
     public static Boolean IsBinario(String binario) {
         
-        if(binario.startsWith("%")) {//Si empieza con % puede ser binario
-            if (binario.length() > 1) { //Valida si hay algo en binario despues de %
-                binario = binario.substring(1); //Le quita el primer caracter (%) y reemplaza la misma variable
-                //System.out.println(binario); //Impresion del nuevo binario
-                //System.out.println("Si empieza ccon porcentaje binario");
-            } //Fin de if
-            else { //Si no hay nada despues de % entonces es un error 
-                System.out.println("Error Operando Binario"); //Imprimir error 
-                return false; //Error
-            } //Fin de error 
-        }//Fin de if
-        else {//Si no empieza con % entonces no puede ser binario 
-            System.out.println(binario); //Imprimir binario 
-            System.out.println("Error " + binario + " no es Binario");
+        if (binario.length() > 1) { //Valida si hay algo en binario despues de %
+            binario = binario.substring(1); //Le quita el primer caracter (%) y reemplaza la misma variable
+        } //Fin de if
+        else { //Si no hay nada despues de % entonces es un error 
+            System.out.println("Error Operando Binario"); //Imprimir error 
             return false; //Error
-        } //Fin de else
+        } //Fin de error 
         
-        String patron = "^[01]+$";  // Patrón regex para permitir solo 1 y 0, al menos un carácter.
+        String patron = "^[01]+$";  // Patrón para permitir solo 1 y 0, al menos un carácter.
         Pattern pattern = Pattern.compile(patron);
         Matcher matcher = pattern.matcher(binario);
         
