@@ -116,10 +116,10 @@ public class ProyectoIntegradorP2_Equipo10 {
                                  linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
                         } //Fin de if
-                        else if(linea.getOperando().startsWith("$")) { //Validar si es hexadecimal
+                        else if(linea.getOperando().startsWith("$") && rangohexa(linea.getOperando()) && IsHexa(linea.getOperando())) { //Validar si es hexadecimal
                             System.out.println("Holahexa");
                         } //Fin de else if
-                        else if(linea.getOperando().startsWith("@")) { //Validar si octal
+                        else if(linea.getOperando().startsWith("@") && rangoocta(linea.getOperando()) && IsOctal(linea.getOperando())) { //Validar si octal
                             System.out.println("hola octal");
                         } //Fin de else if
                         else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal 
@@ -188,5 +188,52 @@ public class ProyectoIntegradorP2_Equipo10 {
         } //Fin de for
         return true;
     }//Fin de codops
+    
+        public static boolean IsHexa(String x){
+            char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+            String patronhexa = "^[0-9A-F]+$";//Declaracn de la variable que cintene los caracteres para comparar.
+            Pattern pattern = Pattern.compile(patronhexa);//junta los caracteres en un objeto para ser comparados.
+            Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
+            return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
+    }//Fin de IsHexa
    
+    public static boolean rangohexa(String x){
+        char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+        try{
+            int hexaint = Integer.parseInt(newx, 16);//Convierte la cadena de texto a int.
+            System.out.println(hexaint);
+            return hexaint >= 0 && hexaint <= 0xFFFF;//Compara si el hexadecimal esta en el rango de 0 a 65535
+        }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
+            return false;
+        }//Fin de try catch
+    }//Fin de rangohexa.
+    
+    public static boolean IsOctal(String x){
+            char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+            String patronocta = "^[0-7]+$";//Declaracn de la variable que cintene los caracteres para comparar.
+            Pattern pattern = Pattern.compile(patronocta);//junta los caracteres en un objeto para ser comparados.
+            Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
+            return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
+    }//Fin de IsOctal
+    
+    public static boolean rangoocta(String x){
+        char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+        if(newx.length() > 6){
+            return false;
+        }
+        
+        try{
+            int octaint = Integer.parseInt(newx, 8);//Convierte la cadena de texto a int.
+            System.out.println(octaint);
+            return octaint >= 0 && octaint <= 65535;//Compara si el hexadecimal esta en el rango de 0 a 65535
+        }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
+            return false;
+        }//Fin de try catch
+        
+    }//Fin de rangooctal
+        
 } //Fin de la clase principal
