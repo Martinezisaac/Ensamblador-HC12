@@ -15,8 +15,7 @@ public class Metodos {
         } //Fin de else 
     } //Fin de compribar etiqueta
     
-    /*
-    public static void DetermineBits(int ValorDecimal) {
+    public static void DeterminarBits(int ValorDecimal) {
         if (ValorDecimal >= 0 && ValorDecimal <= 255) {
             System.out.println("8 bits");
         } //Fin de if
@@ -26,8 +25,15 @@ public class Metodos {
         else {
             System.out.println("Fuera de rango");
         } //Fin de else 
-    } //Fin de la funcion para determinar bits 
-    */
+    } //Fin de la funcion para determinar bits
+    
+    public static boolean Determinar8Bits(int ValorDecimal) {
+        return  ValorDecimal >= 0 && ValorDecimal <= 255; 
+    } //Fin de la funcion para determinar bits
+    
+    public static boolean Determinar16Bits(int ValorDecimal) {
+        return  ValorDecimal >= 256 && ValorDecimal <= 65535; 
+    } //Fin de la funcion para determinar bits
     
     //Funcion para validar si operando es Binario 
     public static Boolean IsBinario(String binario) {      
