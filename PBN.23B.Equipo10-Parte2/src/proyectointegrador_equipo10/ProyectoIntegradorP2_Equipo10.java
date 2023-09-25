@@ -13,7 +13,10 @@ public class ProyectoIntegradorP2_Equipo10 {
     public static void main(String[] args) {
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
         
-    String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
+    String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo    
+    ArchivoSalvacion archivosalvacion = new ArchivoSalvacion("Salvation.txt"); //Objeto para mandar a llamar el archivo de Salvation
+    
+    //System.out.println(ArchivoSalvacion.Salvacion[100][2]); //impresion de prueba
     
     //Instanciar objeto linea con variables inicializadas en null
     Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea
@@ -168,6 +171,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 
                 //Integer entero = Integer.valueOf(cadena);
                 int Decimal = Integer.valueOf(DecimalString);
+                Metodos.DeterminarBits(Decimal); 
 
                 //Impresion de las variables
                 System.out.println("ETIQUETA = " + linea.getEtiqueta());
