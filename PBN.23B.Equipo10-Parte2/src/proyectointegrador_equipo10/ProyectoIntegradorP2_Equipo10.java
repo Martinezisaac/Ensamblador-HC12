@@ -73,17 +73,17 @@ public class ProyectoIntegradorP2_Equipo10 {
 
                 for(String Palabra : Palabras) {
 
-                    Pattern patronetiqueta = Pattern.compile("[a-zA-Z][0-9]{0,8}+$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
+                    Pattern patronetiqueta = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,7}$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
                     Matcher matcheretiqueta = patronetiqueta.matcher(Palabra); // Crear un Matcher para verificar si la Palabra cumple con el patrón
 
                     //Validar etiqueta
-                    if(Palabra.endsWith(":")) {
+                    if(Palabra.endsWith(":")) {    
                         Palabra = Palabra.substring(0, Palabra.length() - 1 ); //Eliminar ":" de la palabra etiqueta
-                        if (!matcheretiqueta.matches()) { //Validador de longitud maximo 8 caracteres                       
-                        linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objrto etiqueta
+                        if (!matcheretiqueta.matches()) { //Validador de longitud maximo 8 caracteres   
+                            linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
                         } //Fin de if
                         else {
-                            System.out.println("Error de Etiqueta: La etiqueta '" + linea.getEtiqueta() + "' excede la longitud maxima de 8 caracteres."); 
+                            System.out.println("Error de Etiqueta: La etiqueta" + linea.getEtiqueta() + "excede la longitud maxima de 8 caracteres."); 
                             linea.setEtiqueta("Error"); // Restablecer etiqueta solo si excede la longitud máxima 
                         } //Fin de else 
                     } // Fin de if                                                                      
@@ -100,7 +100,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
 
                     if (!matcher.matches() && codops(linea.getCodop()) != true) { // Verificar si la palabra no cumple con el patrón
-                           System.out.println("Error Codop: El Codop '" + linea.getCodop() + "' excede la longitud maxima de caracteres o contiene un simbolo invalidado"); //Si no cumple el patron entonces manda un mensaje de error
+                           System.out.println("Error Codop: El Codop " + linea.getCodop() + " excede la longitud maxima de caracteres o contiene un simbolo invalidado"); //Si no cumple el patron entonces manda un mensaje de error
                            linea.setCodop("Error"); //Mensaje de error
                         } //Fin de if       
                     } //Fin de else if
@@ -112,25 +112,42 @@ public class ProyectoIntegradorP2_Equipo10 {
                         
                         //Validadores para identificar que tipo de opernado es
                         if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario
+                            System.out.println("Hola binario");
                             if(!Metodos.IsBinario(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
                         } //Fin de if
-                        else if(linea.getOperando().startsWith("$") && rangohexa(linea.getOperando()) && IsHexa(linea.getOperando())) { //Validar si es hexadecimal
+                        
+                        else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser binario
                             System.out.println("Holahexa");
+                            if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
+                                 linea.setOperando(linea.getOperando() + " No es hexadecimal"); //Mostrar mensaje de error
+                            } //Fin de if sintaxis
                         } //Fin de else if
-                        else if(linea.getOperando().startsWith("@") && rangoocta(linea.getOperando()) && IsOctal(linea.getOperando())) { //Validar si octal
-                            System.out.println("hola octal");
+                        
+                        else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser binario
+                            System.out.println("Hola octal");
+                            if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis no es igual 
+                                 linea.setOperando(linea.getOperando() + " No es octal"); //Mostrar mensaje de error
+                            } //Fin de if sintaxis
                         } //Fin de else if
-                        else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal 
-                            Metodos.IsDecimal(linea.getOperando()); //Validar sintaxis de un decimal con un metodo
-                            System.out.println("hola decimal");
+                        
+                        else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal, empieza con un numero 
+                            System.out.println("Hola decimal");
+                            if(!Metodos.IsDecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
+                                 linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
+                            } //Fin de if sintaxis
                         } //Fin de else if
+                        
                         else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
                             linea.setOperando("Error");
                         } //Fin de else if                        
                     } //Fin de else if                       
-                } //Fin de for                                         
+                                 
+                    else if(linea.getTamaño() == null) { //Siempre va a ser null porque nosotros los calculamos
+                            linea.setTamaño(linea.getOperando());
+                    } //Fin de else if
+                } //Fin de for
 
                // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
                if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
@@ -154,7 +171,7 @@ public class ProyectoIntegradorP2_Equipo10 {
     } //Fin de main 
     
     //Funciones 
-    
+    /*
     static boolean valespacios(String y){
         String cet2 = ":\t\s";//Caracteres permitidos en la comparacion.
         for(int i=0; i < y.length();i++){//Recorre la cadena y, que se ingresa a la funcion. 
@@ -177,6 +194,7 @@ public class ProyectoIntegradorP2_Equipo10 {
         } //Fin de for
         return true;
     }//Fin de caracteretq
+    */
     
     static boolean codops(String o){
         String cet3 = "\t\s";//Caracteres permitidos en la comparacion.
@@ -189,6 +207,7 @@ public class ProyectoIntegradorP2_Equipo10 {
         return true;
     }//Fin de codops
     
+    /*
         public static boolean IsHexa(String x){
             char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
             String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -197,7 +216,8 @@ public class ProyectoIntegradorP2_Equipo10 {
             Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
             return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
     }//Fin de IsHexa
-   
+*/
+   /*
     public static boolean rangohexa(String x){
         char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
         String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -209,7 +229,9 @@ public class ProyectoIntegradorP2_Equipo10 {
             return false;
         }//Fin de try catch
     }//Fin de rangohexa.
+    */
     
+    /*
     public static boolean IsOctal(String x){
             char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
             String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -218,7 +240,8 @@ public class ProyectoIntegradorP2_Equipo10 {
             Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
             return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
     }//Fin de IsOctal
-    
+*/
+    /*
     public static boolean rangoocta(String x){
         char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
         String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -235,5 +258,5 @@ public class ProyectoIntegradorP2_Equipo10 {
         }//Fin de try catch
         
     }//Fin de rangooctal
-        
+    */
 } //Fin de la clase principal
