@@ -44,11 +44,11 @@ public class Metodos {
     
     //Funcion para validar si es hexadecimal 
     public static Boolean IsHexadecimal(String hexadecimal) {
-        if (hexadecimal.length() > 1) { //Valida si hay algo en octal despues de @
-            hexadecimal = hexadecimal.substring(1); //Le quita el primer caracter (@) y reemplaza la misma variable
+        if (hexadecimal.length() > 1) { //Valida si hay algo en octal despues de $
+            hexadecimal = hexadecimal.substring(1); //Le quita el primer caracter ($) y reemplaza la misma variable
         } //Fin de if
-        else { //Si no hay nada despues de @ entonces es un error 
-            //System.out.println("Error Operando Octal"); //Imprimir error 
+        else { //Si no hay nada despues de $ entonces es un error 
+            //System.out.println("Error Operando hexadecmial"); //Imprimir error 
             return false; //Error
         } //Fin de error      
         
@@ -57,7 +57,7 @@ public class Metodos {
         Matcher matcher = pattern.matcher(hexadecimal);
         
         return matcher.matches(); //Retorna el hexadecimal          
-    } //Fin de la funcion para comprobar operando octal
+    } //Fin de la funcion para comprobar operando hexadecimal
     
     //Funcion para validar si operando es decimal
     public static Boolean IsDecimal(String decimal) {
@@ -73,7 +73,7 @@ public class Metodos {
         if(IsBinario(binario)) {
             int decimal = 0; //Variable auxiliar
             int longitud = binario.length(); //Identificar longitud del binario 
-            binario = binario.substring(1); //Eliminar identificador de binario%
+            binario = binario.substring(1); //Eliminar identificador de binario %
 
             // Invierte la cadena binaria
             StringBuilder binarioReverso = new StringBuilder(binario).reverse();
