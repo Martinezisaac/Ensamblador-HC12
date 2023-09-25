@@ -33,7 +33,11 @@ public class ProyectoIntegradorP2_Equipo10 {
         linea.setOperando(null);
         linea.setDireccion(null);
         linea.setTamaño(null);
-
+        
+    // Determinar el tipo de direccionamiento después de asignar valores
+        String tipoDireccionamiento = linea.getDireccion();
+        linea.setDireccion(tipoDireccionamiento);
+        
             Linea = Linea.trim();
             //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
 
