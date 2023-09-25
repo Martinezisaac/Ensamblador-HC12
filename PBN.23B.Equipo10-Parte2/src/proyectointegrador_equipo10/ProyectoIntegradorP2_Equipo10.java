@@ -11,8 +11,9 @@ import java.util.regex.Pattern;
 public class ProyectoIntegradorP2_Equipo10 {
 
     public static void main(String[] args) {
-    
-    String Archivo = ("P1ASM.asm"); //Variable auxiliar para leer el archivo
+        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
+        
+    String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
     
     //Instanciar objeto linea con variables inicializadas en null
     Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea
@@ -24,6 +25,7 @@ public class ProyectoIntegradorP2_Equipo10 {
 
         //Guardar cada linea en la variable Linea
         while((Linea = Read.readLine()) != null) {
+        DecimalString = "0"; //Inicializar variable en null por cada pasada
             
         //Inicializar objetos en null para las iteraciones 
         linea.setEtiqueta(null);
@@ -106,13 +108,13 @@ public class ProyectoIntegradorP2_Equipo10 {
                     } //Fin de else if
 
                     //Validaciones de Operando                    
-                    else if(linea.getOperando() == null) { //Si el operando es igual a null
-                        
+                    else if(linea.getOperando() == null) { //Si el operando es igual a null                        
                         linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
                         
-                        //Validadores para identificar que tipo de opernado es
+                        //Validadores para identificar que tipo de operando es
                         if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario
-                            System.out.println("Hola binario");
+                            System.out.println("Hola binario");     
+                            DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); 
                             if(!Metodos.IsBinario(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
@@ -120,6 +122,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         
                         else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser binario
                             System.out.println("Holahexa");
+                            DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando());
                             if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es hexadecimal"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
@@ -127,6 +130,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         
                         else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser binario
                             System.out.println("Hola octal");
+                            DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando());
                             if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es octal"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
@@ -134,14 +138,17 @@ public class ProyectoIntegradorP2_Equipo10 {
                         
                         else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal, empieza con un numero 
                             System.out.println("Hola decimal");
+                            DecimalString = linea.getOperando(); //Guardar el valor decimal en la variable DecimalString 
                             if(!Metodos.IsDecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
                         } //Fin de else if
                         
                         else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
-                            linea.setOperando("Error");
-                        } //Fin de else if                        
+                            linea.setOperando(Palabra); //FALTA VALIDAR SI ES OTRO TIPO DE OPERANDO FUERA DE HEXA,OCTAL,BIN O DECIMAL
+                            //linea.setOperando("Error"); //Mensaje de error 
+                        } //Fin de else if
+
                     } //Fin de else if                       
                                  
                     else if(linea.getTamaño() == null) { //Siempre va a ser null porque nosotros los calculamos
@@ -149,18 +156,22 @@ public class ProyectoIntegradorP2_Equipo10 {
                     } //Fin de else if
                 } //Fin de for
 
-               // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
-               if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
-                   System.out.println("Error Etiqueta: La etiqueta contiene espacios en blanco o tabuladores");
-                   linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
-               } //Fin de if                  
+                // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
+                if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
+                    System.out.println("Error Etiqueta: La etiqueta contiene espacios en blanco o tabuladores");
+                    linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
+                } //Fin de if      
+                
+                //Integer entero = Integer.valueOf(cadena);
+                int Decimal = Integer.valueOf(DecimalString);
 
                 //Impresion de las variables
                 System.out.println("ETIQUETA = " + linea.getEtiqueta());
                 System.out.println("CODOP = " + linea.getCodop());
                 System.out.println("OPERANDO = " + linea.getOperando());
+                System.out.println("VALOR DECIMAL = " + Decimal);
                 System.out.println("DIRECCION = " + linea.getDireccion());
-                System.out.println("TAMANO = " + linea.getTamaño() + "\n");
+                System.out.println("TAMANO = " + linea.getTamaño() + "\n");             
             } //Fin de else 
         } //Fin de while       
         
