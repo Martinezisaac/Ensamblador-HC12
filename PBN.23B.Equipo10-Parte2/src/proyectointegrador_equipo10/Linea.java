@@ -43,9 +43,13 @@ public class Linea {
 
    public String getDireccion() {
         // Comprobar si es un NOP (sin operando)
-       if (codop != null && codop.equalsIgnoreCase("NOP") && operando == null) {
-           return "Inherente (INH)";
-       }//fin de if
+if (codop != null && codop.equalsIgnoreCase("NOP") && operando == null) {
+    return "Inherente (INH)";
+}
+// Comprobar si es un INH (sin operando)
+else if (operando != null && operando.equalsIgnoreCase("INH")) {
+    return "Inherente (INH)";
+}
        else if (operando != null) {
            // Comprobar el tipo de direccionamiento Inmediato (IMM)
            if (operando.startsWith("#")) {
@@ -116,38 +120,54 @@ public class Linea {
         }//fin de else if
         }//fin de else if
 }// fin if de IMM
-        // Comprobar el tipo de direccionamiento Directo (DIR)
-        else if (Metodos.IsDecimal(operando)) {
-            int valorDecimal = Integer.parseInt(operando);
-            if (valorDecimal >= 0 && valorDecimal <= 255) {
-                return "Directo (DIR) de 8 bits";
-            }//fin de if 
-            else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                return "Directo (DIR) de 16 bits";
-            }//fin de else if
-        }//fin de else if (DIR)
-        // Comprobar el tipo de direccionamiento Extendido (EXT)
-        else if (Metodos.IsDecimal(operando)) {
-            int valorDecimal = Integer.parseInt(operando);
-            if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                return "Extendido (EXT)";
-            }//fin de if
-        }//fin de else if
+      
+// Comprobar el tipo de direccionamiento Directo (DIR)
+           else if (operando.matches("^[#@$%]?[0-9]+$")) {
+    // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
+    String operandoSinSimbolo = operando.replaceAll("^[#@$%]+", "");
+
+    // Procesar el operando como un valor hexadecimal
+    try {
+        int valor = Integer.parseInt(operandoSinSimbolo, 16);
+        if (valor >= 0 && valor <= 255) {
+            return "Directo (DIR) de 8 bits";
+        }
+    } catch (NumberFormatException e) {
+        // No es un valor hexadecimal válido
+    }
+}
+// Comprobar el tipo de direccionamiento Extendido (EXT)
+if (operando.matches("^[#@$%]?+[0-9A-Fa-f]+$")) {
+    // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
+    String operandoSinSimbolo = operando.replaceAll("^[#@$%]+", "");
+
+    // Procesar el operando como un valor hexadecimal
+    try {
+        int valor = Integer.parseInt(operandoSinSimbolo, 16);
+        if (valor >= 256 && valor <= 65535) {
+            return "Extendido (EXT) de 16 bits";
+        }
+    } catch (NumberFormatException e) {
+        // No es un valor hexadecimal válido
+    }
+}
         // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
-        else if (operando.matches("^[0-9]+,[XYSP]+$")) {
-            int valorIndexado = Integer.parseInt(operando.split(",")[0]);
-            if (valorIndexado >= -16 && valorIndexado <= 15) {
-                return "Indexado de 5 bits (IDX)";
-            }//fin de if
-        }//fin de else if
+else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+    String[] parts = operando.split(",");
+    int valorIndexado = Integer.parseInt(parts[0]);
+    if (valorIndexado >= -16 && valorIndexado <= 15) {
+        return "Indexado de 5 bits (IDX)";
+    }
+}
         // Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX1)
-        else if (operando.matches("^[0-9]+,[XYSP]+$")) {
+        else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
             int valorIndexado = Integer.parseInt(operando.split(",")[0]);
             if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 && valorIndexado <= 255)) {
                 return "Indexado de 9 bits (IDX1)";
             }//fin de if
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado de 16 bits (IDX2)
+        //Aún no reconoce "PC", Emmanuel lo acaba
         else if (operando.matches("^[0-9]+,[XYSP]+$")) {
             int valorIndexado = Integer.parseInt(operando.split(",")[0]);
             if (valorIndexado >= 256 && valorIndexado <= 65535) {
@@ -159,7 +179,7 @@ public class Linea {
             return "Indexado indirecto de 16 bits ([IDX2])";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-        else if (operando.matches("^[1-8],[-+][PC]+$|^[1-8],[PC]+[-+]$")) {
+        else if (operando.matches("^[1-8],[-+]+[[X-x]|[Y-y]|[SP-sp]]+$|^[1-8],[[X-x]|[Y-y]|[SP-sp]]+[-+]$")) {
             return "Indexado pre/post decremento/incremento (IDX)";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
