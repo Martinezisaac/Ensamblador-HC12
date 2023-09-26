@@ -47,7 +47,7 @@ if (codop != null && codop.equalsIgnoreCase("NOP") && operando == null) {
     return "Inherente (INH)";
 }
 // Comprobar si es un INH (sin operando)
-else if (operando != null && operando.equalsIgnoreCase("INH")) {
+else if (operando == null) {
     return "Inherente (INH)";
 }
        else if (operando != null) {
