@@ -159,11 +159,11 @@ public class Linea {
             return "Indexado indirecto de 16 bits ([IDX2])";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-        else if (operando.matches("^[1-8],[-+][XYSP]+$|^[1-8],[XYSP]+[-+]$")) {
+        else if (operando.matches("^[1-8],[-+][PC]+$|^[1-8],[PC]+[-+]$")) {
             return "Indexado pre/post decremento/incremento (IDX)";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
-        else if (operando.matches("^[ABD],[XYSP]+$")) {
+        else if (operando.matches("^[a-dA-D.],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
             return "Indexado de acumulador (IDX)";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
@@ -178,6 +178,16 @@ public class Linea {
             }//fin de if
             else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
                 return "Relativo (REL) de 16 bits";
+            }//fin de else if
+        }//fin de else if
+           // Comprobar el tipo de direccionamiento Relativo con ciclo (REL)
+        else if (operando.matches("^[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]],[[a-zA-Z.]|[0-9]]")) {
+            int valorDecimal = Integer.parseInt(operando);
+            if (valorDecimal >= -128 && valorDecimal <= 127) {
+                return "Relativo con ciclo (REL) de 8 bits";
+            }//fin de if
+            else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
+                return "Relativo con ciclo (REL) de 16 bits";
             }//fin de else if
         }//fin de else if
     }//fin de else if
