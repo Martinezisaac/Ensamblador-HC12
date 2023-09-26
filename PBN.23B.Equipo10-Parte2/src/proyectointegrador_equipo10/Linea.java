@@ -168,14 +168,14 @@ else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$"))
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado de 16 bits (IDX2)
         //Aún no reconoce "PC", Emmanuel lo acaba
-        else if (operando.matches("^[0-9]+,[XYSP]+$")) {
+        else if (operando.matches("^[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
             int valorIndexado = Integer.parseInt(operando.split(",")[0]);
             if (valorIndexado >= 256 && valorIndexado <= 65535) {
                 return "Indexado de 16 bits (IDX2)";
             }//fin de if
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits ([IDX2])
-        else if (operando.matches("^\\[[0-9]+,[XYSP]+\\]$")) {
+        else if (operando.matches("^\\[[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
             return "Indexado indirecto de 16 bits ([IDX2])";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
@@ -187,7 +187,7 @@ else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$"))
             return "Indexado de acumulador (IDX)";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
-        else if (operando.matches("^\\[[ABD],[-+][XYSP]+\\]$")) {
+        else if (operando.matches("^\\[[D-d],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
             return "Indexado acumulador indirecto ([D,IDX])";
         }//fin de else if
         // Comprobar el tipo de direccionamiento Relativo (REL)
