@@ -47,9 +47,9 @@ if (codop != null && codop.equalsIgnoreCase("NOP") && operando == null) {
     return "Inherente (INH)";
 }
 // Comprobar si es un INH (sin operando)
-else if (operando == null) {
+else if (operando == null) { //Si el operando es nulo, entonces se considera INH
     return "Inherente (INH)";
-}
+} //Fin de validar INH
        else if (operando != null) {
            // Comprobar el tipo de direccionamiento Inmediato (IMM)
            if (operando.startsWith("#")) {
