@@ -88,7 +88,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                     //Validar etiqueta
                     if(Palabra.endsWith(":")) {    
                         Palabra = Palabra.substring(0, Palabra.length() - 1 ); //Eliminar ":" de la palabra etiqueta
-                        if (!matcheretiqueta.matches()) { //Validador de longitud maximo 8 caracteres   
+                        if (!matcheretiqueta.matches() && cracteretq(Palabra)) { //Validador de longitud maximo 8 caracteres   
                             linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
                         } //Fin de if
                         else {
@@ -200,20 +200,22 @@ public class ProyectoIntegradorP2_Equipo10 {
             } //Fin de if
         } //Fin de for
         return true;
-    }//Fin vlaespacios
+    }//Fin vlaespacios*/
     
     static boolean cracteretq(String x){
         String cet1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:_";//Caracteres permitidos en la comparacion.
         String etqupper = x.toUpperCase();//Convierte la variable en mayusculas para la comparacion.
+        if(etqupper.length()>5){
         for(int i=0; i < etqupper.length(); i++){//Recorre la cadena x, que se ingresa a la funcion.
             char charetq = etqupper.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
             if(cet1.indexOf(charetq) == -1){//Se revisa si los caracteres si estan en cet1.
                 return false;
             } //Fin de if
         } //Fin de for
+        }
         return true;
     }//Fin de caracteretq
-    */
+    
     
     static boolean codops(String o){
         String cet3 = "\t\s";//Caracteres permitidos en la comparacion.

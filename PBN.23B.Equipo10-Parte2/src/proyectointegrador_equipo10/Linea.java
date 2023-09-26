@@ -201,7 +201,7 @@ else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$"))
             }//fin de else if
         }//fin de else if
            // Comprobar el tipo de direccionamiento Relativo con ciclo (REL)
-        else if (operando.matches("^[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]],[[a-zA-Z.]|[0-9]]")) {
+        else if (operando.matches("([xXyYsSpPcC][_0-9]{4})(,\\\\s*([xXyYsSpPcC][_0-9]{4}))*")) {
             int valorDecimal = Integer.parseInt(operando);
             if (valorDecimal >= -128 && valorDecimal <= 127) {
                 return "Relativo con ciclo (REL) de 8 bits";
