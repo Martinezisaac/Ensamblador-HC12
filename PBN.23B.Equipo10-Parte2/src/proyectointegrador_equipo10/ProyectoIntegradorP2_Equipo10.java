@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class ProyectoIntegradorP2_Equipo10 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //Prueba
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
         
     String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo    
