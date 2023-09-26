@@ -41,7 +41,7 @@ public class Linea {
         return operando;
     }
 
-   public String getDireccion() {
+ public String getDireccion() {
         // Comprobar si es un NOP (sin operando)
 if (codop != null && codop.equalsIgnoreCase("NOP") && operando == null) {
     return "Inherente (INH)";
@@ -152,64 +152,76 @@ if (operando.matches("^[#@$%]?+[0-9A-Fa-f]+$")) {
     }
 }
         // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
-else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+else if (operando.matches("^-?\\d+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
     String[] parts = operando.split(",");
     int valorIndexado = Integer.parseInt(parts[0]);
     if (valorIndexado >= -16 && valorIndexado <= 15) {
         return "Indexado de 5 bits (IDX)";
+    }// Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX)
+    else if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 &&                 valorIndexado <= 255)) {
+                return "Indexado de 9 bits (IDX1)";
+            }
+}  
+        // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
+else if (operando.matches("^\\d{1,5},[XYSPPCpc]+\\$")) {
+    String[] parts = operando.split(",");
+    int valorIndexado = Integer.parseInt(parts[0]);
+    if (valorIndexado >= 256 && valorIndexado <= 65535) {
+        return "Indexado de 16 bits (IDX2)";
     }
 }
-        // Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX1)
-        else if (operando.matches("^-?1[0-6]|-?[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
-            int valorIndexado = Integer.parseInt(operando.split(",")[0]);
-            if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 && valorIndexado <= 255)) {
-                return "Indexado de 9 bits (IDX1)";
-            }//fin de if
-        }//fin de else if
-        // Comprobar el tipo de direccionamiento Indexado de 16 bits (IDX2)
-        //Aún no reconoce "PC", Emmanuel lo acaba
-        else if (operando.matches("^[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
-            int valorIndexado = Integer.parseInt(operando.split(",")[0]);
-            if (valorIndexado >= 256 && valorIndexado <= 65535) {
-                return "Indexado de 16 bits (IDX2)";
-            }//fin de if
-        }//fin de else if
+
         // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits ([IDX2])
-        else if (operando.matches("^\\[[0-9]+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
-            return "Indexado indirecto de 16 bits ([IDX2])";
-        }//fin de else if
-        // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-        else if (operando.matches("^[1-8],[-+]+[[X-x]|[Y-y]|[SP-sp]]+$|^[1-8],[[X-x]|[Y-y]|[SP-sp]]+[-+]$")) {
-            return "Indexado pre/post decremento/incremento (IDX)";
-        }//fin de else if
+else if (operando.matches("^\\[\\d{1,5},[XYSPPCpc]+\\]$")) {
+    // Extraer el valor dentro de los corchetes y comprobar si está en el rango de 0 a 65535
+    String operandoSinCorchetes = operando.substring(1, operando.length() - 1);
+    String[] parts = operandoSinCorchetes.split(",");
+    int valorIndexado = Integer.parseInt(parts[0]);
+    if (valorIndexado >= 0 && valorIndexado <= 65535) {
+        return "Indexado indirecto de 16 bits ([IDX2])";
+    }
+}
+        
+    // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
+else if (operando.matches("^[1-8],([-+][XYSP]|[XYSP][-+])$")) {
+    return "Indexado pre/post decremento/incremento (IDX)";
+}
+        
         // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
-        else if (operando.matches("^[a-dA-D.],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+        else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
             return "Indexado de acumulador (IDX)";
         }//fin de else if
+        
         // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
         else if (operando.matches("^\\[[D-d],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
             return "Indexado acumulador indirecto ([D,IDX])";
         }//fin de else if
-        // Comprobar el tipo de direccionamiento Relativo (REL)
-        else if (Metodos.IsDecimal(operando)) {
-            int valorDecimal = Integer.parseInt(operando);
-            if (valorDecimal >= -128 && valorDecimal <= 127) {
-                return "Relativo (REL) de 8 bits";
-            }//fin de if
-            else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
-                return "Relativo (REL) de 16 bits";
-            }//fin de else if
-        }//fin de else if
-           // Comprobar el tipo de direccionamiento Relativo con ciclo (REL)
-        else if (operando.matches("([xXyYsSpPcC][_0-9]{4})(,\\\\s*([xXyYsSpPcC][_0-9]{4}))*")) {
-            int valorDecimal = Integer.parseInt(operando);
-            if (valorDecimal >= -128 && valorDecimal <= 127) {
-                return "Relativo con ciclo (REL) de 8 bits";
-            }//fin de if
-            else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
-                return "Relativo con ciclo (REL) de 16 bits";
-            }//fin de else if
-        }//fin de else if
+        //Relativo REL
+else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
+    // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
+    if (Metodos.ComprobarEtiqueta(operando)) {
+        return "Relativo (REL) de 8 bits";
+    }
+    int valorDecimal = Integer.parseInt(operando);
+    if (valorDecimal >= -128 && valorDecimal <= 127) {
+        return "Relativo (REL) de 8 bits";
+    } else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
+        return "Relativo (REL) de 16 bits";
+    }
+}       //Rel con ciclo 
+          else if (operando.matches("^[[A-a],[B-b],[D-d],[X-x]|[Y-y]|[SP-sp]],[[a-zA-Z.]|[0-9]]+$")) {
+    String[] partes = operando.split(",");
+    String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
+    String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
+
+    // Verificar si el registro es válido
+    if (registro.matches("^[[A-a],[B-b],[D-d],[X-x]|[Y-y]|[SP-sp]]$")) {
+        // Verificar si la parte después de la coma es un valor numérico o una palabra válida
+        if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
+            return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
+        }
+    }
+}
     }//fin de else if
     return "No reconocido"; // Si no se reconoce ningún tipo de direccionamiento
 }//fin de public String 
