@@ -55,23 +55,37 @@ public class Metodos {
     
     //Funcion para validar si es octal 
     public static Boolean IsOctal(String octal) {
-            char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-            String newx = octal.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-            String patronocta = "^[0-7]+$";//Declaracn de la variable que cintene los caracteres para comparar.
-            Pattern pattern = Pattern.compile(patronocta);//junta los caracteres en un objeto para ser comparados.
-            Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
-            return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron. 
+        if (octal.length() > 1) { //Valida si hay algo en octal despues de @
+            octal = octal.substring(1); //Le quita el primer caracter (@) y reemplaza la misma variable
+        } //Fin de if
+        else { //Si no hay nada despues de @ entonces es un error 
+            //System.out.println("Error Operando Octal"); //Imprimir error 
+            return false; //Error
+        } //Fin de error 
+        
+        String patron = "^[0-7]+$"; //Determinar patron con sintaxis de un octal 
+        Pattern pattern = Pattern.compile(patron);
+        Matcher matcher = pattern.matcher(octal); 
+        
+        return matcher.matches(); //Retorna el octal 
                
     } //Fin de la funcion para comprobar operando octal 
     
     //Funcion para validar si es hexadecimal 
     public static Boolean IsHexadecimal(String hexadecimal) {
-            char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-            String newx = hexadecimal.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-            String patronhexa = "^[0-9A-F]+$";//Declaracn de la variable que cintene los caracteres para comparar.
-            Pattern pattern = Pattern.compile(patronhexa);//junta los caracteres en un objeto para ser comparados.
-            Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
-            return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.         
+        if (hexadecimal.length() > 1) { //Valida si hay algo en octal despues de $
+            hexadecimal = hexadecimal.substring(1); //Le quita el primer caracter ($) y reemplaza la misma variable
+        } //Fin de if
+        else { //Si no hay nada despues de $ entonces es un error 
+            //System.out.println("Error Operando hexadecmial"); //Imprimir error 
+            return false; //Error
+        } //Fin de error      
+        
+        String patron = "^[0-9A-Fa-f]+$";
+        Pattern pattern = Pattern.compile(patron);
+        Matcher matcher = pattern.matcher(hexadecimal);
+        
+        return matcher.matches(); //Retorna el hexadecimal          
     } //Fin de la funcion para comprobar operando hexadecimal
     
     //Funcion para validar si operando es decimal

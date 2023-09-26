@@ -121,15 +121,15 @@ public class ProyectoIntegradorP2_Equipo10 {
                         //Validadores para identificar que tipo de operando es
                         if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario
                             System.out.println("Hola binario");     
-                            //DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); 
+                            DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); 
                             if(!Metodos.IsBinario(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
                         } //Fin de if
                         
-                        else if(linea.getOperando().startsWith("$") ) { //Si empieza con $ entonces puede ser binario
+                        else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser binario
                             System.out.println("Holahexa");
-                            //DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando());
+                            DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando());
                             if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es hexadecimal"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
@@ -137,7 +137,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         
                         else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser binario
                             System.out.println("Hola octal");
-                            //DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando());
+                            DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando());
                             if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis no es igual 
                                  linea.setOperando(linea.getOperando() + " No es octal"); //Mostrar mensaje de error
                             } //Fin de if sintaxis
@@ -228,7 +228,7 @@ public class ProyectoIntegradorP2_Equipo10 {
         return true;
     }//Fin de codops
     
-    
+    /*
         public static boolean IsHexa(String x){
             char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
             String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -237,8 +237,8 @@ public class ProyectoIntegradorP2_Equipo10 {
             Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
             return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
     }//Fin de IsHexa
-        
-   
+*/
+   /*
     public static boolean rangohexa(String x){
         char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
         String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -250,7 +250,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             return false;
         }//Fin de try catch
     }//Fin de rangohexa.
-    
+    */
     
     /*
     public static boolean IsOctal(String x){
@@ -262,7 +262,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
     }//Fin de IsOctal
 */
-    
+    /*
     public static boolean rangoocta(String x){
         char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
         String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -279,5 +279,5 @@ public class ProyectoIntegradorP2_Equipo10 {
         }//Fin de try catch
         
     }//Fin de rangooctal
-    
+    */
 } //Fin de la clase principal
