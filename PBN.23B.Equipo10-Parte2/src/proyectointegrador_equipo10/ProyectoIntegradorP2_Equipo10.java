@@ -37,9 +37,10 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
         // Crear la tabla con el modelo de datos
         JTable tbl = new JTable(tabla);
+        tbl.setEnabled(false);
 
         // Configurar del frame
-        JFrame frame = new JFrame("Tabla de Código");
+        JFrame frame = new JFrame("Tabla");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(new JScrollPane(tbl), BorderLayout.CENTER);
@@ -254,7 +255,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     break; //Romper ciclo
                 } //Fin de if 
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDireccion()});
+                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDireccion(), linea.getTamaño()});
             } //Fin de while       
 
             } //Fin de try                        
