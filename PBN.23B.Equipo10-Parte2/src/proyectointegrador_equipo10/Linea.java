@@ -212,13 +212,13 @@ else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
         return "Relativo (REL) de 16 bits";
     }
 }       //Rel con ciclo 
-          else if (operando.matches("^[[A-a],[B-b],[D-d],[X-x]|[Y-y]|[SP-sp]],[[a-zA-Z.]|[0-9]]+$")) {
+          else if (operando.matches("^[[ABDXYSPabdxysp]],[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
     String[] partes = operando.split(",");
     String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
     String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
 
     // Verificar si el registro es válido
-    if (registro.matches("^[[A-a],[B-b],[D-d],[X-x]|[Y-y]|[SP-sp]]$")) {
+    if (registro.matches("^[[ABDXYSPabdxysp]]$")) {
         // Verificar si la parte después de la coma es un valor numérico o una palabra válida
         if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
             return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
