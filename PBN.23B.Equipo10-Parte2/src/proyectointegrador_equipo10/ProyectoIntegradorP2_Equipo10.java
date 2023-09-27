@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class ProyectoIntegradorP2_Equipo10 {
 
-    public static void main(String[] args) { //Prueba
+    public static void main(String[] args) {
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
         
     String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo    
@@ -153,6 +153,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         
                         else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
                             linea.setOperando(Palabra); //FALTA VALIDAR SI ES OTRO TIPO DE OPERANDO FUERA DE HEXA,OCTAL,BIN O DECIMAL
+                            linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
                             //linea.setOperando("Error"); //Mensaje de error 
                         } //Fin de else if
 
