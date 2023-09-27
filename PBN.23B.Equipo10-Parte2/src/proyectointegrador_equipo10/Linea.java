@@ -43,8 +43,11 @@ public class Linea {
 
  public String getDireccion() {
         // Comprobar si es un NOP (sin operando)
-if (codop != null && codop.equalsIgnoreCase("NOP") && operando == null) {
-    return "Inherente (INH)";
+if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+    return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
+}
+else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "ORG" sin un operando
+    return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
 }
 // Comprobar si es un INH (sin operando)
 else if (operando == null) { //Si el operando es nulo, entonces se considera INH
