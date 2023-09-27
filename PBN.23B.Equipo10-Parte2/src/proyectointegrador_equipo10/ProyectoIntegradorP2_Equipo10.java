@@ -1,284 +1,223 @@
-//Proyecto de prueba
+/*
+Proyecto Integrador Parte 2 | Programacion de bajo nivel
+Equipo 10 | Integrantes: 
+    - Hernandez Gutierrez Emmanuel 
+    - Jimenez Castellanos Jesus Alejandro
+    - Martinez Isaac
+*/
+
+// Archivo principal: Contiene todo el algoritmo que hace funcionar al programa, llama funciones de otras clases y contiene un main
+// para la ejecucion del programa
+
 package proyectointegrador_equipo10;
 
 //Librerias
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 //import javax.swing.table.DefaultTableModel;
 
-public class ProyectoIntegradorP2_Equipo10 {
+public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
 
-    public static void main(String[] args) {
-        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
+    public static void main(String[] args) { //Inicio de Main
+        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal   
         
-    String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo    
-    ArchivoSalvacion archivosalvacion = new ArchivoSalvacion("Salvation.txt"); //Objeto para mandar a llamar el archivo de Salvation
-    
-    //System.out.println(ArchivoSalvacion.Salvacion[100][2]); //impresion de prueba
-    
-    //Instanciar objeto linea con variables inicializadas en null
-    Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea
-    
-    //Leer el archivo 
-    try { //Leer archivo
-        BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Leer el archivo P1ASM.asm
-        String Linea; //Variable auxiliar, todo lo que se lee se guarda en este variable
-
-        //Guardar cada linea en la variable Linea
-        while((Linea = Read.readLine()) != null) {
-        DecimalString = "0"; //Inicializar variable en null por cada pasada
+        String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
+            /*Archivos disponibles para probar el programa: 
+                - P1ASM.asm
+                - P2ASM.asm */
             
-        //Inicializar objetos en null para las iteraciones 
-        linea.setEtiqueta(null);
-        linea.setCodop(null);
-        linea.setOperando(null);
-        linea.setDireccion(null);
-        linea.setTamaño(null);
-        
-    // Determinar el tipo de direccionamiento después de asignar valores
-        String tipoDireccionamiento = linea.getDireccion();
-        linea.setDireccion(tipoDireccionamiento);
-        
-            Linea = Linea.trim();
-            //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
+        ArchivoSalvacion archivosalvacion = new ArchivoSalvacion("Salvation.txt"); //Instanciar objeto para mandar a llamar el archivo de Salvation
+            /*Salvation es un archivo de tipo "txt", contiene toda la informacion sobre los codigos operandos, modos de direccionamiento, tamaños de los
+              bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
+              Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
+            
+        Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea con variables inicializadas en null
+    
+    //PRUEBAS DE ISAAC PARA DESPUES DETECTAR TAMANO ///// NO MOVERLE A NADA PLS :)
+    /*
+    //System.out.println(ArchivoSalvacion.Salvacion[100][0]); //impresion de prueba
+    
+    //0 para CODOPS
+    //1 para operandos
+    //2 para modos de direccionamiento
+    //3 para codigo maquina
+    //4 para bytes por calcular
+    //5 para bytes totales
+    
+    String Salvacion = null;
+    Salvacion = ArchivoSalvacion.Salvacion[100][0];
+        System.out.println(Salvacion);
+    
+    
+    for(int i = 0; i <= 585; i++) {
+    if(Linea.getDireccion() == ArchivoSalvacion[i][0]){
+        Linea.setTamaño();
+    }//Fin de if
+    } //FIn de for
+    */
+    
+        try { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta
+            BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Lee el archivo contenido en la variable Archivo
+            String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable
+           
+            while((Linea = Read.readLine()) != null) { //Guardar cada linea en la variable Linea
+                DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
 
-            //Validar linea de comentario
-            if(Linea.isEmpty()) { //Si la linea esta vacia
-                continue; //Continuar con las demas lineas
-            }//Fin de if 
+                //Inicializar objetos en null en cada iteracion  
+                linea.setEtiqueta(null); //Etiqueta
+                linea.setCodop(null); //Codigo Operando
+                linea.setOperando(null); //Operando
+                linea.setDireccion(null); //Direccionamiento
+                linea.setTamaño(null); //Tamaño en bytes
 
-           // Validar si es comentario
-            else if (Linea.startsWith(";")) { // Si la línea empieza con ;
-                if (!Linea.matches("^;.{0,80}$")) { // Verificar que después del ";" pueda tener hasta 80 caracteres
-                    System.out.println("Error de comentario\n");
-                } //Fin de if 
-                else { //Entonces hay menos de 80 caracteres 
-                    System.out.println("COMENTARIO \n"); // Escribir comentario
-                } //Fin de else 
-            } // Fin de else if
+                // Determinar el tipo de direccionamiento después de asignar valores
+                String tipoDireccionamiento = linea.getDireccion();
+                linea.setDireccion(tipoDireccionamiento);
 
-            //Valifacion para terminar el archivo
-            else if(Linea.equalsIgnoreCase("END")) {//Si la linea termina en "END", entonces deja de leer el archivo
-                //Impresion de las variables por default cuando encuentre END
-                System.out.println("ETIQUETA = null");
-                System.out.println("CODOP = END");
-                System.out.println("OPERANDO = null");
-                System.out.println("DIRECCION = null");
-                System.out.println("TAMANO = null" + "\n");
-                Read.close(); // Funcion para cerrar el archivo de lectura
-                break; //El break indica el fin del ciclo 
-            } //Fin de else if
+                Linea = Linea.trim(); //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
 
-            //Leer palabras 
-            else {
-                String[] Palabras = Linea.split("\\s+"); //Arreglo que parte los espacios
-                /* - Palabras es un arreglo que guardara las palabras que esten separadas por espacio en la variable linea                                       
-                /  - Funcion Split: Se utiliza para dividir la cadena en partes, en este caso mediante espacios "\\S+"
-                     Esta funcion nos proporciona palabra por palabra, es util en nuestro codigo porque asi podemos
-                     guardar dichas palabras en las variables de Etiqueta, Codop y Operando.
-                   - s+ : Significa espacios " " */                                                       
+                //Validar linea vacia
+                if(Linea.isEmpty()) { //Validar Si una linea esta vacia
+                    continue; //Continuar con las demas lineas
+                }//Fin de if 
 
-                for(String Palabra : Palabras) {
+               // Validar comentarios
+                else if (Linea.startsWith(";")) { // Si la línea empieza con ; entonces se debe considerar como comentario
+                    if (!Linea.matches("^;.{0,80}$")) { // Si la linea encontrada no contiene de 0 a 80 entonces es un error de comentario
+                        System.out.println("Error Comentario\n"); //Mensaje de error
+                    } //Fin de if 
+                    else { //Entonces la linea si tiene de 0 a 80 caracteres 
+                        System.out.println("COMENTARIO \n"); // Escribir comentario
+                    } //Fin de else 
+                } // Fin de else if
 
-                    Pattern patronetiqueta = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,7}$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
-                    Matcher matcheretiqueta = patronetiqueta.matcher(Palabra); // Crear un Matcher para verificar si la Palabra cumple con el patrón
+                //Leer palabras 
+                else { //Si la linea no encunetra un comentario o el fin del programa
+                    String[] Palabras = Linea.split("\\s+"); //Arreglo que parte los espacios
+                    /* - Palabras es un arreglo que guardara las palabras que esten separadas por espacio en la variable linea                                       
+                       - Funcion Split: Se utiliza para dividir la cadena en partes, en este caso mediante espacios "\\S+"
+                         Esta funcion nos proporciona palabra por palabra, es util en nuestro codigo porque asi podemos
+                         guardar dichas palabras en las variables de Etiqueta, Codop y Operando.
+                       - s+ : Significa espacios " " */                                                       
 
-                    //Validar etiqueta
-                    if(Palabra.endsWith(":")) {    
-                        Palabra = Palabra.substring(0, Palabra.length() - 1 ); //Eliminar ":" de la palabra etiqueta
-                        if (!matcheretiqueta.matches() && cracteretq(Palabra)) { //Validador de longitud maximo 8 caracteres   
-                            linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
-                        } //Fin de if
-                        else {
-                            System.out.println("Error de Etiqueta: La etiqueta" + linea.getEtiqueta() + "excede la longitud maxima de 8 caracteres."); 
-                            linea.setEtiqueta("Error"); // Restablecer etiqueta solo si excede la longitud máxima 
-                        } //Fin de else 
-                    } // Fin de if                                                                      
+                    for(String Palabra : Palabras) { //For each / enhanced for loop
 
-                    //Las variables ya estan inicializadas en null, por lo tanto siempre entra a la condicion
-                    //Validacion CODOP
-                    else if(linea.getCodop() == null) { //Si el codigo operando es igual a null                        
-                        linea.setCodop(Palabra); //La palabra identificada se guardara en el objeto Codop
+                        Pattern patronetiqueta = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,7}$"); //Definir un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
+                        Matcher matcheretiqueta = patronetiqueta.matcher(Palabra); // Crear un Matcher para verificar si la etiqueta cumple con el patrón
 
-                        //Validar que la palabra comience con una letra en mayúscula o minúscula
-                        //Su longitud maxima es de 5 caracteres
-                        //Cualquier otro caracter es un error
-                        Pattern patron = Pattern.compile("[a-zA-Z.]{0,5}+$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 5 caracteres                 
-                        Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
+                        //Validar etiqueta
+                        if(Palabra.endsWith(":")) { //Si empieza con ":"   
+                            Palabra = Palabra.substring(0, Palabra.length() - 1 ); //Eliminar ":" de la palabra etiqueta
+                            if (!matcheretiqueta.matches() && Metodos.cracteretq(Palabra)) { //Validar la longitud maxima de 8 caracteres y los caracteres que hay en "Palabra"  
+                                linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
+                            } //Fin de if
+                            else { //Si palabra no empieza con ":" 
+                                linea.setEtiqueta("Error Etiqueta"); //Definir mensaje de etiqueta en caso de error
+                            } //Fin de else 
+                        } // Fin de if                                                                      
 
-                    if (!matcher.matches() && codops(linea.getCodop()) != true) { // Verificar si la palabra no cumple con el patrón
-                           System.out.println("Error Codop: El Codop " + linea.getCodop() + " excede la longitud maxima de caracteres o contiene un simbolo invalidado"); //Si no cumple el patron entonces manda un mensaje de error
-                           linea.setCodop("Error"); //Mensaje de error
-                        } //Fin de if       
-                    } //Fin de else if
-
-                    //Validaciones de Operando                    
-                    else if(linea.getOperando() == null) { //Si el operando es igual a null                        
-                        linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
+                        //Las variables ya estan inicializadas en null, por lo tanto siempre entra a la condicion debido al while inicial, por cada iteracion los setters
+                        //de Etiqueta, Codop, Operando, Direccion y Tamaño vuelven a tener el valor de null
                         
-                        //Validadores para identificar que tipo de operando es
-                        if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario
-                            System.out.println("Hola binario");     
-                            DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); 
-                            if(!Metodos.IsBinario(linea.getOperando())) { //Validar si la sintaxis no es igual 
-                                 linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
-                            } //Fin de if sintaxis
-                        } //Fin de if
-                        
-                        else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser binario
-                            System.out.println("Holahexa");
-                            DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando());
-                            if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
-                                 linea.setOperando(linea.getOperando() + " No es hexadecimal"); //Mostrar mensaje de error
-                            } //Fin de if sintaxis
-                        } //Fin de else if
-                        
-                        else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser binario
-                            System.out.println("Hola octal");
-                            DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando());
-                            if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis no es igual 
-                                 linea.setOperando(linea.getOperando() + " No es octal"); //Mostrar mensaje de error
-                            } //Fin de if sintaxis
-                        } //Fin de else if
-                        
-                        else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal, empieza con un numero 
-                            System.out.println("Hola decimal");
-                            DecimalString = linea.getOperando(); //Guardar el valor decimal en la variable DecimalString 
-                            if(!Metodos.IsDecimal(linea.getOperando())) { //Validar si la sintaxis no es igual 
-                                 linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
-                            } //Fin de if sintaxis
-                        } //Fin de else if
-                        
-                        else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
-                            linea.setOperando(Palabra); //FALTA VALIDAR SI ES OTRO TIPO DE OPERANDO FUERA DE HEXA,OCTAL,BIN O DECIMAL
-                            linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
-                            //linea.setOperando("Error"); //Mensaje de error 
+                        //Validacion para CODOP
+                        else if(linea.getCodop() == null) { //Si el codigo operando es igual a null                        
+                            linea.setCodop(Palabra); //La palabra identificada se guardara en el objeto Codop
+
+                            Pattern patron = Pattern.compile("[a-zA-Z.]{0,5}+$"); //Crear un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 5 caracteres                 
+                            Matcher matcher = patron.matcher(Palabra); // Crear un Matcher para verificar si Palabra cumple con el patrón
+
+                            if (!matcher.matches() && Metodos.codops(linea.getCodop()) != true) { // Verificar si la palabra no cumple con el patrón
+                                   linea.setCodop("Error CODOP"); //Definir mensaje de etiqueta en caso de error
+                                } //Fin de if       
                         } //Fin de else if
 
-                    } //Fin de else if                       
-                                 
-                    else if(linea.getTamaño() == null) { //Siempre va a ser null porque nosotros los calculamos
-                            linea.setTamaño(linea.getOperando());
-                    } //Fin de else if
-                } //Fin de for
+                        //Validaciones para Operando                    
+                        else if(linea.getOperando() == null) { //Si el operando es igual a null                        
+                            linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
 
-                // Validar espacios en blanco o tabuladores en Etiqueta, CODOP y Operando
-                if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
-                    System.out.println("Error Etiqueta: La etiqueta contiene espacios en blanco o tabuladores");
-                    linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
-                } //Fin de if      
+                            /*Validadores para identificar que tipo de operando es
+                                - Se valida cada sistema numerico:
+                                - Binario = Empiezan con %
+                                - Hexadecimal = Empiezan con $
+                                - Octal = Empizan con @
+                                - Decimal = Empiezan con cualquier numero (0,9)
+                                - Resto de Operandos = Operandos sin tipo de sistema asignado, por lo general aqui caen todos los operandos de tipo IDX y compañia */
+                            
+                            //Validar Binario
+                            if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario     
+                                DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); //Convierte de binario a decimal 
+                                if(!Metodos.IsBinario(linea.getOperando())) { //Validar la sintaxis de un binario 
+                                     linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                            } //Fin de if
+                            
+                            //Validar hexadecimal
+                            else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser hexadecimal
+                                DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando()); //Convierte de hexadecimal a decimal
+                                if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar la sintaxis de un hexadecimal 
+                                     linea.setOperando(linea.getOperando() + " No es hexadecimal"); //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                            } //Fin de else if
+                            
+                            //Validar octal
+                            else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser octal
+                                DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando()); //Convierte de octal a decimal
+                                if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis de un octal 
+                                     linea.setOperando(linea.getOperando() + " No es octal"); //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                            } //Fin de else if
+                            
+                            //Validar decimal
+                            else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal si contiene solamente numeros 
+                                DecimalString = linea.getOperando(); //Guardar automaticamente el valor decimal en la variable DecimalString 
+                                if(!Metodos.IsDecimal(linea.getOperando())) { //Validar si la sintaxis de un decimal 
+                                     linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                            } //Fin de else if
+                            
+                            //Si el operando no cae en ninguno de los sistemas numericos anteriores, entonces cae aqui
+                            else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
+                                linea.setOperando(Palabra); //FALTA VALIDAR SI ES OTRO TIPO DE OPERANDO FUERA DE HEXA,OCTAL,BIN O DECIMAL 
+                            } //Fin de else if
+                        } //Fin de else if                       
+
+                        else if(linea.getTamaño() == null) { //Siempre va a ser null porque nosotros los calculamos
+                                linea.setTamaño(linea.getOperando());
+                        } //Fin de else if
+                    } //Fin de for
+
+                    // Validar espacios en blanco o tabuladores en Etiqueta
+                    if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
+                        System.out.println("Error Etiqueta");
+                        linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
+                    } //Fin de if      
+
+                    int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits
+                    Metodos.DeterminarBits(Decimal); //Metodo para determinar la cantidad de bits
+                    
+                    //Impresion de las variables
+                    System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
+                    System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
+                    System.out.println("OPERANDO = " + linea.getOperando()); //Impresion de Operando por cada iteracion
+                    System.out.println("VALOR DECIMAL = " + Decimal); //Impresion de Valor Decimal por cada iteracion
+                    System.out.println("DIRECCION = " + linea.getDireccion()); //Impresion de Direccion por cada iteracion
+                    System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
+                } //Fin de else
                 
-                //Integer entero = Integer.valueOf(cadena);
-                int Decimal = Integer.valueOf(DecimalString);
-                Metodos.DeterminarBits(Decimal); 
+                if(Linea.equalsIgnoreCase("END")) {//Si la linea encuentra "END" entonces la lectura del archivo puede terminar
+                    break; //Romper ciclo
+                } //Fin de if   
+            } //Fin de while       
 
-                //Impresion de las variables
-                System.out.println("ETIQUETA = " + linea.getEtiqueta());
-                System.out.println("CODOP = " + linea.getCodop());
-                System.out.println("OPERANDO = " + linea.getOperando());
-                System.out.println("VALOR DECIMAL = " + Decimal);
-                System.out.println("DIRECCION = " + linea.getDireccion());
-                System.out.println("TAMANO = " + linea.getTamaño() + "\n");             
-            } //Fin de else 
-        } //Fin de while       
-        
-        } //Fin de try                        
-        catch (Exception e) { //Mostrar mensaje de error
-            System.out.println("Error " + e.getMessage()); //Mensaje de error
-        } //Fin de catch       
-    } //Fin de main 
-    
-    //Funciones 
-    /*
-    static boolean valespacios(String y){
-        String cet2 = ":\t\s";//Caracteres permitidos en la comparacion.
-        for(int i=0; i < y.length();i++){//Recorre la cadena y, que se ingresa a la funcion. 
-            char vals = y.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
-            if(cet2.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet2.
-                return false;
-            } //Fin de if
-        } //Fin de for
-        return true;
-    }//Fin vlaespacios*/
-    
-    static boolean cracteretq(String x){
-        String cet1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:_";//Caracteres permitidos en la comparacion.
-        String etqupper = x.toUpperCase();//Convierte la variable en mayusculas para la comparacion.
-        if(etqupper.length()>5){
-        for(int i=0; i < etqupper.length(); i++){//Recorre la cadena x, que se ingresa a la funcion.
-            char charetq = etqupper.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
-            if(cet1.indexOf(charetq) == -1){//Se revisa si los caracteres si estan en cet1.
-                return false;
-            } //Fin de if
-        } //Fin de for
-        }
-        return true;
-    }//Fin de caracteretq
-    
-    
-    static boolean codops(String o){
-        String cet3 = "\t\s";//Caracteres permitidos en la comparacion.
-        for(int i=0; i < o.length();i++){//Recorre la cadena o, que se ingresa a la funcion.
-            char vals = o.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
-            if(cet3.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet3.
-                return false;
-            } //Fin de if
-        } //Fin de for
-        return true;
-    }//Fin de codops
-    
-    /*
-        public static boolean IsHexa(String x){
-            char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-            String patronhexa = "^[0-9A-F]+$";//Declaracn de la variable que cintene los caracteres para comparar.
-            Pattern pattern = Pattern.compile(patronhexa);//junta los caracteres en un objeto para ser comparados.
-            Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
-            return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
-    }//Fin de IsHexa
-*/
-   /*
-    public static boolean rangohexa(String x){
-        char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-        try{
-            int hexaint = Integer.parseInt(newx, 16);//Convierte la cadena de texto a int.
-            System.out.println(hexaint);
-            return hexaint >= 0 && hexaint <= 0xFFFF;//Compara si el hexadecimal esta en el rango de 0 a 65535
-        }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
-            return false;
-        }//Fin de try catch
-    }//Fin de rangohexa.
-    */
-    
-    /*
-    public static boolean IsOctal(String x){
-            char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-            String patronocta = "^[0-7]+$";//Declaracn de la variable que cintene los caracteres para comparar.
-            Pattern pattern = Pattern.compile(patronocta);//junta los caracteres en un objeto para ser comparados.
-            Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
-            return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
-    }//Fin de IsOctal
-*/
-    /*
-    public static boolean rangoocta(String x){
-        char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-        if(newx.length() > 6){
-            return false;
-        }
-        
-        try{
-            int octaint = Integer.parseInt(newx, 8);//Convierte la cadena de texto a int.
-            System.out.println(octaint);
-            return octaint >= 0 && octaint <= 65535;//Compara si el hexadecimal esta en el rango de 0 a 65535
-        }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
-            return false;
-        }//Fin de try catch
-        
-    }//Fin de rangooctal
-    */
+            } //Fin de try                        
+            catch (Exception e) { //Catch en caso de no poder abrir un archivo
+                System.out.println("Error " + e.getMessage()); //Mensaje de error
+            } //Fin de catch       
+        } //Fin de main 
+     
 } //Fin de la clase principal
