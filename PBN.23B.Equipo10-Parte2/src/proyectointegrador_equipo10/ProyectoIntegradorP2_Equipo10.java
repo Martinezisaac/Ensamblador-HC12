@@ -12,6 +12,7 @@ Equipo 10 | Integrantes:
 package proyectointegrador_equipo10;
 
 //Librerias
+import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -19,12 +20,32 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 //import javax.swing.table.DefaultTableModel;
 
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
 
     public static void main(String[] args) { //Inicio de Main
+        
+        // Crear el modelo de datos para la JTable
+        DefaultTableModel tabla = new DefaultTableModel(
+                new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0);
+
+        // Crear la tabla con el modelo de datos
+        JTable tbl = new JTable(tabla);
+
+        // Configurar del frame
+        JFrame frame = new JFrame("Tabla de Código");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.add(new JScrollPane(tbl), BorderLayout.CENTER);
+        frame.pack();
+        frame.setVisible(true);
+        
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal   
         
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
@@ -231,7 +252,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 
                 if(Linea.equalsIgnoreCase("END")) {//Si la linea encuentra "END" entonces la lectura del archivo puede terminar
                     break; //Romper ciclo
-                } //Fin de if   
+                } //Fin de if 
+                // Agrega una fila con los datos a la JTable
+                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDireccion()});
             } //Fin de while       
 
             } //Fin de try                        
