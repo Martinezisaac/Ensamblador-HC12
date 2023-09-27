@@ -165,8 +165,8 @@ else if (operando.matches("^-?\\d+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
                 return "Indexado de 9 bits (IDX1)";
             }
 }  
-        // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
-else if (operando.matches("^\\d{1,5},[XYSPPCpc]+\\$")) {
+// Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
+if (operando.matches("^[0-9]+,[XYSPPCxysppc]+$")) {
     String[] parts = operando.split(",");
     int valorIndexado = Integer.parseInt(parts[0]);
     if (valorIndexado >= 256 && valorIndexado <= 65535) {
