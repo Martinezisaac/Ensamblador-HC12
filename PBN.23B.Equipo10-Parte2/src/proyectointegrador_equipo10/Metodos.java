@@ -90,6 +90,10 @@ public class Metodos {
     
     //Funcion para validar si operando es decimal
     public static Boolean IsDecimal(String decimal) {
+        if(!decimal.matches("[0-9]+$")) {
+            return false;
+        } //Fin de else 
+        
         String patrondecimal = "[0-9]+$"; //Variable auxiliar para comparar
         Pattern pattern = Pattern.compile(patrondecimal); //Junta los caracteres en un objeto para ser comparados
         Matcher matcher = pattern.matcher(decimal);
@@ -116,7 +120,7 @@ public class Metodos {
             return DecimalString; //Retornar el valor en decimal 
         } //Fin de if
         else { //Si no es binario, entonces muestra mensaje de error 
-            return "Error Operando Binario"; //Mensaje de error
+            return "0"; //Mensaje de error
         } //Fin de else       
     } //Fin del metodo para convertir de binario a decimal 
     
@@ -140,7 +144,8 @@ public class Metodos {
             return decimalString;
         } //Fin if 
         else {
-            return "Error, el numero ingresado no es octal"; //Mensaje de error 
+            //System.err.println("No se puede convertir a entero. El formato no es válido.");
+            return "0"; //Mensaje de error 
         } //Fin de else 
     } //Fin de la funcion para convertir de octal a decimal 
     
@@ -171,7 +176,7 @@ public class Metodos {
             return decimalString; //Retornar el valor en decimal 
         } //Fin de if 
         else { //Si no es hexadecimal, entonces muestra mensaje de error
-            return "Error, el numero ingresado no es hexadecimal"; //Mensaje de error 
+            return "0"; //Mensaje de error 
         } //Fin de else 
     } //Fin de la funcion para convertir de hexadecimal a decimal 
     
