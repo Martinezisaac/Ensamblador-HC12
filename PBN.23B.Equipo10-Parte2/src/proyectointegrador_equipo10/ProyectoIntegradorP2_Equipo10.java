@@ -15,6 +15,7 @@ package proyectointegrador_equipo10;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -26,7 +27,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     public static void main(String[] args) { //Inicio de Main
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal   
         
-        String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
+        //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
             /*Archivos disponibles para probar el programa: 
                 - P1ASM.asm
                 - P2ASM.asm */
@@ -38,34 +39,53 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
         Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea con variables inicializadas en null
     
-    //PRUEBAS DE ISAAC PARA DESPUES DETECTAR TAMANO ///// NO MOVERLE A NADA PLS :)
-    /*
-    //System.out.println(ArchivoSalvacion.Salvacion[100][0]); //impresion de prueba
+        //PRUEBAS DE ISAAC PARA DESPUES DETECTAR TAMANO ///// NO MOVERLE A NADA PLS :)
+        /*
+        //System.out.println(ArchivoSalvacion.Salvacion[100][0]); //impresion de prueba
+
+        //0 para CODOPS
+        //1 para operandos
+        //2 para modos de direccionamiento
+        //3 para codigo maquina
+        //4 para bytes por calcular
+        //5 para bytes totales
+
+        String Salvacion = null;
+        Salvacion = ArchivoSalvacion.Salvacion[100][0];
+            System.out.println(Salvacion);
+
+
+        for(int i = 0; i <= 585; i++) {
+        if(Linea.getDireccion() == ArchivoSalvacion[i][0]){
+            Linea.setTamaño();
+        }//Fin de if
+        } //FIn de for
+        */
     
-    //0 para CODOPS
-    //1 para operandos
-    //2 para modos de direccionamiento
-    //3 para codigo maquina
-    //4 para bytes por calcular
-    //5 para bytes totales
-    
-    String Salvacion = null;
-    Salvacion = ArchivoSalvacion.Salvacion[100][0];
-        System.out.println(Salvacion);
-    
-    
-    for(int i = 0; i <= 585; i++) {
-    if(Linea.getDireccion() == ArchivoSalvacion[i][0]){
-        Linea.setTamaño();
-    }//Fin de if
-    } //FIn de for
-    */
-    
-        try { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta
-            BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Lee el archivo contenido en la variable Archivo
+        File selectedFile = null;          
+        JFileChooser fileChooser = new JFileChooser();
+
+        //Establecer un filtro para mostrar solo ciertos tipos de archivos (opcional)
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto", "asm"); //Solo abrira archivos de tipo asm
+        fileChooser.setFileFilter(filter); //Aplicar filtro
+
+        //Abrir el diálogo para elegir un archivo
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile(); //Abrir archivo
+        } //Fin de if 
+        else {
+            System.out.println("No se selecciono ningun archivo..."); //Mensaje de error
+            return;  //Si no se selecciona un archivo, sale del programa
+        } //Fin de else          
+            //BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Lee el archivo contenido en la variable Archivo
+            
+        try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta    
             String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable
            
-            while((Linea = Read.readLine()) != null) { //Guardar cada linea en la variable Linea
+            while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea 
+                //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
                 DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
 
                 //Inicializar objetos en null en cada iteracion  
@@ -215,7 +235,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             } //Fin de while       
 
             } //Fin de try                        
-            catch (Exception e) { //Catch en caso de no poder abrir un archivo
+            catch (IOException e) { //Catch en caso de no poder abrir un archivo
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
             } //Fin de catch       
         } //Fin de main 
