@@ -178,6 +178,96 @@ public class Metodos {
         else { //Si no es hexadecimal, entonces muestra mensaje de error
             return "0"; //Mensaje de error 
         } //Fin de else 
-    } //Fin de la funcion para convertir de hexadecimal a decimal 
+    } //Fin de la funcion para convertir de hexadecimal a decimal
+    
+    static boolean cracteretq(String x){
+        String cet1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:_";//Caracteres permitidos en la comparacion.
+        String etqupper = x.toUpperCase();//Convierte la variable en mayusculas para la comparacion.
+        if(etqupper.length()>5){
+            for(int i=0; i < etqupper.length(); i++){//Recorre la cadena x, que se ingresa a la funcion.
+                char charetq = etqupper.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+                if(cet1.indexOf(charetq) == -1){//Se revisa si los caracteres si estan en cet1.
+                    return false;
+                } //Fin de if
+            } //Fin de for
+        }
+        return true;
+    }//Fin de caracteretq
+
+        static boolean codops(String o){
+            String cet3 = "\t\s";//Caracteres permitidos en la comparacion.
+            for(int i=0; i < o.length();i++){//Recorre la cadena o, que se ingresa a la funcion.
+                char vals = o.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+                if(cet3.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet3.
+                    return false;
+                } //Fin de if
+            } //Fin de for
+            return true;
+        }//Fin de codops
+    
+    /*
+            public static boolean IsHexa(String x){
+                char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+                String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+                String patronhexa = "^[0-9A-F]+$";//Declaracn de la variable que cintene los caracteres para comparar.
+                Pattern pattern = Pattern.compile(patronhexa);//junta los caracteres en un objeto para ser comparados.
+                Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
+                return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
+        }//Fin de IsHexa
+    */
+       /*
+        public static boolean rangohexa(String x){
+            char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+            try{
+                int hexaint = Integer.parseInt(newx, 16);//Convierte la cadena de texto a int.
+                System.out.println(hexaint);
+                return hexaint >= 0 && hexaint <= 0xFFFF;//Compara si el hexadecimal esta en el rango de 0 a 65535
+            }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
+                return false;
+            }//Fin de try catch
+        }//Fin de rangohexa.
+        */
+
+        /*
+        public static boolean IsOctal(String x){
+                char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+                String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+                String patronocta = "^[0-7]+$";//Declaracn de la variable que cintene los caracteres para comparar.
+                Pattern pattern = Pattern.compile(patronocta);//junta los caracteres en un objeto para ser comparados.
+                Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
+                return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
+        }//Fin de IsOctal
+    */
+        /*
+        public static boolean rangoocta(String x){
+            char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+            if(newx.length() > 6){
+                return false;
+            }
+
+            try{
+                int octaint = Integer.parseInt(newx, 8);//Convierte la cadena de texto a int.
+                System.out.println(octaint);
+                return octaint >= 0 && octaint <= 65535;//Compara si el hexadecimal esta en el rango de 0 a 65535
+            }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
+                return false;
+            }//Fin de try catch
+
+        }//Fin de rangooctal
+        */
+    
+            /*
+        static boolean valespacios(String y){
+            String cet2 = ":\t\s";//Caracteres permitidos en la comparacion.
+            for(int i=0; i < y.length();i++){//Recorre la cadena y, que se ingresa a la funcion. 
+                char vals = y.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+                if(cet2.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet2.
+                    return false;
+                } //Fin de if
+            } //Fin de for
+            return true;
+        }//Fin vlaespacios*/
     
     } //Fin de la clase metodos 
