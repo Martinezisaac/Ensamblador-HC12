@@ -125,35 +125,52 @@ else if (operando == null) { //Si el operando es nulo, entonces se considera INH
 }// fin if de IMM
       
 // Comprobar el tipo de direccionamiento Directo (DIR)
-           else if (operando.matches("^[#@$%]?[0-9]+$")) {
+else if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
     // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
-    String operandoSinSimbolo = operando.replaceAll("^[#@$%]+", "");
+    String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
-    // Procesar el operando como un valor hexadecimal
+    // Procesar el operando como un valor hexadecimal o binario
     try {
-        int valor = Integer.parseInt(operandoSinSimbolo, 16);
+        int valor;
+        if (operandoSinSimbolo.startsWith("%")) {
+            // Si comienza con "%" es un valor binario
+            valor = Integer.parseInt(operandoSinSimbolo.substring(1), 2);
+        } else {
+            // De lo contrario, es un valor decimal
+            valor = Integer.parseInt(operandoSinSimbolo, 16);
+        }
+
         if (valor >= 0 && valor <= 255) {
             return "Directo (DIR) de 8 bits";
         }
     } catch (NumberFormatException e) {
-        // No es un valor hexadecimal válido
+        // No es un valor válido
     }
 }
 // Comprobar el tipo de direccionamiento Extendido (EXT)
-if (operando.matches("^[#@$%]?+[0-9A-Fa-f]+$")) {
+if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$")) {
     // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
-    String operandoSinSimbolo = operando.replaceAll("^[#@$%]+", "");
+    String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
     // Procesar el operando como un valor hexadecimal
-    try {
-        int valor = Integer.parseInt(operandoSinSimbolo, 16);
+   try {
+        int valor;
+        if (operandoSinSimbolo.startsWith("%")) {
+            // Si comienza con "%" es un valor binario
+            valor = Integer.parseInt(operandoSinSimbolo.substring(1), 2);
+        } else {
+            // De lo contrario, es un valor hexadecimal
+            valor = Integer.parseInt(operandoSinSimbolo, 16);
+        }
+
         if (valor >= 256 && valor <= 65535) {
             return "Extendido (EXT) de 16 bits";
         }
     } catch (NumberFormatException e) {
-        // No es un valor hexadecimal válido
+        // No es un valor válido
     }
 }
+
         // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
 else if (operando.matches("^-?\\d+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
     String[] parts = operando.split(",");
