@@ -7,7 +7,9 @@ public class Linea {
     private String operando;
     private String direccion; 
     private String tamaño;
-  
+    public String TamañoAux;
+    public String DireccionAux;
+      
     public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño) {
         this.etiqueta = etiqueta;
         this.codop = codop;
@@ -43,7 +45,10 @@ public class Linea {
 
     public String getDireccion() {
         // Comprobar si es un NOP (sin operando)
-        if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+        TamañoAux = null;
+        DireccionAux = null;
+        
+        if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando 
             return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
         } //Fin de validaro para ORG
         
@@ -53,7 +58,7 @@ public class Linea {
         
         // Comprobar si es un INH (sin operando)
         else if (operando == null) { //Si el operando es nulo, entonces se considera INH
-            return "Inherente (INH)";
+            return "INH";
         } //Fin de validar INH
         
         else if (operando != null) {
@@ -67,10 +72,10 @@ public class Linea {
                         int valor = Integer.parseInt(valorHexadecimal, 16);
                         
                         if (valor >= 0 && valor <= 255) {
-                            return "Inmediato (IMM) de 8 bits";
+                            return "IMM";
                         }//fin de if
                         else if (valor >= 256 && valor <= 65535) {
-                            return "Inmediato (IMM) de 16 bits";
+                            return "IMM";
                         }//fin de else if
                     }//fin de try 
                     catch (NumberFormatException e) {
@@ -84,13 +89,13 @@ public class Linea {
                 try {
                     int valor = Integer.parseInt(valorOctal, 8);
                     if (valor >= 0 && valor <= 255) {
-                        return "Inmediato (IMM) de 8 bits";
+                        return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
-                       return "Inmediato (IMM) de 16 bits";
+                        return "IMM";
                     }//fin de else if
                 }//fin de try
-                   catch (NumberFormatException e) {
+                    catch (NumberFormatException e) {
                        // No es un valor octal válido
                    }//fin de catch
             }//fin de else if  
@@ -101,10 +106,10 @@ public class Linea {
                 if (Metodos.IsBinario(valorBinario)) {
                     int valor = Integer.parseInt(valorBinario, 2);
                     if (valor >= 0 && valor <= 255) {
-                        return "Inmediato (IMM) de 8 bits";
+                        return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
-                        return "Inmediato (IMM) de 16 bits";
+                        return "IMM";
                     }//fin de else if
                 }//fin de if
             }//fin de else if 
@@ -113,10 +118,10 @@ public class Linea {
             // Comprobar si el operando es decimal (#)
                 int valorDecimal = Integer.parseInt(operandoSinNumeral);
                 if (valorDecimal >= 0 && valorDecimal <= 255) {
-                    return "Inmediato (IMM) de 8 bits";
+                    return "IMM";
                 }//fin de if
                 else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                    return "Inmediato (IMM) de 16 bits";
+                    return "IMM";
                 }//fin de else if
             }//fin de else if
         
@@ -124,10 +129,10 @@ public class Linea {
             else if (Metodos.IsDecimal(operandoSinNumeral)) {
                 int valorDecimal = Integer.parseInt(operandoSinNumeral);
                 if (valorDecimal >= 0 && valorDecimal <= 255) {
-                   return "Inmediato (IMM) de 8 bits";
+                   return "IMM";
                 }//fin de if 
                 else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                   return "Inmediato (IMM) de 16 bits";
+                    return "IMM";
                 }//fin de else if
             } //fin de else if
             } //fin if de IMM
@@ -149,7 +154,7 @@ public class Linea {
                        valor = Integer.parseInt(operandoSinSimbolo, 16);
                     } //Fin de else 
                     if (valor >= 0 && valor <= 255) {
-                       return "Directo (DIR) de 8 bits";
+                       return "DIR";
                     } //Fin de if 
                 } //Fin de try
                 catch (NumberFormatException e) {
@@ -174,7 +179,7 @@ public class Linea {
                        valor = Integer.parseInt(operandoSinSimbolo, 16);
                    } //Fin de else
                    if (valor >= 256 && valor <= 65535) {
-                       return "Extendido (EXT) de 16 bits";
+                       return "EXT";
                    } //Fin de if
                 } //Fin de try
                 catch (NumberFormatException e) {
@@ -187,10 +192,10 @@ public class Linea {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= -16 && valorIndexado <= 15) {
-                    return "Indexado de 5 bits (IDX)";
+                    return "IDX";
                 }// Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX)
                 else if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 &&                 valorIndexado <= 255)) {
-                            return "Indexado de 9 bits (IDX1)";
+                    return "IDX1";
                 } //Fin de else if
             } //Fin de else if
 
@@ -199,7 +204,7 @@ public class Linea {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= 256 && valorIndexado <= 65535) {
-                    return "Indexado de 16 bits (IDX2)";
+                    return "IDX2";
                 } //Fin de if 
             } //Fin de if
 
@@ -210,42 +215,42 @@ public class Linea {
                 String[] parts = operandoSinCorchetes.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= 0 && valorIndexado <= 65535) {
-                    return "Indexado indirecto de 16 bits ([IDX2])";
+                    return "[IDX2]";
                 } //Fin de else 
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
             else if (operando.matches("^[1-8],([-+][XYSP])$")) {
-                return "Indexado pre decremento/incremento (IDX)";
+                return "IDX";
             } //Fin de else 
 
             // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
             else if (operando.matches("^[1-8],([XYSP][-+])$")) {
-                return "Indexado post decremento/incremento (IDX)";
+                return "IDX";
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
             else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
-               return "Indexado de acumulador (IDX)";
+               return "IDX";
             }//fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
             else if (operando.matches("^\\[[D-d],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
-               return "Indexado acumulador indirecto ([D,IDX])";
+               return "[D,IDX]";
             }//fin de else if
 
             //Relativo REL
             else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
             // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
                 if (Metodos.ComprobarEtiqueta(operando)) {
-                    return "Relativo (REL) de 8 bits";
+                    return "REL";
                 } //Fin de if
                 int valorDecimal = Integer.parseInt(operando);
                 if (valorDecimal >= -128 && valorDecimal <= 127) {
-                    return "Relativo (REL) de 8 bits";
+                    return "REL";
                 } //Fin de if
                 else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
-                    return "Relativo (REL) de 16 bits";
+                    return "REL";
                 } //Fin else if
             } //Fin de else if       
             //Rel con ciclo 
@@ -259,7 +264,8 @@ public class Linea {
                 if (registro.matches("^[[ABDXYSPabdxysp]]$")) {
                     // Verificar si la parte después de la coma es un valor numérico o una palabra válida
                     if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
-                        return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
+                        //return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
+                        return "REL";
                     } //Fin de if
                 } //Fin de if
             } //Fin de else if
