@@ -45,6 +45,7 @@ public class Linea {
 
     public String getDireccion() {
         // Comprobar si es un NOP (sin operando)
+        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         TamañoAux = null;
         DireccionAux = null;
         
@@ -69,14 +70,19 @@ public class Linea {
                     // Comprobar si el operando es hexadecimal (#$)
                     String valorHexadecimal = operandoSinNumeral.substring(1);
                     try {
-                        int valor = Integer.parseInt(valorHexadecimal, 16);
+                        int valor = Integer.parseInt(valorHexadecimal, 16);                       
                         
                         if (valor >= 0 && valor <= 255) {
                             return "IMM";
                         }//fin de if
                         else if (valor >= 256 && valor <= 65535) {
+                            for(int i = 0; i <=584; i++) {
+                                if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                   return "Error"; 
+                                } //Fin de if                 
+                            }//fin de for   
                             return "IMM";
-                        }//fin de else if
+                        } //Fin de else    
                     }//fin de try 
                     catch (NumberFormatException e) {
                         // No es un valor hexadecimal válido
@@ -92,6 +98,11 @@ public class Linea {
                         return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
+                        for(int i = 0; i <=584; i++) {
+                                if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                   return "Error"; 
+                                } //Fin de if                 
+                            }//fin de for
                         return "IMM";
                     }//fin de else if
                 }//fin de try
@@ -109,6 +120,11 @@ public class Linea {
                         return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
+                        for(int i = 0; i <=584; i++) {
+                            if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                return "Error"; 
+                            } //Fin de if                 
+                        }//fin de for
                         return "IMM";
                     }//fin de else if
                 }//fin de if
@@ -121,6 +137,11 @@ public class Linea {
                     return "IMM";
                 }//fin de if
                 else if (valorDecimal >= 256 && valorDecimal <= 65535) {
+                    for(int i = 0; i <=584; i++) {
+                        if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                            return "Error"; 
+                        } //Fin de if                 
+                    }//fin de for
                     return "IMM";
                 }//fin de else if
             }//fin de else if
@@ -220,12 +241,12 @@ public class Linea {
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-            else if (operando.matches("^[1-8],([-+](X|Y|SP))$")) {
+            else if (operando.matches("^[1-8],([-+](X|x|Y|y|SP|sp))$")) {
                 return "IDX";
             } //Fin de else 
 
             // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-            else if (operando.matches("^[1-8],((X|Y|SP)[-+])$")) {
+            else if (operando.matches("^[1-8],([-+](X|x|Y|y|SP|sp))$")) {
                 return "IDX";
             } //Fin de else if
 
