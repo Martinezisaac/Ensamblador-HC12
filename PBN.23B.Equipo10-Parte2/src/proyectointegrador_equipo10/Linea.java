@@ -203,8 +203,12 @@ else if (operando.matches("^\\[\\d{1,5},[XYSPPCpc]+\\]$")) {
 }
         
     // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-else if (operando.matches("^[1-8],([-+][XYSP]|[XYSP][-+])$")) {
-    return "Indexado pre/post decremento/incremento (IDX)";
+else if (operando.matches("^[1-8],([-+][XYSP])$")) {
+    return "Indexado pre decremento/incremento (IDX)";
+}
+// Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
+else if (operando.matches("^[1-8],([XYSP][-+])$")) {
+    return "Indexado post decremento/incremento (IDX)";
 }
         
         // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
