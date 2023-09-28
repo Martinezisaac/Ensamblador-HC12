@@ -194,7 +194,7 @@ public class Linea {
                 if (valorIndexado >= -16 && valorIndexado <= 15) {
                     return "IDX";
                 }// Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX)
-                else if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 &&                 valorIndexado <= 255)) {
+                else if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 && valorIndexado <= 255)) {
                     return "IDX1";
                 } //Fin de else if
             } //Fin de else if
@@ -230,7 +230,7 @@ public class Linea {
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
-            else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+            else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]")) {
                return "IDX";
             }//fin de else if
 
@@ -246,26 +246,26 @@ public class Linea {
                     return "REL";
                 } //Fin de if
                 int valorDecimal = Integer.parseInt(operando);
-                if (valorDecimal >= -128 && valorDecimal <= 127) {
+                if (valorDecimal >= -128 && valorDecimal <= 127) { //REL 8bit
                     return "REL";
                 } //Fin de if
-                else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
+                else if (valorDecimal >= -32768 && valorDecimal <= 32767) { //REL 16bit
                     return "REL";
                 } //Fin else if
-            } //Fin de else if       
+            } //Fin de else if
+            
             //Rel con ciclo 
-
             else if (operando.matches("^[[ABDXYSPabdxysp]],[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
                 String[] partes = operando.split(",");
                 String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
                 String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
-
+                
                 // Verificar si el registro es válido
-                if (registro.matches("^[[ABDXYSPabdxysp]]$")) {
+                if (registro.matches("[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]|[PC-pc]]")) {
                     // Verificar si la parte después de la coma es un valor numérico o una palabra válida
                     if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
                         //return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
-                        return "REL";
+                        return "REL(9-bit)";
                     } //Fin de if
                 } //Fin de if
             } //Fin de else if
