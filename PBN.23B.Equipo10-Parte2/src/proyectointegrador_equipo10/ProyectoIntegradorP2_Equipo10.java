@@ -131,6 +131,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea 
                 //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
                 DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
+                linea.TamañoAux = null;
+                linea.DireccionAux = null;
 
                 //Inicializar objetos en null en cada iteracion  
                 linea.setEtiqueta(null); //Etiqueta
@@ -267,13 +269,21 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     //Algoritmo para realizar busquedas en el archivo salvacion 
                     for(int i = 0; i <= 585; i++) { //Busca desde la linea 0 hasta las 585 lineas que conforma el archivo salvacion 
                         if(linea.getCodop().equals(BD.PosicionMatriz( i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {
+                        
                         //El if compara si el CODOP y la direccion del .asm son iguaales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia  
                             //String TamañoAux; //Guarda el tamaño en una variable auxiliar
                             
-                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Establcer coincidencia
-                            linea.setTamaño(linea.getTamaño());
-                            System.out.println(linea.getTamaño()); //Impresion de prueba
+                            //linea.TamañoAux = (BD.PosicionMatriz(i, 5)); //Devolver Operando
                             
+                            linea.setTamaño(BD.PosicionMatriz(i, 5)); 
+                            linea.setTamaño(linea.getTamaño());
+                            
+                            //linea.setTamaño(linea.TamañoAux);
+                            
+                            System.out.println(linea.getTamaño()); //Impresion de prueba
+                            //System.out.println(linea.TamañoAux);
+                            //linea.DireccionAux = null;
+                            //linea.TamañoAux = null;
                             break; //Sale del if si lo encuentra 
                         } //Fin de if 
                         else { //Si no encuentra una coincidencia entonces mara un mensaje de error
