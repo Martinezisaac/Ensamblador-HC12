@@ -48,8 +48,8 @@ public class ArchivoSalvacion {
     
     //Funcion para buscar un posicion en la matriz //Hola
     public String PosicionMatriz(int fila, int columna) {
-        fila = fila - 1; 
-        columna = columna - 1;
+        //fila = fila - 1; 
+        //columna = columna - 1;
         return Salvacion[fila][columna]; //Impresion del archivo con los valores de columna y fila definidos 
         
     } //Fin de la funcion para obtener la posicion de la columna y fila en especifico 
