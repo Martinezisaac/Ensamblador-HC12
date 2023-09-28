@@ -111,7 +111,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             tbl.getColumnModel().getColumn(0).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 0
             tbl.getColumnModel().getColumn(1).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 1
             tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 2
-
+            tbl.getColumnModel().getColumn(3).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 3
+            tbl.getColumnModel().getColumn(4).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 4
+            
             // Configurar del frame
             JFrame frame = new JFrame("Partes de código Ensamblador"); //Nombre de la ventana
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
