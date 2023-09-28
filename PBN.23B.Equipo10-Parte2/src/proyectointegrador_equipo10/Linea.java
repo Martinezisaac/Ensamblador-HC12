@@ -263,7 +263,7 @@ public class Linea {
                 // Verificar si el registro es válido
                 if (registro.matches("[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]|[PC-pc]]")) {
                     // Verificar si la parte después de la coma es un valor numérico o una palabra válida
-                    if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
+                    if (Metodos.IsDecimal(resto) || Metodos.IsBinario(resto) || Metodos.IsOctal(resto) || Metodos.IsHexadecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
                         //return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
                         return "REL(9-bit)";
                     } //Fin de if
