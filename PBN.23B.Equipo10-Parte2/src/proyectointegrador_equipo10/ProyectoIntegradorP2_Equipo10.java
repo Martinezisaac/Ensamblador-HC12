@@ -48,7 +48,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
               bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
               Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
             
-        Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea con variables inicializadas en null
+        Linea linea = new Linea(null , null , null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
     
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         
@@ -131,10 +131,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
             //Algoritmo para detectar las partes de un ensamblador 
             while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea 
+                //linea.DirAux = null;
                 //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
                 DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
-                linea.TamañoAux = null;
-                linea.DireccionAux = null;
 
                 //Inicializar objetos en null en cada iteracion  
                 linea.setEtiqueta(null); //Etiqueta
@@ -142,6 +141,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 linea.setOperando(null); //Operando
                 linea.setDireccion(null); //Direccionamiento
                 linea.setTamaño(null); //Tamaño en bytes
+                linea.setDirAux(null);
 
                 // Determinar el tipo de direccionamiento después de asignar valores
                 String tipoDireccionamiento = linea.getDireccion();
@@ -228,7 +228,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser hexadecimal
                                 DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando()); //Convierte de hexadecimal a decimal
                                 if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar la sintaxis de un hexadecimal 
-                                     linea.setOperando(linea.getOperando() + " No es hexadecimal"); //Mostrar mensaje de error
+                                     linea.setOperando("Error Operando"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             } //Fin de else if
                             
@@ -236,7 +236,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser octal
                                 DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando()); //Convierte de octal a decimal
                                 if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis de un octal 
-                                     linea.setOperando(linea.getOperando() + " No es octal"); //Mostrar mensaje de error
+                                     linea.setOperando("Error Operando"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             } //Fin de else if
                             
@@ -244,7 +244,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal si contiene solamente numeros 
                                 DecimalString = linea.getOperando(); //Guardar automaticamente el valor decimal en la variable DecimalString 
                                 if(!Metodos.IsDecimal(linea.getOperando())) { //Validar si la sintaxis de un decimal 
-                                     linea.setOperando(linea.getOperando() + " No es decimal"); //Mostrar mensaje de error
+                                     linea.setOperando("Error Operando"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             } //Fin de else if
                             
@@ -266,33 +266,21 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     } //Fin de if      
 
                     int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits
-                    Metodos.DeterminarBits(Decimal); //Metodo para determinar la cantidad de bits
+                    //Metodos.DeterminarBits(Decimal); //Metodo para determinar la cantidad de bits
                     
                     //Algoritmo para realizar busquedas en el archivo salvacion 
                     for(int i = 0; i <= 585; i++) { //Busca desde la linea 0 hasta las 585 lineas que conforma el archivo salvacion 
-                        if(linea.getCodop().equals(BD.PosicionMatriz( i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {
-                        
+                        if(linea.getCodop().equals(BD.PosicionMatriz( i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                        
                         //El if compara si el CODOP y la direccion del .asm son iguaales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia  
-                            //String TamañoAux; //Guarda el tamaño en una variable auxiliar
-                            
-                            //linea.TamañoAux = (BD.PosicionMatriz(i, 5)); //Devolver Operando
-                            
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); 
                             linea.setTamaño(linea.getTamaño() + " bytes"); //Mensaje de confirmacion 
-                            
-                            //linea.setTamaño(linea.TamañoAux);
-                            
-                            System.out.println(linea.getTamaño()); //Impresion de prueba
-                            //System.out.println(linea.TamañoAux);
-                            //linea.DireccionAux = null;
-                            //linea.TamañoAux = null;
                             break; //Sale del if si lo encuentra 
                         } //Fin de if 
                         else { //Si no encuentra una coincidencia entonces manda un mensaje de error
                             linea.setTamaño(""); //Impresion de error
                         } //Fin de else 
-                    } //Fin de for                    
-                    
+                    } //Fin de for    
+                                      
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
@@ -300,15 +288,13 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     System.out.println("VALOR DECIMAL = " + Decimal); //Impresion de Valor Decimal por cada iteracion
                     System.out.println("DIRECCION = " + linea.getDireccion()); //Impresion de Direccion por cada iteracion
                     System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
-                } //Fin de else
-                
-                //if(Linea.equalsIgnoreCase("END")) {//Si la linea encuentra "END" entonces la lectura del archivo puede terminar
-                //    break; //Romper ciclo y termina el programa
-                //} //Fin de if 
+                } //Fin de else 
                 
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDireccion(), linea.getTamaño()}); //Agregar objetos a la tabla
-            
+                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                    //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
+                    //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion 
+                    
             } //Fin de while       
 
             } //Fin de try                        
