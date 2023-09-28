@@ -278,7 +278,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             //linea.TamañoAux = (BD.PosicionMatriz(i, 5)); //Devolver Operando
                             
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); 
-                            linea.setTamaño(linea.getTamaño());
+                            linea.setTamaño(linea.getTamaño() + " bytes"); //Mensaje de confirmacion 
                             
                             //linea.setTamaño(linea.TamañoAux);
                             
@@ -288,10 +288,10 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             //linea.TamañoAux = null;
                             break; //Sale del if si lo encuentra 
                         } //Fin de if 
-                        else { //Si no encuentra una coincidencia entonces mara un mensaje de error
-                            linea.setTamaño("-"); //Impresion de error
+                        else { //Si no encuentra una coincidencia entonces manda un mensaje de error
+                            linea.setTamaño(""); //Impresion de error
                         } //Fin de else 
-                     } //Fin de for
+                    } //Fin de for                    
                     
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
