@@ -41,214 +41,231 @@ public class Linea {
         return operando;
     }
 
- public String getDireccion() {
+    public String getDireccion() {
         // Comprobar si es un NOP (sin operando)
-if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
-    return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
-}
-else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "ORG" sin un operando
-    return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
-}
-// Comprobar si es un INH (sin operando)
-else if (operando == null) { //Si el operando es nulo, entonces se considera INH
-    return "Inherente (INH)";
-} //Fin de validar INH
-       else if (operando != null) {
-           // Comprobar el tipo de direccionamiento Inmediato (IMM)
-           if (operando.startsWith("#")) {
-               String operandoSinNumeral = operando.substring(1); // Quitar el símbolo "#" del operando
-        if (operandoSinNumeral.startsWith("$")) {
-            // Comprobar si el operando es hexadecimal (#$)
-            String valorHexadecimal = operandoSinNumeral.substring(1);
-            try {
-                int valor = Integer.parseInt(valorHexadecimal, 16);
-                if (valor >= 0 && valor <= 255) {
-                    return "Inmediato (IMM) de 8 bits";
-                }//fin de if
-                else if (valor >= 256 && valor <= 65535) {
-                    return "Inmediato (IMM) de 16 bits";
-                }//fin de else if
-            }//fin de try 
-            catch (NumberFormatException e) {
-                // No es un valor hexadecimal válido
-            }//fin de catch
-        }//fin de if 
-        else if (operandoSinNumeral.startsWith("@")) {
+        if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+            return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
+        } //Fin de validaro para ORG
+        
+        else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "ORG" sin un operando
+            return "DIRECT"; //Retorna modo de direccionamiento "DIRECT"
+        } //Fin de validar para END
+        
+        // Comprobar si es un INH (sin operando)
+        else if (operando == null) { //Si el operando es nulo, entonces se considera INH
+            return "Inherente (INH)";
+        } //Fin de validar INH
+        
+        else if (operando != null) {
+            // Comprobar el tipo de direccionamiento Inmediato (IMM)
+            if (operando.startsWith("#")) {
+                  String operandoSinNumeral = operando.substring(1); // Quitar el símbolo "#" del operando
+                if (operandoSinNumeral.startsWith("$")) {
+                    // Comprobar si el operando es hexadecimal (#$)
+                    String valorHexadecimal = operandoSinNumeral.substring(1);
+                    try {
+                        int valor = Integer.parseInt(valorHexadecimal, 16);
+                        
+                        if (valor >= 0 && valor <= 255) {
+                            return "Inmediato (IMM) de 8 bits";
+                        }//fin de if
+                        else if (valor >= 256 && valor <= 65535) {
+                            return "Inmediato (IMM) de 16 bits";
+                        }//fin de else if
+                    }//fin de try 
+                    catch (NumberFormatException e) {
+                        // No es un valor hexadecimal válido
+                    }//fin de catch
+                }//fin de if 
+                
+            else if (operandoSinNumeral.startsWith("@")) {
             // Comprobar si el operando es octal (#@)
-            String valorOctal = operandoSinNumeral.substring(1);
-            try {
-                int valor = Integer.parseInt(valorOctal, 8);
-                if (valor >= 0 && valor <= 255) {
-                    return "Inmediato (IMM) de 8 bits";
-                }//fin de if
-                else if (valor >= 256 && valor <= 65535) {
-                    return "Inmediato (IMM) de 16 bits";
-                }//fin de else if
-            }//fin de try
-            catch (NumberFormatException e) {
-                // No es un valor octal válido
-            }//fin de catch
-        }//fin de else if    
-        else if (operandoSinNumeral.startsWith("%")) {
+                String valorOctal = operandoSinNumeral.substring(1);
+                try {
+                    int valor = Integer.parseInt(valorOctal, 8);
+                    if (valor >= 0 && valor <= 255) {
+                        return "Inmediato (IMM) de 8 bits";
+                    }//fin de if
+                    else if (valor >= 256 && valor <= 65535) {
+                       return "Inmediato (IMM) de 16 bits";
+                    }//fin de else if
+                }//fin de try
+                   catch (NumberFormatException e) {
+                       // No es un valor octal válido
+                   }//fin de catch
+            }//fin de else if  
+
+            else if (operandoSinNumeral.startsWith("%")) {
             // Comprobar si el operando es binario (#%)
-            String valorBinario = operandoSinNumeral.substring(1);
-            if (Metodos.IsBinario(valorBinario)) {
-                int valor = Integer.parseInt(valorBinario, 2);
-                if (valor >= 0 && valor <= 255) {
+                String valorBinario = operandoSinNumeral.substring(1);
+                if (Metodos.IsBinario(valorBinario)) {
+                    int valor = Integer.parseInt(valorBinario, 2);
+                    if (valor >= 0 && valor <= 255) {
+                        return "Inmediato (IMM) de 8 bits";
+                    }//fin de if
+                    else if (valor >= 256 && valor <= 65535) {
+                        return "Inmediato (IMM) de 16 bits";
+                    }//fin de else if
+                }//fin de if
+            }//fin de else if 
+
+            else if (Metodos.IsDecimal(operandoSinNumeral)) {
+            // Comprobar si el operando es decimal (#)
+                int valorDecimal = Integer.parseInt(operandoSinNumeral);
+                if (valorDecimal >= 0 && valorDecimal <= 255) {
                     return "Inmediato (IMM) de 8 bits";
                 }//fin de if
-                else if (valor >= 256 && valor <= 65535) {
+                else if (valorDecimal >= 256 && valorDecimal <= 65535) {
                     return "Inmediato (IMM) de 16 bits";
                 }//fin de else if
-            }//fin de if
-        }//fin de else if 
-        else if (Metodos.IsDecimal(operandoSinNumeral)) {
-            // Comprobar si el operando es decimal (#)
-            int valorDecimal = Integer.parseInt(operandoSinNumeral);
-            if (valorDecimal >= 0 && valorDecimal <= 255) {
-                return "Inmediato (IMM) de 8 bits";
-            }//fin de if
-            else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                return "Inmediato (IMM) de 16 bits";
             }//fin de else if
-        }//fin de else if
-    // Comprobar si el operando es decimal
-    else if (Metodos.IsDecimal(operandoSinNumeral)) {
-        int valorDecimal = Integer.parseInt(operandoSinNumeral);
-        if (valorDecimal >= 0 && valorDecimal <= 255) {
-            return "Inmediato (IMM) de 8 bits";
-        }//fin de if 
-        else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-            return "Inmediato (IMM) de 16 bits";
-        }//fin de else if
-        }//fin de else if
-}// fin if de IMM
-      
-// Comprobar el tipo de direccionamiento Directo (DIR)
-else if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
-    // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
-    String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
-
-    // Procesar el operando como un valor hexadecimal o binario
-    try {
-        int valor;
-        if (operandoSinSimbolo.startsWith("%")) {
-            // Si comienza con "%" es un valor binario
-            valor = Integer.parseInt(operandoSinSimbolo.substring(1), 2);
-        } else {
-            // De lo contrario, es un valor decimal
-            valor = Integer.parseInt(operandoSinSimbolo, 16);
-        }
-
-        if (valor >= 0 && valor <= 255) {
-            return "Directo (DIR) de 8 bits";
-        }
-    } catch (NumberFormatException e) {
-        // No es un valor válido
-    }
-}
-// Comprobar el tipo de direccionamiento Extendido (EXT)
-if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$")) {
-    // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
-    String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
-
-    // Procesar el operando como un valor hexadecimal
-   try {
-        int valor;
-        if (operandoSinSimbolo.startsWith("%")) {
-            // Si comienza con "%" es un valor binario
-            valor = Integer.parseInt(operandoSinSimbolo.substring(1), 2);
-        } else {
-            // De lo contrario, es un valor hexadecimal
-            valor = Integer.parseInt(operandoSinSimbolo, 16);
-        }
-
-        if (valor >= 256 && valor <= 65535) {
-            return "Extendido (EXT) de 16 bits";
-        }
-    } catch (NumberFormatException e) {
-        // No es un valor válido
-    }
-}
-
-        // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
-else if (operando.matches("^-?\\d+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
-    String[] parts = operando.split(",");
-    int valorIndexado = Integer.parseInt(parts[0]);
-    if (valorIndexado >= -16 && valorIndexado <= 15) {
-        return "Indexado de 5 bits (IDX)";
-    }// Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX)
-    else if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 &&                 valorIndexado <= 255)) {
-                return "Indexado de 9 bits (IDX1)";
-            }
-}  
-// Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
-if (operando.matches("^[0-9]+,[XYSPPCxysppc]+$")) {
-    String[] parts = operando.split(",");
-    int valorIndexado = Integer.parseInt(parts[0]);
-    if (valorIndexado >= 256 && valorIndexado <= 65535) {
-        return "Indexado de 16 bits (IDX2)";
-    }
-}
-
-        // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits ([IDX2])
-else if (operando.matches("^\\[\\d{1,5},[XYSPPCpc]+\\]$")) {
-    // Extraer el valor dentro de los corchetes y comprobar si está en el rango de 0 a 65535
-    String operandoSinCorchetes = operando.substring(1, operando.length() - 1);
-    String[] parts = operandoSinCorchetes.split(",");
-    int valorIndexado = Integer.parseInt(parts[0]);
-    if (valorIndexado >= 0 && valorIndexado <= 65535) {
-        return "Indexado indirecto de 16 bits ([IDX2])";
-    }
-}
         
-    // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-else if (operando.matches("^[1-8],([-+][XYSP])$")) {
-    return "Indexado pre decremento/incremento (IDX)";
-}
-// Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-else if (operando.matches("^[1-8],([XYSP][-+])$")) {
-    return "Indexado post decremento/incremento (IDX)";
-}
-        
-        // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
-        else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
-            return "Indexado de acumulador (IDX)";
-        }//fin de else if
-        
-        // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
-        else if (operando.matches("^\\[[D-d],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
-            return "Indexado acumulador indirecto ([D,IDX])";
-        }//fin de else if
-        //Relativo REL
-else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
-    // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
-    if (Metodos.ComprobarEtiqueta(operando)) {
-        return "Relativo (REL) de 8 bits";
-    }
-    int valorDecimal = Integer.parseInt(operando);
-    if (valorDecimal >= -128 && valorDecimal <= 127) {
-        return "Relativo (REL) de 8 bits";
-    } else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
-        return "Relativo (REL) de 16 bits";
-    }
-}       //Rel con ciclo 
-          else if (operando.matches("^[[ABDXYSPabdxysp]],[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
-    String[] partes = operando.split(",");
-    String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
-    String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
+            // Comprobar si el operando es decimal
+            else if (Metodos.IsDecimal(operandoSinNumeral)) {
+                int valorDecimal = Integer.parseInt(operandoSinNumeral);
+                if (valorDecimal >= 0 && valorDecimal <= 255) {
+                   return "Inmediato (IMM) de 8 bits";
+                }//fin de if 
+                else if (valorDecimal >= 256 && valorDecimal <= 65535) {
+                   return "Inmediato (IMM) de 16 bits";
+                }//fin de else if
+            } //fin de else if
+            } //fin if de IMM
 
-    // Verificar si el registro es válido
-    if (registro.matches("^[[ABDXYSPabdxysp]]$")) {
-        // Verificar si la parte después de la coma es un valor numérico o una palabra válida
-        if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
-            return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
-        }
-    }
-}
-    }//fin de else if
-    return "No reconocido"; // Si no se reconoce ningún tipo de direccionamiento
-}//fin de public String 
+            // Comprobar el tipo de direccionamiento Directo (DIR)
+            else if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
+                // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
+                String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
+
+                // Procesar el operando como un valor hexadecimal o binario
+                try {
+                    int valor;
+                    if (operandoSinSimbolo.startsWith("%")) {
+                       // Si comienza con "%" es un valor binario
+                       valor = Integer.parseInt(operandoSinSimbolo.substring(1), 2);
+                    } //Fin de if
+                    else {
+                       // De lo contrario, es un valor decimal
+                       valor = Integer.parseInt(operandoSinSimbolo, 16);
+                    } //Fin de else 
+                    if (valor >= 0 && valor <= 255) {
+                       return "Directo (DIR) de 8 bits";
+                    } //Fin de if 
+                } //Fin de try
+                catch (NumberFormatException e) {
+                   // No es un valor válido
+                } //Fin de catch
+            } //Fin de else if
+
+            // Comprobar el tipo de direccionamiento Extendido (EXT)
+            if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$")) {
+                // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
+                String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
+
+                // Procesar el operando como un valor hexadecimal
+                try {
+                    int valor;
+                    if (operandoSinSimbolo.startsWith("%")) {
+                        // Si comienza con "%" es un valor binario
+                        valor = Integer.parseInt(operandoSinSimbolo.substring(1), 2);
+                    } //Fin de if
+                    else {
+                       // De lo contrario, es un valor hexadecimal
+                       valor = Integer.parseInt(operandoSinSimbolo, 16);
+                   } //Fin de else
+                   if (valor >= 256 && valor <= 65535) {
+                       return "Extendido (EXT) de 16 bits";
+                   } //Fin de if
+                } //Fin de try
+                catch (NumberFormatException e) {
+                   // No es un valor válido
+                } //Fin de catch
+            } //Fin de if
+
+            // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
+            else if (operando.matches("^-?\\d+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+                String[] parts = operando.split(",");
+                int valorIndexado = Integer.parseInt(parts[0]);
+                if (valorIndexado >= -16 && valorIndexado <= 15) {
+                    return "Indexado de 5 bits (IDX)";
+                }// Comprobar el tipo de direccionamiento Indexado de 9 bits (IDX)
+                else if ((valorIndexado >= -256 && valorIndexado <= -17) || (valorIndexado >= 16 &&                 valorIndexado <= 255)) {
+                            return "Indexado de 9 bits (IDX1)";
+                } //Fin de else if
+            } //Fin de else if
+
+            // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
+            if (operando.matches("^[0-9]+,[XYSPPCxysppc]+$")) {
+                String[] parts = operando.split(",");
+                int valorIndexado = Integer.parseInt(parts[0]);
+                if (valorIndexado >= 256 && valorIndexado <= 65535) {
+                    return "Indexado de 16 bits (IDX2)";
+                } //Fin de if 
+            } //Fin de if
+
+               // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits ([IDX2])
+            else if (operando.matches("^\\[\\d{1,5},[XYSPPCpc]+\\]$")) {
+                // Extraer el valor dentro de los corchetes y comprobar si está en el rango de 0 a 65535
+                String operandoSinCorchetes = operando.substring(1, operando.length() - 1);
+                String[] parts = operandoSinCorchetes.split(",");
+                int valorIndexado = Integer.parseInt(parts[0]);
+                if (valorIndexado >= 0 && valorIndexado <= 65535) {
+                    return "Indexado indirecto de 16 bits ([IDX2])";
+                } //Fin de else 
+            } //Fin de else if
+
+            // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
+            else if (operando.matches("^[1-8],([-+][XYSP])$")) {
+                return "Indexado pre decremento/incremento (IDX)";
+            } //Fin de else 
+
+            // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
+            else if (operando.matches("^[1-8],([XYSP][-+])$")) {
+                return "Indexado post decremento/incremento (IDX)";
+            } //Fin de else if
+
+            // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
+            else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+               return "Indexado de acumulador (IDX)";
+            }//fin de else if
+
+            // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
+            else if (operando.matches("^\\[[D-d],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
+               return "Indexado acumulador indirecto ([D,IDX])";
+            }//fin de else if
+
+            //Relativo REL
+            else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
+            // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
+                if (Metodos.ComprobarEtiqueta(operando)) {
+                    return "Relativo (REL) de 8 bits";
+                } //Fin de if
+                int valorDecimal = Integer.parseInt(operando);
+                if (valorDecimal >= -128 && valorDecimal <= 127) {
+                    return "Relativo (REL) de 8 bits";
+                } //Fin de if
+                else if (valorDecimal >= -32768 && valorDecimal <= 32767) {
+                    return "Relativo (REL) de 16 bits";
+                } //Fin else if
+            } //Fin de else if       
+            //Rel con ciclo 
+
+            else if (operando.matches("^[[ABDXYSPabdxysp]],[a-zA-Z_][a-zA-Z0-9_]*$|^-?\\d+$")) {
+                String[] partes = operando.split(",");
+                String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
+                String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
+
+                // Verificar si el registro es válido
+                if (registro.matches("^[[ABDXYSPabdxysp]]$")) {
+                    // Verificar si la parte después de la coma es un valor numérico o una palabra válida
+                    if (Metodos.IsDecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
+                        return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
+                    } //Fin de if
+                } //Fin de if
+            } //Fin de else if
+        }//fin de else if
+        return "No reconocido"; // Si no se reconoce ningún tipo de direccionamiento
+   }//fin de public String 
    
     public void setDireccion(String direccion) {
         this.direccion = direccion;
