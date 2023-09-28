@@ -220,12 +220,12 @@ public class Linea {
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-            else if (operando.matches("^[1-8],([-+][X|Y|SP])$")) {
+            else if (operando.matches("^[1-8],([-+](X|Y|SP))$")) {
                 return "IDX";
             } //Fin de else 
 
             // Comprobar el tipo de direccionamiento Indexado pre/post decremento/incremento (IDX)
-            else if (operando.matches("^[1-8],([X|Y|SP][-+])$")) {
+            else if (operando.matches("^[1-8],((X|Y|SP)[-+])$")) {
                 return "IDX";
             } //Fin de else if
 
