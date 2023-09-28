@@ -69,6 +69,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
         Linea linea = new Linea(null , null , null, null, null); // Instanciar objeto Linea con variables inicializadas en null
     
+        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
+        
         //PRUEBAS DE ISAAC PARA DESPUES DETECTAR TAMANO ///// NO MOVERLE A NADA PLS :)
         /*
         //System.out.println(ArchivoSalvacion.Salvacion[100][0]); //impresion de prueba
@@ -250,6 +252,23 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits
                     Metodos.DeterminarBits(Decimal); //Metodo para determinar la cantidad de bits
                     
+                    //Algoritmo para realizar busquedas en el archivo salvacion 
+                    for(int i = 0; i <= 585; i++) { //Busca desde la linea 0 hasta las 585 lineas que conforma el archivo salvacion 
+                        if(linea.getCodop().equals(BD.PosicionMatriz( i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {
+                        //El if compara si el CODOP y la direccion del .asm son iguaales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia  
+                            //String TamañoAux; //Guarda el tamaño en una variable auxiliar
+                            
+                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Establcer coincidencia
+                            linea.setTamaño(linea.getTamaño());
+                            System.out.println(linea.getTamaño()); //Impresion de prueba
+                            
+                            break; //Sale del if si lo encuentra 
+                        } //Fin de if 
+                        else { //Si no encuentra una coincidencia entonces mara un mensaje de error
+                            linea.setTamaño("-"); //Impresion de error
+                        } //Fin de else 
+                     } //Fin de for
+                    
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
@@ -259,11 +278,13 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
                 } //Fin de else
                 
-                if(Linea.equalsIgnoreCase("END")) {//Si la linea encuentra "END" entonces la lectura del archivo puede terminar
-                    break; //Romper ciclo
-                } //Fin de if 
+                //if(Linea.equalsIgnoreCase("END")) {//Si la linea encuentra "END" entonces la lectura del archivo puede terminar
+                //    break; //Romper ciclo y termina el programa
+                //} //Fin de if 
+                
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDireccion(), linea.getTamaño()});
+                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDireccion(), linea.getTamaño()}); //Agregar objetos a la tabla
+            
             } //Fin de while       
 
             } //Fin de try                        
