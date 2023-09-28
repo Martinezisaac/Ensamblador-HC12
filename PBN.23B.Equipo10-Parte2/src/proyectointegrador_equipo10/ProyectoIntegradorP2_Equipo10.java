@@ -13,6 +13,8 @@ package proyectointegrador_equipo10;
 
 //Librerias
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,28 +35,7 @@ import javax.swing.table.TableCellRenderer;
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
 
     public static void main(String[] args) { //Inicio de Main
-        
-        // Crear el modelo de datos para la JTable
-        DefaultTableModel tabla = new DefaultTableModel(
-                new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0);
-        DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
 
-        // Crear la tabla con el modelo de datos
-        JTable tbl = new JTable(tabla);
-        tbl.setEnabled(false);
-        centrar.setHorizontalAlignment(SwingConstants.CENTER);//Se decide hacia que direccion se desean acomodar.
-        tbl.getColumnModel().getColumn(0).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 0
-        tbl.getColumnModel().getColumn(1).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 1
-        tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 2
-
-        // Configurar del frame
-        JFrame frame = new JFrame("Tabla");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.add(new JScrollPane(tbl), BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
-        
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal   
         
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
@@ -116,6 +97,37 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta    
             String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable
            
+            //Si el archivo se abre de manera correcta entonces entra al try y crea la tabla con la informacion del archivo .asm
+            
+            // Crear el modelo de datos para la JTable
+            DefaultTableModel tabla = new DefaultTableModel(
+                new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0);
+            DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
+
+            // Crear la tabla con el modelo de datos
+            JTable tbl = new JTable(tabla);
+            tbl.setEnabled(false);
+            centrar.setHorizontalAlignment(SwingConstants.CENTER);//Se decide hacia que direccion se desean acomodar.
+            tbl.getColumnModel().getColumn(0).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 0
+            tbl.getColumnModel().getColumn(1).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 1
+            tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 2
+
+            // Configurar del frame
+            JFrame frame = new JFrame("Partes de código Ensamblador"); //Nombre de la ventana
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLayout(new BorderLayout());
+            frame.add(new JScrollPane(tbl), BorderLayout.CENTER);
+            frame.pack();
+
+            // Centrar la ventana en la pantalla
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - frame.getWidth()) / 2;
+            int y = (screenSize.height - frame.getHeight()) / 2;
+            frame.setLocation(x, y);
+
+            frame.setVisible(true); //Hacer visible la tabla
+            
+            //Algoritmo para detectar las partes de un ensamblador 
             while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea 
                 //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
                 DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
