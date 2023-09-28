@@ -269,5 +269,5 @@ public class Metodos {
             } //Fin de for
             return true;
         }//Fin vlaespacios*/
-    
+          
     } //Fin de la clase metodos 

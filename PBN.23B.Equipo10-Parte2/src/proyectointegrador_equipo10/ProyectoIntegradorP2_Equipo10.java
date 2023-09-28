@@ -23,8 +23,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 //import javax.swing.table.DefaultTableModel;
 
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
@@ -34,10 +37,15 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         // Crear el modelo de datos para la JTable
         DefaultTableModel tabla = new DefaultTableModel(
                 new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0);
+        DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
 
         // Crear la tabla con el modelo de datos
         JTable tbl = new JTable(tabla);
         tbl.setEnabled(false);
+        centrar.setHorizontalAlignment(SwingConstants.CENTER);//Se decide hacia que direccion se desean acomodar.
+        tbl.getColumnModel().getColumn(0).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 0
+        tbl.getColumnModel().getColumn(1).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 1
+        tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 2
 
         // Configurar del frame
         JFrame frame = new JFrame("Tabla");
@@ -263,5 +271,5 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
             } //Fin de catch       
         } //Fin de main 
-     
+
 } //Fin de la clase principal
