@@ -181,7 +181,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         //Validar etiqueta
                         if(Palabra.endsWith(":")) { //Si empieza con ":"   
                             Palabra = Palabra.substring(0, Palabra.length() - 1 ); //Eliminar ":" de la palabra etiqueta
-                            if (!matcheretiqueta.matches() && Metodos.cracteretq(Palabra)) { //Validar la longitud maxima de 8 caracteres y los caracteres que hay en "Palabra"  
+                            if (!matcheretiqueta.matches() && Metodos.cracteretq(Palabra) && Palabra.length()<=7) { //Validar la longitud maxima de 8 caracteres y los caracteres que hay en "Palabra"  
                                 linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
                             } //Fin de if
                             else { //Si palabra no empieza con ":" 
