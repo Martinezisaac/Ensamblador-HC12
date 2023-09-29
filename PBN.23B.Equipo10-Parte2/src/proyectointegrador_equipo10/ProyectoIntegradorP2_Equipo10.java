@@ -36,7 +36,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
     public static void main(String[] args) { //Inicio de Main
 
-        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal   
+        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
         
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
             /*Archivos disponibles para probar el programa: 
@@ -262,7 +262,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     // Validar espacios en blanco o tabuladores en Etiqueta
                     if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
                         System.out.println("Error Etiqueta");
-                        linea.setEtiqueta(null); // Restablecer etiqueta si es inválida
+                        linea.setEtiqueta("Error Etiqueta"); // Restablecer etiqueta si es inválida
                     } //Fin de if      
 
                     int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits

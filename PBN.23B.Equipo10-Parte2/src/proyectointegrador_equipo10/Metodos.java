@@ -183,7 +183,7 @@ public class Metodos {
     static boolean cracteretq(String x){
         String cet1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:_";//Caracteres permitidos en la comparacion.
         String etqupper = x.toUpperCase();//Convierte la variable en mayusculas para la comparacion.
-        if(etqupper.length()>5){
+        if(etqupper.length()<=5){
             for(int i=0; i < etqupper.length(); i++){//Recorre la cadena x, que se ingresa a la funcion.
                 char charetq = etqupper.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
                 if(cet1.indexOf(charetq) == -1){//Se revisa si los caracteres si estan en cet1.

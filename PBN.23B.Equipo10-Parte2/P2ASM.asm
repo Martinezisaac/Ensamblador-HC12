@@ -1,11 +1,11 @@
 	ORG 	$4040
-Et1: 	SWI 
+Et1%: 	SWI 
 dos: 	EORA 	5 
 	EORA 	@5 
-Tres: 	EORA 	%111 
+Trese4: 	EORA 	%111 
 	EORA 	$6 
 	EORA 	300 
-	EORA 	$FFF 
+	EORA 	$FFFF 
 	EORA 	#5 
 	EORA 	#@5 
 	EORA 	#1500 
@@ -21,5 +21,5 @@ Uno: 	EORA 	255,X
 	EORA 	[D,X] 
 	BLT 	Uno 
 	LBLT 	Uno 
-	IBNE 	A,Uno 
+	IBNE 	A,eso 
 	END
