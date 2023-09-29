@@ -184,7 +184,7 @@ public class Linea {
             } //fin if de IMM
 
             // Comprobar el tipo de direccionamiento Directo (DIR)
-            else if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
+            if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
                 // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
                 String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
@@ -236,7 +236,7 @@ public class Linea {
             } //Fin de if
 
             // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
-            else if (operando.matches("^-?\\d+,[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+$")) {
+            if (operando.matches("^\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= -16 && valorIndexado <= 15) {
@@ -250,7 +250,7 @@ public class Linea {
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
-            if (operando.matches("^[0-9]+,[XYSPPCxysppc]+$")) {
+            if (operando.matches("^\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= 256 && valorIndexado <= 65535) {
@@ -260,7 +260,7 @@ public class Linea {
             } //Fin de if
 
                // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits ([IDX2])
-            else if (operando.matches("^\\[\\d{1,5},[XYSPPCpc]+\\]$")) {
+            if (operando.matches("^\\[\\d{1,5},((X|x|Y|y|SP|sp|PC|pc))+\\]$")) {
                 // Extraer el valor dentro de los corchetes y comprobar si está en el rango de 0 a 65535
                 String operandoSinCorchetes = operando.substring(1, operando.length() - 1);
                 String[] parts = operandoSinCorchetes.split(",");
@@ -272,43 +272,44 @@ public class Linea {
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado predecremento(IDX)
-            else if (operando.matches("^[1-8],([-](X|x|Y|y|SP|sp))$")) {
+            if (operando.matches("^[1-8],([-](X|x|Y|y|SP|sp))$")) {
                 setDirAux("IDX(PreDec)");
                 return "IDX";
             } //Fin de else 
             
             // Comprobar el tipo de direccionamiento Indexado postdecremento(IDX)
-            else if (operando.matches("^[1-8],([+](X|x|Y|y|SP|sp))$")) {
+            if (operando.matches("^[1-8],([+](X|x|Y|y|SP|sp))$")) {
                 setDirAux("IDX(PreInc)");
                 return "IDX";
             } //Fin de else
 
             // Comprobar el tipo de direccionamiento Indexado postdecremento(IDX)
-            else if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[-])$")) {
+            if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[-])$")) {
                 DirAux = "IDX(PostDec)";
                 return "IDX";
             } //Fin de else if
             
             // Comprobar el tipo de direccionamiento Indexado postincremento (IDX)
-            else if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[+])$")) {
+            if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[+])$")) {
                 DirAux = "IDX(PostInc)";
                 return "IDX";
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
-            else if (operando.matches("^[[A-a]|[B-b]|[D-d]],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]")) {
+            if (operando.matches("^(A|a|B|b|D|d),(X|x|Y|y|SP|sp|PC|pc)$")) {
                 DirAux = "IDX(Acc)";
                 return "IDX";
             }//fin de else if
-
+            
             // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
-            else if (operando.matches("^\\[[D-d],[[X-x]|[Y-y]|[SP-sp]|[PC-pc]]+\\]$")) {
+            //if (operando.matches("^\\[\\d{1,5},((X|x|Y|y|SP|sp|PC|pc))+\\]$"))
+            if (operando.matches("\\[[Dd],(?i)(X|Y|SP|PC)\\]")) {
                 setDirAux("[D,IDX]");
                 return "[D,IDX]";
             }//fin de else if
 
             //Relativo REL
-            else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
+            if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
             // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
                 if (Metodos.ComprobarEtiqueta(operando)) {
                     for(int i = 0; i<=584; i++) {
@@ -336,13 +337,19 @@ public class Linea {
             } //Fin de else if
             
             //Rel con ciclo 
-            else if (operando.matches("^[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]|[PC-pc]],[a-zA-Z_][a-zA-Z0-9_]")) {
+
+            if (operando.matches("^(A|a|B|b|D|d|X|x|Y|y|SP|sp|PC|pc),[a-zA-Z_][a-zA-Z0-7_]+$")) {
                 String[] partes = operando.split(",");
                 String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
                 String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
                 
+                if(Metodos.ComprobarEtiqueta(resto)) {
+                    setDirAux("REL(9-bit)"); //Relativo con ciclo 
+                    return "REL(9-bit)";
+                }//Fin de if
+                
                 // Verificar si el registro es válido
-                if (registro.matches("[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]|[PC-pc]]")) {
+                if (registro.matches("^[[A-a]|[B-b]|[D-d]|[X-x]|[Y-y]|[SP-sp]|[PC-pc]]$")) {
                     // Verificar si la parte después de la coma es un valor numérico o una palabra válida
                     if (Metodos.IsDecimal(resto) || Metodos.IsBinario(resto) || Metodos.IsOctal(resto) || Metodos.IsHexadecimal(resto) || Metodos.ComprobarEtiqueta(resto)) {
                         //return "Relativo con ciclo (REL) de " + (resto.length() <= 2 ? "8" : "16") + " bits";
@@ -352,7 +359,7 @@ public class Linea {
                 } //Fin de if 
             } //Fin de else if
         }//fin de else if
-        setDirAux("Error");
+        setDirAux("Error"); 
         return "Error"; // Si no se reconoce ningún tipo de direccionamiento
    }//fin de public String 
    
