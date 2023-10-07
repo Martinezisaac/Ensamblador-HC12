@@ -1,5 +1,5 @@
 	ORG 	$4040
-Et1%: 	SWI 
+Et1: 	SWI 
 dos: 	EORA 	5 
 	EORA 	@5 
 Trese4: 	EORA 	%111 
