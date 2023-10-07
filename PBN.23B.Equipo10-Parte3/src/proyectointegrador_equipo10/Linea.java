@@ -55,7 +55,11 @@ public class Linea {
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         //TamañoAux = null;
         //DirAux = null;
-      
+        
+        if(getCodop().equals("Error")) { //Si el codigo operando presenta un error, entonces no puede calcular el modo de direccionamiento
+            setDirAux("Error DIR"); //Mensaje de error para la tabla
+            return("Error");  //Mensaje de error para Direccion
+        } //Fin de if
         
         if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
             setDirAux("DIRECT"); //Variable para mostrar en tabla
@@ -88,9 +92,9 @@ public class Linea {
                             return "IMM"; //Retorna el objeto Direccion 
                         }//fin de if
                         else if (valor >= 256 && valor <= 65535) {
-                            for(int i = 0; i <=584; i++) {
+                            for(int i = 0; i <=587; i++) {
                                 if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                                   setDirAux("Error");
+                                   setDirAux("Error DIR");
                                    return "Error"; 
                                 } //Fin de if                 
                             }//fin de for
@@ -113,9 +117,9 @@ public class Linea {
                         return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
-                        for(int i = 0; i <=584; i++) {
+                        for(int i = 0; i <=587; i++) {
                                 if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                                    setDirAux("Error");
+                                    setDirAux("Error DIR");
                                    return "Error"; 
                                 } //Fin de if                 
                             }//fin de for
@@ -138,9 +142,9 @@ public class Linea {
                         return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
-                        for(int i = 0; i <=584; i++) {
+                        for(int i = 0; i <=587; i++) {
                             if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                                setDirAux("Error");
+                                setDirAux("Error DIR");
                                 return "Error"; 
                             } //Fin de if                 
                         }//fin de for
@@ -158,9 +162,9 @@ public class Linea {
                     return "IMM";
                 }//fin de if
                 else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                    for(int i = 0; i <=584; i++) {
+                    for(int i = 0; i <=587; i++) {
                         if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                            setDirAux("Error");
+                            setDirAux("Error DIR");
                             return "Error"; 
                         } //Fin de if                 
                     }//fin de for
@@ -312,7 +316,7 @@ public class Linea {
             if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
             // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
                 if (Metodos.ComprobarEtiqueta(operando)) {
-                    for(int i = 0; i<=584; i++) {
+                    for(int i = 0; i<=587; i++) {
                         if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "2".equals(BD.PosicionMatriz(i, 5))) {
                             setDirAux("REL(8b)");
                             return "REL";
@@ -358,8 +362,9 @@ public class Linea {
                     } //Fin de if
                 } //Fin de if 
             } //Fin de else if
-        }//fin de else if
-        setDirAux("Error"); 
+        }//fin de else if   
+        
+        setDirAux("Error DIR"); 
         return "Error"; // Si no se reconoce ningún tipo de direccionamiento
    }//fin de public String 
    
