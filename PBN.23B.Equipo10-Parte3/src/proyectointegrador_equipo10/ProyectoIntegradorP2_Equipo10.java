@@ -1,4 +1,4 @@
-/*
+/* Isaaccommit
 Proyecto Integrador Parte 2 | Programacion de bajo nivel
 Equipo 10 | Integrantes: 
     - Hernandez Gutierrez Emmanuel 
