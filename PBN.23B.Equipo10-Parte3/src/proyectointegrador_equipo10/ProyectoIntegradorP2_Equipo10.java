@@ -68,7 +68,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             System.out.println(Salvacion);
 
 
-        for(int i = 0; i <= 585; i++) {
+        for(int i = 0; i <= 587; i++) {
         if(Linea.getDireccion() == ArchivoSalvacion[i][0]){
             Linea.setTamaño();
         }//Fin de if
@@ -92,7 +92,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             System.out.println("No se selecciono ningun archivo..."); //Mensaje de error
             return;  //Si no se selecciona un archivo, sale del programa
         } //Fin de else          
-            //BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Lee el archivo contenido en la variable Archivo
+        //BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Lee el archivo contenido en la variable Archivo
             
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta    
             String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable
@@ -100,8 +100,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             //Si el archivo se abre de manera correcta entonces entra al try y crea la tabla con la informacion del archivo .asm
             
             // Crear el modelo de datos para la JTable
-            DefaultTableModel tabla = new DefaultTableModel(
-                new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0);
+            DefaultTableModel tabla = new DefaultTableModel( //Crear tabla
+                new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
+            
             DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
 
             // Crear la tabla con el modelo de datos
@@ -141,11 +142,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 linea.setOperando(null); //Operando
                 linea.setDireccion(null); //Direccionamiento
                 linea.setTamaño(null); //Tamaño en bytes
-                linea.setDirAux(null);
-
-                // Determinar el tipo de direccionamiento después de asignar valores
-                String tipoDireccionamiento = linea.getDireccion();
-                linea.setDireccion(tipoDireccionamiento);
+                linea.setDirAux(null); //Direccionamiento auxiliar para mostrar en la tabla 
 
                 Linea = Linea.trim(); //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
 
@@ -185,7 +182,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                                 linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
                             } //Fin de if
                             else { //Si palabra no empieza con ":" 
-                                linea.setEtiqueta("Error Etiqueta"); //Definir mensaje de etiqueta en caso de error
+                                linea.setEtiqueta("Error ETQ"); //Definir mensaje de etiqueta en caso de error
                             } //Fin de else 
                         } // Fin de if                                                                      
 
@@ -201,7 +198,21 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
                             if (!matcher.matches() && Metodos.codops(linea.getCodop()) != true) { // Verificar si la palabra no cumple con el patrón
                                    linea.setCodop("Error CODOP"); //Definir mensaje de etiqueta en caso de error
-                                } //Fin de if       
+                            } //Fin de if
+                            
+                            //Algoritmo para realizar busquedas en el archivo salvacion 
+                            for(int i = 0; i <= 587; i++) { //Busca desde la linea 0 hasta las 587 lineas que conforma el archivo salvacion 
+                                //Validar Codigos Operandos
+                                //El if compara si el CODOP del .asm y del archivo salvacion coinciden, si no encuentra ninguna coincidencia entonces CODOP esta mal escrito en el archivo .asm
+                                if(Palabra.equals((BD.PosicionMatriz(i, 0)))) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
+                                   linea.setCodop(Palabra); //Escribir CODOP 
+                                   break; //Romper ciclo 
+                                } //Fin de if 
+                                else { //Si los CODOPS de .asm y ArchivoSalvation no son iguales
+                                    linea.setCodop("Error CODOP"); //Mensaje de error 
+                                } //Fin de else 
+                            } //Fin de for
+                    
                         } //Fin de else if
 
                         //Validaciones para Operando                    
@@ -220,7 +231,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario     
                                 DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); //Convierte de binario a decimal 
                                 if(!Metodos.IsBinario(linea.getOperando())) { //Validar la sintaxis de un binario 
-                                     linea.setOperando(linea.getOperando() + " No es binario"); //Mostrar mensaje de error
+                                     linea.setOperando("Error OPR"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             } //Fin de if
                             
@@ -228,7 +239,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             else if(linea.getOperando().startsWith("$")) { //Si empieza con $ entonces puede ser hexadecimal
                                 DecimalString = Metodos.ConvertHexadecimalDecimal(linea.getOperando()); //Convierte de hexadecimal a decimal
                                 if(!Metodos.IsHexadecimal(linea.getOperando())) { //Validar la sintaxis de un hexadecimal 
-                                     linea.setOperando("Error Operando"); //Mostrar mensaje de error
+                                     linea.setOperando("Error OPR"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             } //Fin de else if
                             
@@ -236,7 +247,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             else if(linea.getOperando().startsWith("@")) { //Si empieza con @ entonces puede ser octal
                                 DecimalString = Metodos.ConvertOctalDecimal(linea.getOperando()); //Convierte de octal a decimal
                                 if(!Metodos.IsOctal(linea.getOperando())) { //Validar si la sintaxis de un octal 
-                                     linea.setOperando("Error Operando"); //Mostrar mensaje de error
+                                     linea.setOperando("Error OPR"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             } //Fin de else if
                             
@@ -244,9 +255,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             else if(linea.getOperando().matches("\\d+")) { //Validar si es decimal si contiene solamente numeros 
                                 DecimalString = linea.getOperando(); //Guardar automaticamente el valor decimal en la variable DecimalString 
                                 if(!Metodos.IsDecimal(linea.getOperando())) { //Validar si la sintaxis de un decimal 
-                                     linea.setOperando("Error Operando"); //Mostrar mensaje de error
+                                     linea.setOperando("Error OPR"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
-                            } //Fin de else if
+                            } //Fin de else if                            
                             
                             //Si el operando no cae en ninguno de los sistemas numericos anteriores, entonces cae aqui
                             else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
@@ -255,32 +266,39 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         } //Fin de else if                       
 
                         else if(linea.getTamaño() == null) { //Siempre va a ser null porque nosotros los calculamos
-                                linea.setTamaño(linea.getOperando());
+                            linea.setTamaño(linea.getOperando());
                         } //Fin de else if
-                    } //Fin de for
+                    } //Fin de for each
 
                     // Validar espacios en blanco o tabuladores en Etiqueta
                     if (linea.getEtiqueta() != null && (linea.getEtiqueta().contains(" ") || linea.getEtiqueta().contains("\t"))) {
-                        System.out.println("Error Etiqueta");
-                        linea.setEtiqueta("Error Etiqueta"); // Restablecer etiqueta si es inválida
+                        System.out.println("Error ETQ");
+                        linea.setEtiqueta("Error ETQ"); // Restablecer etiqueta si es inválida
                     } //Fin de if      
 
                     int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits
                     //Metodos.DeterminarBits(Decimal); //Metodo para determinar la cantidad de bits
                     
+                    // Determinar el tipo de direccionamiento después de asignar valores
+                    String tipoDireccionamiento = linea.getDireccion();
+                    linea.setDireccion(tipoDireccionamiento);
+                    
                     //Algoritmo para realizar busquedas en el archivo salvacion 
-                    for(int i = 0; i <= 585; i++) { //Busca desde la linea 0 hasta las 585 lineas que conforma el archivo salvacion 
-                        if(linea.getCodop().equals(BD.PosicionMatriz( i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                        
-                        //El if compara si el CODOP y la direccion del .asm son iguaales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia  
+                    for(int i = 0; i <= 587; i++) { //Busca desde la linea 0 hasta las 587 lineas que conforma el archivo salvacion 
+                        //Determinar Tamaño
+                        //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
+                        if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                                                 
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); 
                             linea.setTamaño(linea.getTamaño() + " bytes"); //Mensaje de confirmacion 
                             break; //Sale del if si lo encuentra 
-                        } //Fin de if 
+                        } //Fin de if                        
                         else { //Si no encuentra una coincidencia entonces manda un mensaje de error
-                            linea.setTamaño(""); //Impresion de error
-                        } //Fin de else 
-                    } //Fin de for    
-                                      
+                            linea.setTamaño("-"); //Impresion de error
+                            linea.setDirAux("Error DIR"); //Ayuda no funciona REVISAR
+                            linea.setDireccion("Error"); //Ayuda no funciona REVISAR
+                        } //Fin de else
+                    } //Fin de for  
+               
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
