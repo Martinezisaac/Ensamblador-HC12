@@ -35,7 +35,7 @@ import javax.swing.table.TableCellRenderer;
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
 
     public static void main(String[] args) { //Inicio de Main
-
+        
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
         
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
@@ -79,7 +79,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         JFileChooser fileChooser = new JFileChooser();
 
         //Establecer un filtro para mostrar solo ciertos tipos de archivos (opcional)
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto", "asm"); //Solo abrira archivos de tipo asm
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto", "asm", "lst"); //abrira archivos de tipo asm y lst
         fileChooser.setFileFilter(filter); //Aplicar filtro
 
         //Abrir el diálogo para elegir un archivo
@@ -99,7 +99,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
            
             //Si el archivo se abre de manera correcta entonces entra al try y crea la tabla con la informacion del archivo .asm
             
-            // Crear el modelo de datos para la JTable
+             // Crear el modelo de datos para la JTable
             DefaultTableModel tabla = new DefaultTableModel( //Crear tabla
                 new Object[]{"CONTLOC", "ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
             
@@ -131,6 +131,32 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
             frame.setVisible(true); //Hacer visible la tabla
             
+            // Crear el modelo de datos para la JTable del archivo .lst
+            DefaultTableModel lstTableModel = new DefaultTableModel(
+                new Object[]{"Columna1", "Columna2", "Columna3", /* ... */}, 0);
+
+            DefaultTableCellRenderer centrarLST = new DefaultTableCellRenderer();
+
+            // Crear la tabla con el modelo de datos para el archivo .lst
+            JTable tblLST = new JTable(lstTableModel);
+            tblLST.setEnabled(false);
+            centrarLST.setHorizontalAlignment(SwingConstants.CENTER);
+
+            // Configurar del frame para la tabla del archivo .lst
+            JFrame frameLST = new JFrame("Tabla para archivo .lst");
+            frameLST.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frameLST.setLayout(new BorderLayout());
+            frameLST.add(new JScrollPane(tblLST), BorderLayout.CENTER);
+            frameLST.pack();
+
+            // Centrar la ventana en la pantalla
+            Dimension screenSize1 = Toolkit.getDefaultToolkit().getScreenSize();
+            int xLST = (screenSize1.width - frameLST.getWidth()) / 2;
+            int yLST = (screenSize1.height - frameLST.getHeight()) / 2;
+            frameLST.setLocation(xLST, yLST);
+
+            frameLST.setVisible(true);
+
             //Algoritmo para detectar las partes de un ensamblador 
             while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea 
                 //linea.DirAux = null;
@@ -319,7 +345,11 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             } //Fin de try                        
             catch (IOException e) { //Catch en caso de no poder abrir un archivo
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
-            } //Fin de catch       
+            } //Fin de catch    
+        
+            //Seccion donde se trabajara con el archivo temporal
+             System.out.println("Aqui");
+                   
         } //Fin de main 
 
 } //Fin de la clase principal
