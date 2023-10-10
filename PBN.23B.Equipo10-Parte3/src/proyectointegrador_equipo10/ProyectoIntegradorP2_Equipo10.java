@@ -228,10 +228,11 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             } //Fin de if
                             
                             //Algoritmo para realizar busquedas en el archivo salvacion 
-                            for(int i = 0; i <= 587; i++) { //Busca desde la linea 0 hasta las 587 lineas que conforma el archivo salvacion 
+                            for(int i = 1; i <= 588; i++) { //Busca desde la linea 0 hasta las 587 lineas que conforma el archivo salvacion 
                                 //Validar Codigos Operandos
                                 //El if compara si el CODOP del .asm y del archivo salvacion coinciden, si no encuentra ninguna coincidencia entonces CODOP esta mal escrito en el archivo .asm
-                                if(Palabra.equals((BD.PosicionMatriz(i, 0)))) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
+                                if(Palabra.equals((BD.PosicionMatriz(i, 0)))|Palabra.equals
+        ("EQU")) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
                                    linea.setCodop(Palabra); //Escribir CODOP 
                                    break; //Romper ciclo 
                                 } //Fin de if 
@@ -348,7 +349,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
              }
 
              // Agrega una fila con los datos a la tabla lst
-             lstTableModel.addRow(new Object[]{null, null, linea.getEtiqueta(), linea.getOperando(),             linea.getDirAux(), linea.getTamaño()});
+             lstTableModel.addRow(new Object[]{null, null, linea.getEtiqueta(), linea.getCodop(),             linea.getDirAux(), linea.getTamaño()});
                     
             } //Fin de while       
 
