@@ -133,7 +133,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
             // Crear el modelo de datos para la JTable del archivo .lst
             DefaultTableModel lstTableModel = new DefaultTableModel(
-                new Object[]{"Columna1", "Columna2", "Columna3", /* ... */}, 0);
+                new Object[]{"TIPO", "VALOR", "ETIQUETA","CODOP", "OPERANDO" /* ... */}, 0);
 
             DefaultTableCellRenderer centrarLST = new DefaultTableCellRenderer();
 
@@ -339,6 +339,16 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     tabla.addRow(new Object[]{null, linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
                     //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion 
+                    
+                    // Antes de agregar una fila a la tabla lstTableModel, verifica si                     la etiqueta está vacía o es nula y, si es así, asigna "NULL"
+             String etiqueta = linea.getEtiqueta();
+             if (etiqueta == null || etiqueta.isEmpty()) {
+                 etiqueta = "NULL";
+                 linea.setEtiqueta("NULL");
+             }
+
+             // Agrega una fila con los datos a la tabla lst
+             lstTableModel.addRow(new Object[]{null, null, linea.getEtiqueta(), linea.getOperando(),             linea.getDirAux(), linea.getTamaño()});
                     
             } //Fin de while       
 
