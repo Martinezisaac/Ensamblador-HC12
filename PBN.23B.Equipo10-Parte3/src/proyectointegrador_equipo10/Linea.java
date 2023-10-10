@@ -6,6 +6,8 @@ public class Linea {
     private String codop; //Variable para guardar el codigo operando 
     public String DirAux; //Variable auxiliar para mostrar mensaje en la tabla
     private String operando;  
+    private String tipo;
+    private String valor;
     private String direccion;
     private String tamaño;
       
@@ -21,6 +23,22 @@ public class Linea {
     //Getters y setters    
    public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
+    }
+   public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getValor() {
+        System.out.println("");
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
     }
 
     public String getEtiqueta() {
@@ -69,6 +87,10 @@ public class Linea {
         else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "ORG" sin un operando
             setDirAux("DIRECT");
             return "DIRECT"; //Retorna el objeto Direccion 
+        }
+        else if (codop != null && codop.equalsIgnoreCase("EQU") && operando != null)  { //Si encuentra "EQU" sin un operando
+            setDirAux("DIRECT");
+            return "DIRECT"; //Retorna el objeto Direccion
         }
         
         // Comprobar si es un INH (sin operando)
