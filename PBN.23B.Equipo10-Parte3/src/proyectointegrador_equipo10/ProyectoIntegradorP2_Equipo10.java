@@ -209,6 +209,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                                     } //Fin de if sintaxi
                                 else{
                                         contloc = cantidad;
+                                        contloc = contloc.substring(1);
                                     }//FIn de 
                                 } //Fin de else if
                                 
@@ -220,6 +221,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                                 else{
                                         
                                     contloc = cantidad;
+                                    contloc = contloc.substring(1);
                                    }//FIn de 
                             } //Fin de if
                             
@@ -230,6 +232,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                                 } //Fin de if sintaxis
                             else{
                                         contloc = cantidad;
+                                        contloc = contloc.substring(1);
                                     }//FIn de 
                             } //Fin de else if
                             
@@ -240,10 +243,14 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                                 } //Fin de if sintaxis
                                 else{
                                         contloc = cantidad;
+                                        contloc = contloc.substring(1);
                                     }//FIn de 
                             } //Fin de else if
                                
                             }//Fin de for
+                            System.out.println("antes"+contloc);
+                            linea.setContloc(contloc);
+                            System.out.println("despues"+linea.getContloc());
                         }//Fin de if
                     for(String Palabra : Palabras) { //For each / enhanced for loop
 
@@ -365,7 +372,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
                         if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                                                 
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); 
-                            linea.setTamaño(linea.getTamaño() + " bytes"); //Mensaje de confirmacion 
+                            linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
                         else { //Si no encuentra una coincidencia entonces manda un mensaje de error
@@ -375,14 +382,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         } //Fin de else
                     } //Fin de for  
                     
-                    if(linea.getTamaño().equals("-")){
-                        linea.setContloc(contloc);
-                    }else{
-                        newtamaño = Metodos.quitar(linea.getTamaño(), " bytes");
-                        newcontloc = contloc.replace(String.valueOf("$"), "");
-                        String suma = Metodos.sumaHexadecimal(newtamaño, newcontloc);
-                        linea.setContloc("$" + suma);
-                    }
+
                     
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
@@ -397,8 +397,13 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 } //Fin de else 
                 
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{linea.getContloc(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
-                    //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
+                tabla.addRow(new Object[]{linea.getContloc(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                System.out.println("tamaño"+linea.getTamaño());
+                System.out.println("contloc"+linea.getContloc());
+                if(!linea.getTamaño().equals("-")){
+                    linea.setContloc( Metodos.sumaHexadecimal(linea.getContloc(), linea.getTamaño()));
+                }
+//Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion 
                     
                     // Antes de agregar una fila a la tabla lstTableModel, verifica si                     la etiqueta está vacía o es nula y, si es así, asigna "NULL"
@@ -410,7 +415,19 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
              // Agrega una fila con los datos a la tabla lst
              lstTableModel.addRow(new Object[]{null, null, linea.getEtiqueta(), linea.getCodop(),             linea.getDirAux(), linea.getTamaño()});
-                    
+              
+
+             /*    
+             if(linea.getTamaño().equals("-")){
+                        linea.setContloc(contloc);
+                    }else{
+                        newtamaño = Metodos.quitar(linea.getTamaño(), " bytes");
+                        newcontloc = contloc.replace(String.valueOf("$"), "");
+                        linea.setContloc( Metodos.sumaHexadecimal(newtamaño, newcontloc));
+                        
+                        linea.setContloc("$" + linea.getContloc());
+                    }
+*/
             } //Fin de while       
 
             } //Fin de try                        
