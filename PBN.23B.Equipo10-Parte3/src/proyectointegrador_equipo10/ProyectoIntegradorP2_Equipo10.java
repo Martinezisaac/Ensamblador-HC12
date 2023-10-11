@@ -202,8 +202,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             for(String cantidad : Palabras) {
                                 if(cantidad.startsWith("$")) { //Si empieza con $ entonces puede ser hexadecimal
                                     DecimalString = Metodos.ConvertHexadecimalDecimal(cantidad); //Convierte de hexadecimal a decimal
-                                    if(!Metodos.IsHexadecimal(cantidad)) { //Validar la sintaxis de un hexadecimal 
-                                        contloc = "Error numero no valido"; //Mostrar mensaje de error  
+                                    if(!Metodos.IsHexadecimal(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar la sintaxis de un hexadecimal 
+                                        contloc = "Error numero hexadecimal no valido"; //Mostrar mensaje de error  
                                     } //Fin de if sintaxi
                                 else{
                                         contloc = cantidad;
@@ -212,8 +212,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                                 
                                 if(cantidad.startsWith("%")) { //Si empieza con % entonces puede ser binario     
                                 DecimalString = Metodos.ConvertBinarioDecimal(cantidad); //Convierte de binario a decimal 
-                                if(!Metodos.IsBinario(cantidad)) { //Validar la sintaxis de un binario 
-                                     contloc ="Error OPR"; //Mostrar mensaje de error
+                                if(!Metodos.IsBinario(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar la sintaxis de un binario 
+                                     contloc ="Error bin"; //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                                 else{
                                         
@@ -223,8 +223,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             
                             if(cantidad.startsWith("@")) { //Si empieza con @ entonces puede ser octal
                                 DecimalString = Metodos.ConvertOctalDecimal(cantidad); //Convierte de octal a decimal
-                                if(!Metodos.IsOctal(cantidad)) { //Validar si la sintaxis de un octal 
-                                     contloc ="Error OPR"; //Mostrar mensaje de error
+                                if(!Metodos.IsOctal(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar si la sintaxis de un octal 
+                                     contloc ="Error octa"; //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                             else{
                                         contloc = cantidad;
@@ -233,8 +233,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             
                             if(cantidad.matches("\\d+")) { //Validar si es decimal si contiene solamente numeros 
                                 DecimalString = cantidad; //Guardar automaticamente el valor decimal en la variable DecimalString 
-                                if(!Metodos.IsDecimal(cantidad)) { //Validar si la sintaxis de un decimal 
-                                     contloc ="Error OPR"; //Mostrar mensaje de error
+                                if(!Metodos.IsDecimal(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar si la sintaxis de un decimal 
+                                     contloc ="Error dec"; //Mostrar mensaje de error
                                 } //Fin de if sintaxis
                                 else{
                                         contloc = cantidad;
@@ -372,7 +372,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             linea.setDireccion("Error"); //Ayuda no funciona REVISAR
                         } //Fin de else
                     } //Fin de for  
-                         
+                    
+                    
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
