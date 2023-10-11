@@ -37,7 +37,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     public static void main(String[] args) { //Inicio de Main
         
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
-        
+        String contloc = null;
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
             /*Archivos disponibles para probar el programa: 
                 - P1ASM.asm
@@ -48,7 +48,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
               bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
               Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
             
-        Linea linea = new Linea(null , null , null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
+        Linea linea = new Linea(null , null , null, null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
     
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         
@@ -195,8 +195,54 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                        - Funcion Split: Se utiliza para dividir la cadena en partes, en este caso mediante espacios "\\S+"
                          Esta funcion nos proporciona palabra por palabra, es util en nuestro codigo porque asi podemos
                          guardar dichas palabras en las variables de Etiqueta, Codop y Operando.
-                       - s+ : Significa espacios " " */                                                       
+                       - s+ : Significa espacios " " */   
+                    
+                        if (Metodos.reconocer(Palabras, "ORG")){
 
+                            for(String cantidad : Palabras) {
+                                if(cantidad.startsWith("$")) { //Si empieza con $ entonces puede ser hexadecimal
+                                    DecimalString = Metodos.ConvertHexadecimalDecimal(cantidad); //Convierte de hexadecimal a decimal
+                                    if(!Metodos.IsHexadecimal(cantidad)) { //Validar la sintaxis de un hexadecimal 
+                                        contloc = "Error numero no valido"; //Mostrar mensaje de error  
+                                    } //Fin de if sintaxi
+                                else{
+                                        contloc = cantidad;
+                                    }//FIn de 
+                                } //Fin de else if
+                                
+                                if(cantidad.startsWith("%")) { //Si empieza con % entonces puede ser binario     
+                                DecimalString = Metodos.ConvertBinarioDecimal(cantidad); //Convierte de binario a decimal 
+                                if(!Metodos.IsBinario(cantidad)) { //Validar la sintaxis de un binario 
+                                     contloc ="Error OPR"; //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                                else{
+                                        
+                                    contloc = cantidad;
+                                   }//FIn de 
+                            } //Fin de if
+                            
+                            if(cantidad.startsWith("@")) { //Si empieza con @ entonces puede ser octal
+                                DecimalString = Metodos.ConvertOctalDecimal(cantidad); //Convierte de octal a decimal
+                                if(!Metodos.IsOctal(cantidad)) { //Validar si la sintaxis de un octal 
+                                     contloc ="Error OPR"; //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                            else{
+                                        contloc = cantidad;
+                                    }//FIn de 
+                            } //Fin de else if
+                            
+                            if(cantidad.matches("\\d+")) { //Validar si es decimal si contiene solamente numeros 
+                                DecimalString = cantidad; //Guardar automaticamente el valor decimal en la variable DecimalString 
+                                if(!Metodos.IsDecimal(cantidad)) { //Validar si la sintaxis de un decimal 
+                                     contloc ="Error OPR"; //Mostrar mensaje de error
+                                } //Fin de if sintaxis
+                                else{
+                                        contloc = cantidad;
+                                    }//FIn de 
+                            } //Fin de else if
+                               
+                            }//Fin de for
+                        }//Fin de if
                     for(String Palabra : Palabras) { //For each / enhanced for loop
 
                         Pattern patronetiqueta = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,7}$"); //Definir un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
@@ -326,18 +372,19 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             linea.setDireccion("Error"); //Ayuda no funciona REVISAR
                         } //Fin de else
                     } //Fin de for  
-               
+                         
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
                     System.out.println("OPERANDO = " + linea.getOperando()); //Impresion de Operando por cada iteracion
                     System.out.println("VALOR DECIMAL = " + Decimal); //Impresion de Valor Decimal por cada iteracion
                     System.out.println("DIRECCION = " + linea.getDireccion()); //Impresion de Direccion por cada iteracion
-                    System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
+                    System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion
+                    System.out.println(contloc);
                 } //Fin de else 
                 
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{null, linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                    tabla.addRow(new Object[]{linea.getContloc(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
                     //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion 
                     

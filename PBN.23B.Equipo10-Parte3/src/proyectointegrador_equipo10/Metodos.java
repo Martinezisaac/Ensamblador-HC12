@@ -1,6 +1,8 @@
 //Clase de metodos
 package proyectointegrador_equipo10;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -204,6 +206,47 @@ public class Metodos {
             } //Fin de for
             return true;
         }//Fin de codops
+        
+        static boolean reconocer(String[] arr, String text){
+            for (String elemento : arr) {
+                if (elemento.equals(text)) {
+                    return true; // Si encontramos el carácter, retornamos true
+                }
+            }
+            return false; // Si no encontramos el carácter, retornamos false
+        }
+    
+        static String sumaHexadecimal(String numero1, String numero2) {
+            // Convertir los números hexadecimales a enteros
+            int entero1 = Integer.parseInt(numero1, 16);
+            int entero2 = Integer.parseInt(numero2, 16);
+
+            // Realizar la suma
+            int resultado = entero1 + entero2;
+
+            // Convertir el resultado a hexadecimal
+            String resultadoHexadecimal = Integer.toHexString(resultado);
+
+            return resultadoHexadecimal;
+    }
+        
+        
+        static String extraerPalabra(String texto, String palabraDeseada) {
+            // Escapar caracteres especiales de la palabra deseada
+            palabraDeseada = Pattern.quote(palabraDeseada);
+
+            // Crear un patrón para buscar la palabra deseada en el texto
+            Pattern patron = Pattern.compile("\\b" + palabraDeseada + "\\b");
+
+            // Crear un objeto Matcher para buscar el patrón en el texto
+            Matcher matcher = patron.matcher(texto);
+
+            if (matcher.find()) {
+                return "";
+            } else {
+                return ""; // Devolver null si la palabra no se encuentra en el texto
+        }
+    }
     
     /*
             public static boolean IsHexa(String x){

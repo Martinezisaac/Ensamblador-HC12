@@ -10,14 +10,16 @@ public class Linea {
     private String valor;
     private String direccion;
     private String tamaño;
+    private String contloc;
       
-    public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux) {
+    public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux, String contloc) {
         this.etiqueta = etiqueta;
         this.codop = codop;
         this.operando = operando;
         this.direccion = direccion;
         this.tamaño = tamaño;
-        this.DirAux = DirAux; 
+        this.DirAux = DirAux;
+        this.contloc = contloc;
     } //Fin de constructor 
     
     //Getters y setters    
@@ -67,6 +69,14 @@ public class Linea {
 
     public void setDirAux(String DirAux) {
         this.DirAux = DirAux;
+    }
+
+    public String getContloc() {
+        return contloc;
+    }
+
+    public void setContloc(String contolc) {
+        this.contloc = contolc;
     }
 
     public String getDireccion() {
