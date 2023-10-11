@@ -230,24 +230,13 @@ public class Metodos {
             return resultadoHexadecimal;
     }
         
-        
-        static String extraerPalabra(String texto, String palabraDeseada) {
-            // Escapar caracteres especiales de la palabra deseada
-            palabraDeseada = Pattern.quote(palabraDeseada);
+        static String quitar(String texto, String quitar) {
+        // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
+        String resultado = texto.replace(quitar, "");
 
-            // Crear un patrón para buscar la palabra deseada en el texto
-            Pattern patron = Pattern.compile("\\b" + palabraDeseada + "\\b");
-
-            // Crear un objeto Matcher para buscar el patrón en el texto
-            Matcher matcher = patron.matcher(texto);
-
-            if (matcher.find()) {
-                return "";
-            } else {
-                return ""; // Devolver null si la palabra no se encuentra en el texto
-        }
+        return resultado;
     }
-    
+        
     /*
             public static boolean IsHexa(String x){
                 char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
@@ -258,7 +247,7 @@ public class Metodos {
                 return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
         }//Fin de IsHexa
     */
-       /*
+/*
         public static boolean rangohexa(String x){
             char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
             String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -270,7 +259,7 @@ public class Metodos {
                 return false;
             }//Fin de try catch
         }//Fin de rangohexa.
-        */
+*/
 
         /*
         public static boolean IsOctal(String x){
@@ -282,7 +271,7 @@ public class Metodos {
                 return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
         }//Fin de IsOctal
     */
-        /*
+/*
         public static boolean rangoocta(String x){
             char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
             String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
@@ -299,7 +288,7 @@ public class Metodos {
             }//Fin de try catch
 
         }//Fin de rangooctal
-        */
+*/
     
             /*
         static boolean valespacios(String y){

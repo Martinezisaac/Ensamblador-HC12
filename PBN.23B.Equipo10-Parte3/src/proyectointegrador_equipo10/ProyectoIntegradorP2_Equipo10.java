@@ -38,6 +38,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
         String contloc = null;
+        String newtamaño = null;
+        String newcontloc = null;
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
             /*Archivos disponibles para probar el programa: 
                 - P1ASM.asm
@@ -373,6 +375,14 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         } //Fin de else
                     } //Fin de for  
                     
+                    if(linea.getTamaño().equals("-")){
+                        linea.setContloc(contloc);
+                    }else{
+                        newtamaño = Metodos.quitar(linea.getTamaño(), " bytes");
+                        newcontloc = contloc.replace(String.valueOf("$"), "");
+                        String suma = Metodos.sumaHexadecimal(newtamaño, newcontloc);
+                        linea.setContloc("$" + suma);
+                    }
                     
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
@@ -382,6 +392,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     System.out.println("DIRECCION = " + linea.getDireccion()); //Impresion de Direccion por cada iteracion
                     System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion
                     System.out.println(contloc);
+                    System.out.println(newtamaño);
+                    System.out.println(newcontloc);
                 } //Fin de else 
                 
                 // Agrega una fila con los datos a la JTable
