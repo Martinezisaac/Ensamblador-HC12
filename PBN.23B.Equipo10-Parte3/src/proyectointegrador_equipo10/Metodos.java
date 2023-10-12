@@ -330,7 +330,42 @@ public class Metodos {
             return "Error Formato";
         } //Fin de catch
     } //Fin de la funcion para devolver en FormatoHehadecimal
-        
+            
+ //Metodo para sumar cuando se deba hacer el alojamientoa dos bytes
+    static String ad2bytes(String opr, int num){
+        int oprint = Integer.parseInt(opr);//se hace int el valor string que se ha ingresado 
+        int result = oprint * num; //Se hace la operacion 
+        return Integer.toString(result);//retorna un string para poder ser usado
+    }
+    
+    //Metodo para obtener el valor de los operandos con ""
+    static String adcontar(String opr){
+        opr = opr.replace("\"", "");
+        int result = opr.length();
+        return Integer.toString(result);
+    }
+    
+   /* static String adseparar(String opr){
+        opr = opr.replace(" ", "");
+        int result = opr.length();
+        for(int i=0; i <= result; i++){
+            if()
+        }
+    }*/
+     
+    //Metodo para contar los operandos de DC 
+    static String adcontardc(String opr){
+        String[] bloques = opr.split(",");
+        int conta = 0;
+        for(String elemento : bloques){
+            String nuevoelemento = elemento.trim();
+            if(!nuevoelemento.isEmpty()){
+                conta ++;
+            }
+        }
+        return Integer.toString(conta);
+    }
+       
     /*
             public static boolean IsHexa(String x){
                 char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
