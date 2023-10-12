@@ -210,6 +210,7 @@ public class Metodos {
             return true;
         }//Fin de codops
         
+        /*
         static boolean reconocer(String[] arr, String text){
             for (String elemento : arr) {
                 if (elemento.equals(text)) {
@@ -218,107 +219,117 @@ public class Metodos {
             }
             return false; // Si no encontramos el carácter, retornamos false
         }
+        */
     
-        static String sumaHexadecimal(String numero1, String numero2) {
+        static String SumarHexadecimal(String Operando, String Tamaño) {
             // Convertir los números hexadecimales a enteros
-            int entero1 = Integer.parseInt(numero1, 16);
-            int entero2 = Integer.parseInt(numero2, 16);
-
-            // Realizar la suma
-            int resultado = entero1 + entero2;
+            int entero1 = Integer.parseInt(Operando, 16);
+            int entero2 = Integer.parseInt(Tamaño, 16);
+           
+            int resultado = entero1 + entero2; // Sumar Hexadecimales
 
             // Convertir el resultado a hexadecimal
             String resultadoHexadecimal = Integer.toHexString(resultado);
 
-            return resultadoHexadecimal;
-    }
+            return resultadoHexadecimal; //Devolver resultado
+        } //Fin de la funcion para sumar hexadecimales
         
+        /*
         static String quitar(String texto, String quitar) {
-        // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
-        String resultado = texto.replace(quitar, "");
+            // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
+            String resultado = texto.replace(quitar, "");
 
-        return resultado;
-    }
+            return resultado; //Devolver resultado
+        } //Fin de la funcion para quitar un simbolo de una variable String
+        */
         
-    public String convertToHex(String baseValue) {
+    public String ConvertToHexadecimal(String baseValue) {
         if (baseValue.startsWith("$")) {
             if (IsHexadecimal(baseValue)) {
                 return baseValue.substring(1);
             } else {
-                return "Formato no valido";
+                return "Error Formato";
             }
         } else if (baseValue.startsWith("@")) {
             return OctToHex(baseValue);
         } else if (baseValue.startsWith("%")) {
             return BintoHex(baseValue);
         } else {
-            return DecToHex(baseValue);
+            return DecimalToHexadecimal(baseValue);
         }
-    }
+    } //Fin de la funcion para convertir a hexadecimal
 
     // Funcion para convertir decimal a hexadecimal
-    public static String DecToHex(String decimalValue) {
+    public static String DecimalToHexadecimal(String ValDecimal) {
         try {
-            int decimal = Integer.parseInt(decimalValue);
-            if (decimal >= 0 && decimal <= 0xFFFF) {
-                return String.format("%04X", decimal);
-            } else {
-                return "Valor fuera de rango";
-            }
-        } catch (NumberFormatException e) {
-            return "Formato no valido";
-        }
-    }
+            int decimal = Integer.parseInt(ValDecimal); //Convertir string a decimal
+            if (decimal >= 0 && decimal <= 0xFFFF) { //Evaluar 16 bits
+                return String.format("%04X", decimal); //Devolver formato rellenando con 0 a la izquierda en caso de ser necesario
+            } //Fin de if 
+            else { //Si no esta en el rango de 16 bits
+                return "Desbordamiento"; //Devolver mensaje
+            } //Fin de else
+        } //Fin de try
+        catch (NumberFormatException e) {
+            return "Error Formato"; //Devolver mensaje
+        } //Fin de catch
+    } //Fin de la funcion para convertir de decimal a hexadecimal
 
     // Funcion para convertir binario a hexadecimal
-    public static String BintoHex(String binaryValue) {
-        if (IsBinario(binaryValue)) {
-            String decimalValue = ConvertBinarioDecimal(binaryValue);
-            return DecToHex(decimalValue);
-        } else {
-            return "Formato no valido";
-        }
-    }
+    public static String BintoHex(String ValBinario) {
+        if (IsBinario(ValBinario)) { //Evaluar si tiene la estructura de un binario
+            String ValDecimal = ConvertBinarioDecimal(ValBinario); //Convertir ValBinario a decimal
+            return DecimalToHexadecimal(ValDecimal); //Devolver valor en hexadecimal
+        } //Fin de if 
+        else {
+            return "Error Formato"; //Devolver mensaje
+        } //Fin de else 
+    } //Fin de la funcion para convertir de binario a hexadecimal
 
     // Funcion para convertir octal a hexadecimal
-    public static String OctToHex(String octalValue) {
-        if (IsOctal(octalValue)) {
-            String decimalValue = ConvertOctalDecimal(octalValue);
-            return DecToHex(decimalValue);
-        } else {
-            return "Formato no valido";
-        }
-    }
+    public static String OctToHex(String ValOctal) {
+        if (IsOctal(ValOctal)) { //Evaluar si tiene la estructura de un octal
+            String decimalValue = ConvertOctalDecimal(ValOctal); //Convertir ValOctal a decimal
+            return DecimalToHexadecimal(decimalValue); //Devolver valor en hexadecimal
+        } //Fin de if
+        else {
+            return "Error Formato"; //Devolver mensaje
+        } //Fin de else
+    } //Fin de la funcion 
 
     //Esta funcion sirve para dar el formato correcto al hexadecimal en forma de bytes
-    public String HexFormat(String Base) {
+    public String FormatoHexadecimal(String Base) {
         try {
             //String hexValue = convertToHex(Base).substring(1).replaceAll("^0+", "");
-            String hexValue = convertToHex(Base); 
-            int len = hexValue.length();
-            if (len == 3) {
-                hexValue = "0" + hexValue;
-                len++;
-            }else if(len == 1){
-                hexValue = "000" + hexValue;
-                len = len+3;
-            }else if(len == 2){
-                hexValue = "00" + hexValue;
-                len = len+2;
-            }
+            String ValorHexadecimal = ConvertToHexadecimal(Base); 
+            int len = ValorHexadecimal.length();
+            //Detectar la longitud del valor en hexadecimal para completar con 0 y mostrar su estructura
+            if (len == 3) { 
+                ValorHexadecimal = "0" + ValorHexadecimal; //Agregar un cero al valorhexadecimal
+                len++; //Guardar valor
+            } //Fin de else if
+            else if(len == 2){ //Si hexadecimal solamente tiene dos digitos
+                ValorHexadecimal = "00" + ValorHexadecimal; //Agregar dos ceros al valorhexadecimal
+                len = len+2; //Guardar valor
+            } //Fin de else if
+            else if(len == 1){
+                ValorHexadecimal = "000" + ValorHexadecimal; //Agregar tres ceros al valorhexadecimal
+                len = len+3; //Guardar valor
+            } //Fin de else if
 
             StringBuilder formattedHex = new StringBuilder(len * 2);
-            for (int i = 0; i < len; i += 2) {
-                formattedHex.append(hexValue, i, i + 2);
+            for (int i = 0; i < len; i += 2) { 
+                formattedHex.append(ValorHexadecimal, i, i + 2);
                 if (i < len - 2) {
-                    formattedHex.append(' ');
-                }
-            }
-            return formattedHex.toString();
-        } catch (NumberFormatException e) {
-            return "Formato no valido";
-        }
-    }
+                    formattedHex.append(' '); //Agregar espacio para definir estructura
+                } //Fin de if
+            } //Fin de for
+            return formattedHex.toString(); //Devolver Formato hexadecimal con 0 y separados por cada dos digitos
+        } //Fin de try
+        catch (NumberFormatException e) {
+            return "Error Formato";
+        } //Fin de catch
+    } //Fin de la funcion para devolver en FormatoHehadecimal
         
     /*
             public static boolean IsHexa(String x){
