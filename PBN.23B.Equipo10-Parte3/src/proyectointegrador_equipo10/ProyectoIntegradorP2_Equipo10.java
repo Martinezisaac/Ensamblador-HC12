@@ -426,6 +426,6 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 e.printStackTrace();
                 System.out.println("Error al crear el archivo");
             } //Fin de catch
-    } //Fin de la funcion para escribir en archivo TABSIM
+    } //Fin de la funcion para escribir en archivo LISTADO
  
 } //Fin de la clase principal
