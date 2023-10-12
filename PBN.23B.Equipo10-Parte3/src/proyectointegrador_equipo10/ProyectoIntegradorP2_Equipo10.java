@@ -41,15 +41,15 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
     public static void main(String[] args) { //Inicio de Main
         
-         // Nombre del archivo que deseas crear o sobrescribir
+         // Crear variable para archivo TABSIM
         String nombreArchivo = "TABSIM.txt";
 
-        // Verificar si el archivo existe y eliminarlo si es el caso
-        File archivoExistente = new File(nombreArchivo);
-        if (archivoExistente.exists()) {
-            archivoExistente.delete();
-            System.out.println("Archivo existente eliminado: " + nombreArchivo);
-        }
+        // Verificar si el archivo existe y eliminarlo en caso de que exista
+        File archivoExistente = new File(nombreArchivo); 
+        if (archivoExistente.exists()) { //Si el archivo TABSIM, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
+            archivoExistente.delete(); //Eliminar TABSIM
+            System.out.println("Archivo existente eliminado: " + nombreArchivo); //Mensaje de confirmacion 
+        } //Fin de if 
 
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
         
@@ -372,11 +372,12 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     
                     //IMPRESION PARA ARCHIVO DE LISTADO
                     System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
-                    //Tabsim(linea.getEtiqueta(), linea.getOperando(), linea.getValor()); //tabla
                     
                     //Archivo TABSIM
-                        escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
-
+                    escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
+                    
+                    //Archivo LISTADO
+                    
             } //Fin de while  
 
             //Archivo de listado
@@ -389,22 +390,24 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     
     // Función para escribir en el archivo TABSIM
     private static void escribirEnTABSIM(String etiqueta, String codop, String operando, String valor) {
-        if (etiqueta != null) {
+        if (etiqueta != null) { //Si la etiqueta es diferentes de null
             try (BufferedWriter w = new BufferedWriter(new FileWriter("TABSIM.txt", true))) {
                 // Escribir en el archivo TABSIM solo si la etiqueta no es nula
-                if (codop.equals("EQU")) {
-                    String tipo = "ABSOLUTA";
-                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.HexFormat(operando) + "\n");
-                } else {
+                if (codop.equals("EQU")) { //Encontrar EQU
+                    String tipo = "ABSOLUTA"; //Definir tipo "ABSOLUTA"
+                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.FormatoHexadecimal(operando) + "\n"); //Escribir en archivo
+                } //Fin de if 
+                else {
                     String CONTLOC = "$" + valor; //Agrega identificador de hexadecmial para que posteriormente entre a las validaciones 
-                    String tipo = "RELATIVO";
-                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.HexFormat(CONTLOC) + "\n");
-                }
-            } catch (IOException e) {
+                    String tipo = "RELATIVO"; //Definir tipo "RELATIVO"
+                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.FormatoHexadecimal(CONTLOC) + "\n"); //Escribir en archivo
+                } //Fin de else 
+            } //Fin de try
+            catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error al crear el archivo");
-            }
-        }
-    }
+            } //Fin de catch
+        } //Fin de if 
+    } //Fin de la funcion para escribir en archivo TABSIM
  
 } //Fin de la clase principal
