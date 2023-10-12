@@ -307,11 +307,11 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 } //Fin de else 
                 
                 //Algoritmo para realizar busquedas en el archivo salvacion 
+                if(linea.getCodop() != null) { //Validar si codigo operando existe, nos sirve para validar comentarios
                     for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                         //Determinar Tamaño
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
-                        if(linea.getCodop() != null && linea.getDireccion() != null && linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                                                 
-                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
+                        if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
                             linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
@@ -322,6 +322,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             //System.out.println("hola mundo");
                         } //Fin de else                        
                     } //Fin de for
+                } //Fin de if 
                 
                 // Agrega una fila con los datos a la JTable
                     tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
