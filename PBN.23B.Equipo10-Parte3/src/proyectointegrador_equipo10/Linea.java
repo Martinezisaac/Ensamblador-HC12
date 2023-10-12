@@ -12,6 +12,7 @@ public class Linea {
     private String tamaño;
       
     public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux) {
+        
         this.tipo = tipo;
         this.valor = valor;
         this.etiqueta = etiqueta;
@@ -49,29 +50,25 @@ public class Linea {
                 } //Fin de validacion 
                 
                 if(Conversion >= 0 && Conversion <= 65535) { //Evaluar 16 bytes
-                    valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
+                    //valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
                     String valorHexadecimal = String.format("%04X", Conversion); //Rellena con 0s a la izquierda para cumplir con el formato
-                    valor = valorHexadecimal; //Guarda el valor  
+                    valor = valorHexadecimal; //Guarda el valor
+                    return "DIR_INIC"; //Retorna DIR_INIC
                 } //Fin de if
                 else {
-                    valor = "Error";
+                    valor = "Desbordamiento";
+                    return "Error"; //Devolver Tipo Error
                 } //Fin de else 
-                
-                //String valorHexadecimal = String.format("%04X", Conversion);
-                
-                //valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
-                //String valorHexadecimal = String.format("%04X", Conversion); //Rellena con 0s a la izquierda para cumplir con el formato
-                //valor = valorHexadecimal; //Guarda el valor 
-                if(Conversion >= 0 && Conversion <= 65535) { //Evaluar 16 bytes
-                  return "DIR_INIC"; //Retorna DIR_INIC  
-                } //Fin de if
-                else { //Si no esta dentro del rango entonces debe de ser error
-                    valor = "Desbordamiento"; //Valor sera igual a desbordamiento
-                    return "Error"; //Devolver Tipo Error           
-                } //Fin de else 
-            
-            //return "DIR_INIC"; //Retorna DIR_INIC
+
         } //Fin de if 
+        
+        //Validar EQU
+            //Siempre tiene una etiqueta
+            //Tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {  
+            return "CONTLOC";
+        } //Fin de else if para EQU
         
         //Validar END
             //Puede o no tener una etiqueta
@@ -80,17 +77,9 @@ public class Linea {
         else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "END" sin un operando           
             return "CONTLOC"; //Retorna CONTLOC 
         } //Fin de else if para END
-                
-        //Validar EQU
-            //Siempre tiene una etiqueta
-            //Tiene codigo operando
-            //Su modo de direccionamiento siempre es DIRECT
-        else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {           
-            return "VALOR"; //Retorna Valor
-        } //Fin de else if para EQU
         
-        if(codop != null) {
-          return "CONTLOC";  
+        else if(codop != null) { 
+            return "CONTLOC";  
         } //Fin de if 
         return "Error";
     }
@@ -156,7 +145,7 @@ public class Linea {
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
         if (codop != null && etiqueta == null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
-            setValor(operando);
+            //setValor(operando);
             setTamaño(null);//No mostrar un mensaje de error, la validacion cumple las condiciones
             setDirAux("DIRECT"); //Variable para mostrar en tabla
             return "DIRECT"; //Retorna el objeto Direccion            
