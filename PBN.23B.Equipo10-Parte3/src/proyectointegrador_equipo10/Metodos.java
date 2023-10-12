@@ -8,6 +8,9 @@ import java.util.regex.Pattern;
 
 public class Metodos {
     
+    public int tamaño = 0;
+    String MarcarError;
+    
     public static boolean ComprobarEtiqueta(String etiqueta) {
         if(etiqueta.matches("[a-zA-Z][a-zA-Z0-9_]{0,7}")) {
             return true; 
@@ -235,6 +238,86 @@ public class Metodos {
         String resultado = texto.replace(quitar, "");
 
         return resultado;
+    }
+        
+    public String convertToHex(String baseValue) {
+        if (baseValue.startsWith("$")) {
+            if (IsHexadecimal(baseValue)) {
+                return baseValue.substring(1);
+            } else {
+                return "Formato no valido";
+            }
+        } else if (baseValue.startsWith("@")) {
+            return OctToHex(baseValue);
+        } else if (baseValue.startsWith("%")) {
+            return BintoHex(baseValue);
+        } else {
+            return DecToHex(baseValue);
+        }
+    }
+
+    // Funcion para convertir decimal a hexadecimal
+    public static String DecToHex(String decimalValue) {
+        try {
+            int decimal = Integer.parseInt(decimalValue);
+            if (decimal >= 0 && decimal <= 0xFFFF) {
+                return String.format("%04X", decimal);
+            } else {
+                return "Valor fuera de rango";
+            }
+        } catch (NumberFormatException e) {
+            return "Formato no valido";
+        }
+    }
+
+    // Funcion para convertir binario a hexadecimal
+    public static String BintoHex(String binaryValue) {
+        if (IsBinario(binaryValue)) {
+            String decimalValue = ConvertBinarioDecimal(binaryValue);
+            return DecToHex(decimalValue);
+        } else {
+            return "Formato no valido";
+        }
+    }
+
+    // Funcion para convertir octal a hexadecimal
+    public static String OctToHex(String octalValue) {
+        if (IsOctal(octalValue)) {
+            String decimalValue = ConvertOctalDecimal(octalValue);
+            return DecToHex(decimalValue);
+        } else {
+            return "Formato no valido";
+        }
+    }
+
+    //Esta funcion sirve para dar el formato correcto al hexadecimal en forma de bytes
+    public String HexFormat(String Base) {
+        try {
+            //String hexValue = convertToHex(Base).substring(1).replaceAll("^0+", "");
+            String hexValue = convertToHex(Base); 
+            int len = hexValue.length();
+            if (len == 3) {
+                hexValue = "0" + hexValue;
+                len++;
+            }else if(len == 1){
+                hexValue = "000" + hexValue;
+                len = len+3;
+            }else if(len == 2){
+                hexValue = "00" + hexValue;
+                len = len+2;
+            }
+
+            StringBuilder formattedHex = new StringBuilder(len * 2);
+            for (int i = 0; i < len; i += 2) {
+                formattedHex.append(hexValue, i, i + 2);
+                if (i < len - 2) {
+                    formattedHex.append(' ');
+                }
+            }
+            return formattedHex.toString();
+        } catch (NumberFormatException e) {
+            return "Formato no valido";
+        }
     }
         
     /*
