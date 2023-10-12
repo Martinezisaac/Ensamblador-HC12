@@ -41,15 +41,23 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
     public static void main(String[] args) { //Inicio de Main
         
-         // Crear variable para archivo TABSIM
-        String nombreArchivo = "TABSIM.txt";
+         // Crear variable para archivo TABSIM y LISTADO
+        String ArchivoTABSIM = "TABSIM.txt";
+        String ArchivoLISTADO = "LISTADO.txt";
 
         // Verificar si el archivo existe y eliminarlo en caso de que exista
-        File archivoExistente = new File(nombreArchivo); 
+        File archivoExistente = new File(ArchivoTABSIM); 
         if (archivoExistente.exists()) { //Si el archivo TABSIM, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
             archivoExistente.delete(); //Eliminar TABSIM
-            System.out.println("Archivo existente eliminado: " + nombreArchivo); //Mensaje de confirmacion 
+            System.out.println("Archivo existente eliminado: " + ArchivoTABSIM); //Mensaje de confirmacion 
         } //Fin de if 
+        
+        // Verificar si el archivo existe y eliminarlo en caso de que exista
+        File archivoExistente2 = new File(ArchivoLISTADO); 
+        if (archivoExistente2.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
+            archivoExistente2.delete(); //Eliminar LISTADO
+            System.out.println("Archivo existente eliminado: " + ArchivoLISTADO); //Mensaje de confirmacion 
+        } //Fin de if
 
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
         
@@ -352,7 +360,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
                     
                     //Archivo LISTADO
-                    
+                    escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
+
                     if(linea.getTamaño() != null || linea.getTamaño() == "0") { //Validar si existe algo en tamaño 
                         int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
                         System.out.println("conversion: " + conversion);
@@ -378,8 +387,6 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         //linea.setValor(Integer.toHexString(ValorDecimal).toUpperCase()); //Convertir la suma en hexadecimal
                     } //Fin de if    
             } //Fin de while  
-
-            //Archivo de listado
 
             } //Fin de try                        
             catch (IOException e) { //Catch en caso de no poder abrir un archivo
@@ -407,6 +414,18 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 System.out.println("Error al crear el archivo");
             } //Fin de catch
         } //Fin de if 
+    } //Fin de la funcion para escribir en archivo TABSIM
+    
+    // Función para escribir en el archivo LISTADO
+    private static void escribirEnLISTADO(String Tipo, String Valor, String Etiqueta, String Codop, String Operando) {
+            try (BufferedWriter w = new BufferedWriter(new FileWriter("LISTADO.txt", true))) {
+                // Escribir en el archivo TABSIM solo si la etiqueta no es nula
+                    w.write(Tipo + "\t" + Valor + "\t" + Etiqueta + "\t" + Codop + "\t" + Operando + "\n"); //Escribir en archivo
+            } //Fin de try
+            catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error al crear el archivo");
+            } //Fin de catch
     } //Fin de la funcion para escribir en archivo TABSIM
  
 } //Fin de la clase principal
