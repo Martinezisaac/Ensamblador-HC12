@@ -158,7 +158,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 linea.setCodop(null); //Codigo Operando
                 linea.setOperando(null); //Operando
                 linea.setDireccion(null); //Direccionamiento
-                linea.setTamaño(null); //Tamaño en bytes
+                //linea.setTamaño(null); //Tamaño en bytes
                 linea.setDirAux(null); //Direccionamiento auxiliar para mostrar en la tabla 
 
                 Linea = Linea.trim(); //.trim evita los espacios o los tabuladores que hay de una palabra a otra y pasa directamente hacia la siguiente palabra
@@ -328,11 +328,11 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
                         if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                            
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
-                            linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
+                            //linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
                         else { //Si no encuentra una coincidencia entonces manda un mensaje de error
-                            linea.setTamaño(null); //Impresion de error
+                            linea.setTamaño("0"); //Impresion de error
                             linea.setDirAux("Error DIR"); //Ayuda no funciona REVISAR
                             linea.setDireccion("Error DIR"); //Ayuda no funciona REVISAR
                             //System.out.println("hola mundo");
@@ -341,11 +341,19 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 } //Fin de if 
                 
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
-                    //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
+                tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion  
                     
-                    if(linea.getTamaño() != null) { //Validar si existe algo en tamaño 
+                    //IMPRESION PARA ARCHIVO DE LISTADO (COMPROBACION EN CONSOLA)
+                    System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
+                    
+                    //Archivo TABSIM
+                    escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
+                    
+                    //Archivo LISTADO
+                    
+                    if(linea.getTamaño() != null || linea.getTamaño() == "0") { //Validar si existe algo en tamaño 
                         int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
                         System.out.println("conversion: " + conversion);
                         System.out.println("getvalor: " + linea.getValor());
@@ -368,16 +376,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         //linea.setValor(valorHexadecimal); //Guarda el valor 
                         
                         //linea.setValor(Integer.toHexString(ValorDecimal).toUpperCase()); //Convertir la suma en hexadecimal
-                    } //Fin de if                    
-                    
-                    //IMPRESION PARA ARCHIVO DE LISTADO
-                    System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
-                    
-                    //Archivo TABSIM
-                    escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
-                    
-                    //Archivo LISTADO
-                    
+                    } //Fin de if    
             } //Fin de while  
 
             //Archivo de listado
