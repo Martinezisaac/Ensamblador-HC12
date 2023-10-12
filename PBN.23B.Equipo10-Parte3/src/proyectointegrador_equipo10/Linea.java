@@ -2,45 +2,113 @@
 package proyectointegrador_equipo10;
 
 public class Linea {
+    private String tipo;
+    private String valor;
     private String etiqueta; 
     private String codop; //Variable para guardar el codigo operando 
     public String DirAux; //Variable auxiliar para mostrar mensaje en la tabla
     private String operando;  
-    private String tipo;
-    private String valor;
     private String direccion;
     private String tamaño;
-    private String contloc;
       
-    public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux, String contloc) {
+    public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux) {
+        this.tipo = tipo;
+        this.valor = valor;
         this.etiqueta = etiqueta;
         this.codop = codop;
         this.operando = operando;
         this.direccion = direccion;
         this.tamaño = tamaño;
-        this.DirAux = DirAux;
-        this.contloc = contloc;
+        this.DirAux = DirAux; 
     } //Fin de constructor 
     
-    //Getters y setters    
-   public void setEtiqueta(String etiqueta) {
-        this.etiqueta = etiqueta;
-    }
-   public String getTipo() {
-        return tipo;
+    //Getters y setters 
+    public String getTipo() {
+        //Validar ORG
+            //No tiene etiqueta
+            //Tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        if (codop != null && etiqueta == null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+            int Conversion = 0;
+            valor = operando;
+                if(valor.matches("\\d+")){ //Verificar decimal
+                    Conversion = Integer.parseInt(valor); //Obtener valor decimal y guardar en Conversion
+                } //Fin de if para validar
+                else if(valor.matches("%[01]+")) { //Verificar binario
+                    Conversion = Integer.parseInt(valor.replace("%",""),2); //Quitar simbolo de binario y evaluar en base 2
+                } //Fin de validacion binario
+                else if(valor.matches("@[0-7]+")) { //Verificar octal
+                    Conversion = Integer.parseInt(valor.replace("@",""),8); //Quitar simbolo de octal y evaluar en base 8
+                } //Fin de validacion octal
+                else if(valor.matches("\\$[A-F0-9]+")) { //Verificar hexadecimal
+                    Conversion = Integer.parseInt(valor.replace("$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
+                } //Fin de validacion octal
+                else {
+                    System.out.println("Error");
+                    //return "Error OPR";
+                } //Fin de validacion 
+                
+                if(Conversion >= 0 && Conversion <= 65535) { //Evaluar 16 bytes
+                    valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
+                    String valorHexadecimal = String.format("%04X", Conversion); //Rellena con 0s a la izquierda para cumplir con el formato
+                    valor = valorHexadecimal; //Guarda el valor  
+                } //Fin de if
+                else {
+                    valor = "Error";
+                } //Fin de else 
+                
+                //String valorHexadecimal = String.format("%04X", Conversion);
+                
+                //valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
+                //String valorHexadecimal = String.format("%04X", Conversion); //Rellena con 0s a la izquierda para cumplir con el formato
+                //valor = valorHexadecimal; //Guarda el valor 
+                if(Conversion >= 0 && Conversion <= 65535) { //Evaluar 16 bytes
+                  return "DIR_INIC"; //Retorna DIR_INIC  
+                } //Fin de if
+                else { //Si no esta dentro del rango entonces debe de ser error
+                    valor = "Desbordamiento"; //Valor sera igual a desbordamiento
+                    return "Error"; //Devolver Tipo Error           
+                } //Fin de else 
+            
+            //return "DIR_INIC"; //Retorna DIR_INIC
+        } //Fin de if 
+        
+        //Validar END
+            //Puede o no tener una etiqueta
+            //No tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "END" sin un operando           
+            return "CONTLOC"; //Retorna CONTLOC 
+        } //Fin de else if para END
+                
+        //Validar EQU
+            //Siempre tiene una etiqueta
+            //Tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {           
+            return "VALOR"; //Retorna Valor
+        } //Fin de else if para EQU
+        
+        if(codop != null) {
+          return "CONTLOC";  
+        } //Fin de if 
+        return "Error";
     }
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
+    
     public String getValor() {
-        System.out.println("");
         return valor;
     }
 
     public void setValor(String valor) {
         this.valor = valor;
+    }
+    
+   public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
     }
 
     public String getEtiqueta() {
@@ -71,44 +139,63 @@ public class Linea {
         this.DirAux = DirAux;
     }
 
-    public String getContloc() {
-        return contloc;
-    }
-
-    public void setContloc(String contolc) {
-        this.contloc = contolc;
-    }
-
     public String getDireccion() {
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         //TamañoAux = null;
         //DirAux = null;
         
+        //VALIDAR DIRECTIVAS
+        //Validar operando y establcer direccionamiento como error
         if(getCodop().equals("Error")) { //Si el codigo operando presenta un error, entonces no puede calcular el modo de direccionamiento
             setDirAux("Error DIR"); //Mensaje de error para la tabla
             return("Error");  //Mensaje de error para Direccion
         } //Fin de if
-        
-        if (codop != null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+               
+        //Validar ORG
+            //No tiene etiqueta
+            //Tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        if (codop != null && etiqueta == null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+            setValor(operando);
+            setTamaño(null);//No mostrar un mensaje de error, la validacion cumple las condiciones
             setDirAux("DIRECT"); //Variable para mostrar en tabla
-            return "DIRECT"; //Retorna el objeto Direccion 
-        }
+            return "DIRECT"; //Retorna el objeto Direccion            
+        } //Fin de if 
         
-        else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "ORG" sin un operando
-            setDirAux("DIRECT");
+        //Validar END
+            //Puede o no tener una etiqueta
+            //No tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "END" sin un operando
+            setTamaño(null); //No mostrar un mensaje de error, la validacion cumple las condiciones
+            setDirAux("DIRECT");            
             return "DIRECT"; //Retorna el objeto Direccion 
-        }
-        else if (codop != null && codop.equalsIgnoreCase("EQU") && operando != null)  { //Si encuentra "EQU" sin un operando
-            setDirAux("DIRECT");
+        } //Fin de else if para END
+                
+        //Validar EQU
+            //Siempre tiene una etiqueta
+            //Tiene codigo operando
+            //Su modo de direccionamiento siempre es DIRECT
+        else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {
+            setTamaño(null); //No mostrar un mensaje de error, la validacion cumple las condiciones
+            setDirAux("DIRECT");            
             return "DIRECT"; //Retorna el objeto Direccion
-        }
+        } //Fin de else if para EQU
+        
+        /*
+        //Si no se cumplen las condiciones, entonces muestra error en direccionamiento
+        else {
+            setDirAux("Error");
+            return "Error";
+        } //Fin de else
+        */
         
         // Comprobar si es un INH (sin operando)
-        else if (operando == null) { //Si el operando es nulo, entonces se considera INH
+        else if (operando == null) { //Si el operando es nulo, entonces se considera INH            
             setDirAux("INH");
             return "INH";
         } //Fin de validar INH
-        
+
         else if (operando != null) {
             // Comprobar el tipo de direccionamiento Inmediato (IMM)
             if (operando.startsWith("#")) {
@@ -124,7 +211,7 @@ public class Linea {
                             return "IMM"; //Retorna el objeto Direccion 
                         }//fin de if
                         else if (valor >= 256 && valor <= 65535) {
-                            for(int i = 0; i <=587; i++) {
+                            for(int i = 0; i <=592; i++) {
                                 if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
                                    setDirAux("Error DIR");
                                    return "Error"; 
@@ -149,7 +236,7 @@ public class Linea {
                         return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
-                        for(int i = 0; i <=587; i++) {
+                        for(int i = 0; i <=592; i++) {
                                 if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
                                     setDirAux("Error DIR");
                                    return "Error"; 
@@ -174,7 +261,7 @@ public class Linea {
                         return "IMM";
                     }//fin de if
                     else if (valor >= 256 && valor <= 65535) {
-                        for(int i = 0; i <=587; i++) {
+                        for(int i = 0; i <=592; i++) {
                             if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
                                 setDirAux("Error DIR");
                                 return "Error"; 
@@ -194,7 +281,7 @@ public class Linea {
                     return "IMM";
                 }//fin de if
                 else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                    for(int i = 0; i <=587; i++) {
+                    for(int i = 0; i <=592; i++) {
                         if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
                             setDirAux("Error DIR");
                             return "Error"; 
@@ -348,7 +435,7 @@ public class Linea {
             if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
             // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
                 if (Metodos.ComprobarEtiqueta(operando)) {
-                    for(int i = 0; i<=587; i++) {
+                    for(int i = 0; i<=592; i++) {
                         if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "2".equals(BD.PosicionMatriz(i, 5))) {
                             setDirAux("REL(8b)");
                             return "REL";
@@ -373,7 +460,6 @@ public class Linea {
             } //Fin de else if
             
             //Rel con ciclo 
-
             if (operando.matches("^(A|a|B|b|D|d|X|x|Y|y|SP|sp|PC|pc),[a-zA-Z_][a-zA-Z0-7_]+$")) {
                 String[] partes = operando.split(",");
                 String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
@@ -394,12 +480,12 @@ public class Linea {
                     } //Fin de if
                 } //Fin de if 
             } //Fin de else if
-        }//fin de else if   
+        } //Fin de else if 
         
         setDirAux("Error DIR"); 
-        return "Error"; // Si no se reconoce ningún tipo de direccionamiento
-   }//fin de public String 
-   
+        return "Error"; // Si no se reconoce ningún tipo de direccionamiento      
+   } //Fin de public String 
+    
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
