@@ -1,4 +1,4 @@
-/* Isaacprueba commit
+/* Isaaccommit
 Proyecto Integrador Parte 2 | Programacion de bajo nivel
 Equipo 10 | Integrantes: 
     - Hernandez Gutierrez Emmanuel 
@@ -35,11 +35,9 @@ import javax.swing.table.TableCellRenderer;
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
 
     public static void main(String[] args) { //Inicio de Main
+
+        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
         
-        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal 
-        String contloc = null;
-        String newtamaño = null;
-        String newcontloc = null;
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
             /*Archivos disponibles para probar el programa: 
                 - P1ASM.asm
@@ -50,7 +48,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
               bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
               Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
             
-        Linea linea = new Linea(null , null , null, null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
+        Linea linea = new Linea(null , null , null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
     
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         
@@ -81,7 +79,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         JFileChooser fileChooser = new JFileChooser();
 
         //Establecer un filtro para mostrar solo ciertos tipos de archivos (opcional)
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto", "asm", "lst"); //abrira archivos de tipo asm y lst
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto", "asm"); //Solo abrira archivos de tipo asm
         fileChooser.setFileFilter(filter); //Aplicar filtro
 
         //Abrir el diálogo para elegir un archivo
@@ -101,9 +99,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
            
             //Si el archivo se abre de manera correcta entonces entra al try y crea la tabla con la informacion del archivo .asm
             
-             // Crear el modelo de datos para la JTable
+            // Crear el modelo de datos para la JTable
             DefaultTableModel tabla = new DefaultTableModel( //Crear tabla
-                new Object[]{"CONTLOC", "ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
+                new Object[]{"TIPO", "VALOR", "ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
             
             DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
 
@@ -133,39 +131,14 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
 
             frame.setVisible(true); //Hacer visible la tabla
             
-            // Crear el modelo de datos para la JTable del archivo .lst
-            DefaultTableModel lstTableModel = new DefaultTableModel(
-                new Object[]{"TIPO", "VALOR", "ETIQUETA","CODOP", "OPERANDO" /* ... */}, 0);
-
-            DefaultTableCellRenderer centrarLST = new DefaultTableCellRenderer();
-
-            // Crear la tabla con el modelo de datos para el archivo .lst
-            JTable tblLST = new JTable(lstTableModel);
-            tblLST.setEnabled(false);
-            centrarLST.setHorizontalAlignment(SwingConstants.CENTER);
-
-            // Configurar del frame para la tabla del archivo .lst
-            JFrame frameLST = new JFrame("Tabla para archivo .lst");
-            frameLST.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frameLST.setLayout(new BorderLayout());
-            frameLST.add(new JScrollPane(tblLST), BorderLayout.CENTER);
-            frameLST.pack();
-
-            // Centrar la ventana en la pantalla
-            Dimension screenSize1 = Toolkit.getDefaultToolkit().getScreenSize();
-            int xLST = (screenSize1.width - frameLST.getWidth()) / 2;
-            int yLST = (screenSize1.height - frameLST.getHeight()) / 2;
-            frameLST.setLocation(xLST, yLST);
-
-            frameLST.setVisible(true);
-
             //Algoritmo para detectar las partes de un ensamblador 
-            while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea 
+            while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea                  
                 //linea.DirAux = null;
                 //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
                 DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
 
-                //Inicializar objetos en null en cada iteracion  
+                //Inicializar objetos en null en cada iteracion
+                //linea.setValor("Hola"); //Etiqueta
                 linea.setEtiqueta(null); //Etiqueta
                 linea.setCodop(null); //Codigo Operando
                 linea.setOperando(null); //Operando
@@ -197,61 +170,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                        - Funcion Split: Se utiliza para dividir la cadena en partes, en este caso mediante espacios "\\S+"
                          Esta funcion nos proporciona palabra por palabra, es util en nuestro codigo porque asi podemos
                          guardar dichas palabras en las variables de Etiqueta, Codop y Operando.
-                       - s+ : Significa espacios " " */   
-                    
-                        if (Metodos.reconocer(Palabras, "ORG")){
+                       - s+ : Significa espacios " " */                                                       
 
-                            for(String cantidad : Palabras) {
-                                if(cantidad.startsWith("$")) { //Si empieza con $ entonces puede ser hexadecimal
-                                    DecimalString = Metodos.ConvertHexadecimalDecimal(cantidad); //Convierte de hexadecimal a decimal
-                                    if(!Metodos.IsHexadecimal(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar la sintaxis de un hexadecimal 
-                                        contloc = "Error numero hexadecimal no valido"; //Mostrar mensaje de error  
-                                    } //Fin de if sintaxi
-                                else{
-                                        contloc = cantidad;
-                                        contloc = contloc.substring(1);
-                                    }//FIn de 
-                                } //Fin de else if
-                                
-                                if(cantidad.startsWith("%")) { //Si empieza con % entonces puede ser binario     
-                                DecimalString = Metodos.ConvertBinarioDecimal(cantidad); //Convierte de binario a decimal 
-                                if(!Metodos.IsBinario(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar la sintaxis de un binario 
-                                     contloc ="Error bin"; //Mostrar mensaje de error
-                                } //Fin de if sintaxis
-                                else{
-                                        
-                                    contloc = cantidad;
-                                    contloc = contloc.substring(1);
-                                   }//FIn de 
-                            } //Fin de if
-                            
-                            if(cantidad.startsWith("@")) { //Si empieza con @ entonces puede ser octal
-                                DecimalString = Metodos.ConvertOctalDecimal(cantidad); //Convierte de octal a decimal
-                                if(!Metodos.IsOctal(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar si la sintaxis de un octal 
-                                     contloc ="Error octa"; //Mostrar mensaje de error
-                                } //Fin de if sintaxis
-                            else{
-                                        contloc = cantidad;
-                                        contloc = contloc.substring(1);
-                                    }//FIn de 
-                            } //Fin de else if
-                            
-                            if(cantidad.matches("\\d+")) { //Validar si es decimal si contiene solamente numeros 
-                                DecimalString = cantidad; //Guardar automaticamente el valor decimal en la variable DecimalString 
-                                if(!Metodos.IsDecimal(cantidad) || !Metodos.Determinar16Bits(Integer.parseInt(DecimalString))) { //Validar si la sintaxis de un decimal 
-                                     contloc ="Error dec"; //Mostrar mensaje de error
-                                } //Fin de if sintaxis
-                                else{
-                                        contloc = cantidad;
-                                        contloc = contloc.substring(1);
-                                    }//FIn de 
-                            } //Fin de else if
-                               
-                            }//Fin de for
-                            System.out.println("antes"+contloc);
-                            linea.setContloc(contloc);
-                            System.out.println("despues"+linea.getContloc());
-                        }//Fin de if
                     for(String Palabra : Palabras) { //For each / enhanced for loop
 
                         Pattern patronetiqueta = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,7}$"); //Definir un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
@@ -283,11 +203,10 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             } //Fin de if
                             
                             //Algoritmo para realizar busquedas en el archivo salvacion 
-                            for(int i = 1; i <= 588; i++) { //Busca desde la linea 0 hasta las 587 lineas que conforma el archivo salvacion 
+                            for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                                 //Validar Codigos Operandos
                                 //El if compara si el CODOP del .asm y del archivo salvacion coinciden, si no encuentra ninguna coincidencia entonces CODOP esta mal escrito en el archivo .asm
-                                if(Palabra.equals((BD.PosicionMatriz(i, 0)))|Palabra.equals
-        ("EQU")) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
+                                if(Palabra.equals((BD.PosicionMatriz(i, 0)))) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
                                    linea.setCodop(Palabra); //Escribir CODOP 
                                    break; //Romper ciclo 
                                 } //Fin de if 
@@ -312,7 +231,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             
                             //Validar Binario
                             if(linea.getOperando().startsWith("%")) { //Si empieza con % entonces puede ser binario     
-                                DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); //Convierte de binario a decimal 
+                                DecimalString = Metodos.ConvertBinarioDecimal(linea.getOperando()); //Convierte de binario a decimal                                
                                 if(!Metodos.IsBinario(linea.getOperando())) { //Validar la sintaxis de un binario 
                                      linea.setOperando("Error OPR"); //Mostrar mensaje de error
                                 } //Fin de if sintaxis
@@ -364,80 +283,79 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     
                     // Determinar el tipo de direccionamiento después de asignar valores
                     String tipoDireccionamiento = linea.getDireccion();
-                    linea.setDireccion(tipoDireccionamiento);
+                    linea.setDireccion(tipoDireccionamiento);  
                     
                     //Algoritmo para realizar busquedas en el archivo salvacion 
-                    for(int i = 0; i <= 587; i++) { //Busca desde la linea 0 hasta las 587 lineas que conforma el archivo salvacion 
+                    for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                         //Determinar Tamaño
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
                         if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                                                 
-                            linea.setTamaño(BD.PosicionMatriz(i, 5)); 
+                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
                             linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
-                        else { //Si no encuentra una coincidencia entonces manda un mensaje de error
-                            linea.setTamaño("-"); //Impresion de error
-                            linea.setDirAux("Error DIR"); //Ayuda no funciona REVISAR
-                            linea.setDireccion("Error"); //Ayuda no funciona REVISAR
-                        } //Fin de else
-                    } //Fin de for  
-                    
+                    } //Fin de for
 
-                    
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
                     System.out.println("OPERANDO = " + linea.getOperando()); //Impresion de Operando por cada iteracion
                     System.out.println("VALOR DECIMAL = " + Decimal); //Impresion de Valor Decimal por cada iteracion
                     System.out.println("DIRECCION = " + linea.getDireccion()); //Impresion de Direccion por cada iteracion
-                    System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion
-                    System.out.println(contloc);
-                    System.out.println(newtamaño);
-                    System.out.println(newcontloc);
+                    System.out.println("DIRECCION AUX = " + linea.getDirAux()); //Impresion de Direccion por cada iteracion
+                    System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
                 } //Fin de else 
                 
+                //Algoritmo para realizar busquedas en el archivo salvacion 
+                    for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
+                        //Determinar Tamaño
+                        //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
+                        if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                                                 
+                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
+                            linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
+                            break; //Sale del if si lo encuentra 
+                        } //Fin de if                        
+                        else { //Si no encuentra una coincidencia entonces manda un mensaje de error
+                            linea.setTamaño(null); //Impresion de error
+                            linea.setDirAux("Error DIR"); //Ayuda no funciona REVISAR
+                            linea.setDireccion("Error DIR"); //Ayuda no funciona REVISAR
+                            //System.out.println("hola mundo");
+                        } //Fin de else                        
+                    } //Fin de for
+                
                 // Agrega una fila con los datos a la JTable
-                tabla.addRow(new Object[]{linea.getContloc(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
-                System.out.println("tamaño"+linea.getTamaño());
-                System.out.println("contloc"+linea.getContloc());
-                if(!linea.getTamaño().equals("-")){
-                    linea.setContloc( Metodos.sumaHexadecimal(linea.getContloc(), linea.getTamaño()));
-                }
-//Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
-                    //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion 
+                    tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                    //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
+                    //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion  
                     
-                    // Antes de agregar una fila a la tabla lstTableModel, verifica si                     la etiqueta está vacía o es nula y, si es así, asigna "NULL"
-             String etiqueta = linea.getEtiqueta();
-             if (etiqueta == null || etiqueta.isEmpty()) {
-                 etiqueta = "NULL";
-                 linea.setEtiqueta("NULL");
-             }
-
-             // Agrega una fila con los datos a la tabla lst
-             lstTableModel.addRow(new Object[]{null, null, linea.getEtiqueta(), linea.getCodop(),             linea.getDirAux(), linea.getTamaño()});
-              
-
-             /*    
-             if(linea.getTamaño().equals("-")){
-                        linea.setContloc(contloc);
-                    }else{
-                        newtamaño = Metodos.quitar(linea.getTamaño(), " bytes");
-                        newcontloc = contloc.replace(String.valueOf("$"), "");
-                        linea.setContloc( Metodos.sumaHexadecimal(newtamaño, newcontloc));
+                    if(linea.getTamaño() != "Error" && linea.getTamaño() != null) { //Validar si existe algo en tamaño 
+                        int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
+                        int tamañodecimal = Integer.parseInt(linea.getTamaño(), 16); //Variable auxiliar 
+                        int ValorDecimal = conversion + tamañodecimal; //Sumar variables auxiliares en decimal para posteriormente convertir a hexadecimal
                         
-                        linea.setContloc("$" + linea.getContloc());
-                    }
-*/
+                            if(ValorDecimal > 65535){
+                                //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
+                                linea.setValor("Desbordamiento"); //Guarda el valor 
+                            } //Fin de if
+                            else {
+                                String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
+                                linea.setValor(valorHexadecimal); //Guarda el valor 
+                            } //Fin de else 
+                            
+                        //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
+                        //linea.setValor(valorHexadecimal); //Guarda el valor 
+                        
+                        //linea.setValor(Integer.toHexString(ValorDecimal).toUpperCase()); //Convertir la suma en hexadecimal
+                    } //Fin de if                    
+                    
+                    //IMPRESION PARA ARCHIVO DE LISTADO
+                    System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
             } //Fin de while       
 
             } //Fin de try                        
             catch (IOException e) { //Catch en caso de no poder abrir un archivo
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
-            } //Fin de catch    
-        
-            //Seccion donde se trabajara con el archivo temporal
-             System.out.println("Aqui");
-                   
+            } //Fin de catch       
         } //Fin de main 
 
 } //Fin de la clase principal
