@@ -4,6 +4,7 @@ package proyectointegrador_equipo10;
 public class Linea {
     private String tipo;
     private String valor;
+    private String EQUval;
     private String etiqueta; 
     private String codop; //Variable para guardar el codigo operando 
     public String DirAux; //Variable auxiliar para mostrar mensaje en la tabla
@@ -25,7 +26,10 @@ public class Linea {
     
     //Getters y setters 
     public String getTipo() {     
-        //Validar ORG
+        
+        EQUval = valor;
+        
+            //Validar ORG
             //No tiene etiqueta
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
@@ -66,8 +70,37 @@ public class Linea {
             //Siempre tiene una etiqueta
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
-        if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {  
-            return "VALOR";
+        else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {  
+            System.out.println("entre a equ");
+            int Conversion = 0;
+            valor = operando;
+                if(valor.matches("\\d+")){ //Verificar decimal
+                    Conversion = Integer.parseInt(valor); //Obtener valor decimal y guardar en Conversion
+                } //Fin de if para validar
+                else if(valor.matches("%[01]+")) { //Verificar binario
+                    Conversion = Integer.parseInt(valor.replace("%",""),2); //Quitar simbolo de binario y evaluar en base 2
+                } //Fin de validacion binario
+                else if(valor.matches("@[0-7]+")) { //Verificar octal
+                    Conversion = Integer.parseInt(valor.replace("@",""),8); //Quitar simbolo de octal y evaluar en base 8
+                } //Fin de validacion octal
+                else if(valor.matches("\\$[A-F0-9]+")) { //Verificar hexadecimal
+                    Conversion = Integer.parseInt(valor.replace("$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
+                } //Fin de validacion octal
+                else {
+                    System.out.println("Error");
+                    //return "Error OPR";
+                } //Fin de validacion 
+                
+                if(Conversion >= 0 && Conversion <= 65535) { //Evaluar 16 bytes
+                    //valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
+                    String valorHexadecimal = String.format("%04X", Conversion); //Rellena con 0s a la izquierda para cumplir con el formato
+                    valor = valorHexadecimal; //Guarda el valor
+                    return "VALOR"; //Retorna DIR_INIC
+                } //Fin de if
+                else {
+                    valor = "Desbordamiento";
+                    return "Error"; //Devolver Tipo Error
+                } //Fin de else
         } //Fin de else if para EQU
         
         //Validar END
@@ -80,6 +113,7 @@ public class Linea {
         
         //Devolcer CONTLOC si el codigo operando no esta vacio 
         else if(codop != null) {
+            valor = EQUval;
             return "CONTLOC";  
         } //Fin de if 
         return "Error";
@@ -87,6 +121,14 @@ public class Linea {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getEQUval() {
+        return EQUval;
+    }
+
+    public void setEQUval(String EQUval) {
+        this.EQUval = EQUval;
     }
     
     public String getValor() {
