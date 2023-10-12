@@ -66,6 +66,28 @@ public class Linea {
                 } //Fin de else 
         } //Fin de if 
         
+        else if(codop != null && codop.equalsIgnoreCase("DS.B") && operando != null){
+                if(Metodos.IsDecimal(operando)){
+                    setTamaño(operando);
+                }
+        }else if(codop != null && codop.equalsIgnoreCase("DS.W") && operando != null){
+                if(Metodos.IsDecimal(operando)){
+                    setTamaño(Metodos.ad2bytes(operando, 2));
+                }
+        }else if(codop != null && codop.equalsIgnoreCase("DC.B") && operando != null){
+            if(operando.startsWith("\"")){
+                setTamaño(Metodos.adcontar(operando));
+            }else if(operando.startsWith("^($|@|%|\\d)")){
+            }
+        }else if(codop != null && codop.equalsIgnoreCase("DC.W") && operando != null){
+            if(operando.startsWith("\"")){
+                setTamaño(Metodos.ad2bytes(Metodos.adcontar(operando), 2));
+            }else if(Metodos.IsDecimal(operando)){
+                    setTamaño(Metodos.ad2bytes(operando, 2));
+                
+            }
+        }
+               
         //Validar EQU
             //Siempre tiene una etiqueta
             //Tiene codigo operando
