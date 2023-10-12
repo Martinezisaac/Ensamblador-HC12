@@ -362,13 +362,14 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     //Archivo LISTADO
                     escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
 
-                    if(linea.getTamaño() != null || linea.getTamaño() == "0") { //Validar si existe algo en tamaño 
+                    if(linea.getCodop().equals("EQU")) {
+                        linea.setValor(linea.getEQUval());
+                        System.out.println("EQU: " + linea.getEQUval());
+                    } //Fin de if
+                    else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
                         int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
-                        System.out.println("conversion: " + conversion);
-                        System.out.println("getvalor: " + linea.getValor());
                         int tamañodecimal = Integer.parseInt(linea.getTamaño()); //Variable auxiliar 
                         int ValorDecimal = conversion + tamañodecimal; //Sumar variables auxiliares en decimal para posteriormente convertir a hexadecimal
-                        System.out.println("val decimal: " + ValorDecimal);
                         
                             if(ValorDecimal > 65535){
                                 //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
@@ -376,16 +377,10 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             } //Fin de if
                             else {
                                 String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
-                                System.out.println("Valor Anterior: " + linea.getValor());
                                 linea.setValor(valorHexadecimal); //Guarda el valor 
-                                System.out.println("Nuevo valor: " + linea.getValor());
                             } //Fin de else 
-                            
-                        //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
-                        //linea.setValor(valorHexadecimal); //Guarda el valor 
-                        
-                        //linea.setValor(Integer.toHexString(ValorDecimal).toUpperCase()); //Convertir la suma en hexadecimal
-                    } //Fin de if    
+                    } //Fin de if
+                    
             } //Fin de while  
 
             } //Fin de try                        
