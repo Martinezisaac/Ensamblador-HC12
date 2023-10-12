@@ -24,12 +24,13 @@ public class Linea {
     } //Fin de constructor 
     
     //Getters y setters 
-    public String getTipo() {
+    public String getTipo() {     
         //Validar ORG
             //No tiene etiqueta
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
         if (codop != null && etiqueta == null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
+            System.out.println("entre a org");
             int Conversion = 0;
             valor = operando;
                 if(valor.matches("\\d+")){ //Verificar decimal
@@ -59,15 +60,14 @@ public class Linea {
                     valor = "Desbordamiento";
                     return "Error"; //Devolver Tipo Error
                 } //Fin de else 
-
         } //Fin de if 
         
         //Validar EQU
             //Siempre tiene una etiqueta
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
-        else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {  
-            return "CONTLOC";
+        if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {  
+            return "VALOR";
         } //Fin de else if para EQU
         
         //Validar END
@@ -78,11 +78,12 @@ public class Linea {
             return "CONTLOC"; //Retorna CONTLOC 
         } //Fin de else if para END
         
-        else if(codop != null) { 
+        //Devolcer CONTLOC si el codigo operando no esta vacio 
+        else if(codop != null) {
             return "CONTLOC";  
         } //Fin de if 
         return "Error";
-    }
+    } //Fin de getTipo
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
@@ -95,7 +96,7 @@ public class Linea {
     public void setValor(String valor) {
         this.valor = valor;
     }
-    
+
    public void setEtiqueta(String etiqueta) {
         this.etiqueta = etiqueta;
     }
@@ -146,7 +147,7 @@ public class Linea {
             //Su modo de direccionamiento siempre es DIRECT
         if (codop != null && etiqueta == null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
             //setValor(operando);
-            setTamaño(null);//No mostrar un mensaje de error, la validacion cumple las condiciones
+            setTamaño("0");//No mostrar un mensaje de error, la validacion cumple las condiciones
             setDirAux("DIRECT"); //Variable para mostrar en tabla
             return "DIRECT"; //Retorna el objeto Direccion            
         } //Fin de if 
@@ -156,7 +157,7 @@ public class Linea {
             //No tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
         else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "END" sin un operando
-            setTamaño(null); //No mostrar un mensaje de error, la validacion cumple las condiciones
+            setTamaño("0"); //No mostrar un mensaje de error, la validacion cumple las condiciones
             setDirAux("DIRECT");            
             return "DIRECT"; //Retorna el objeto Direccion 
         } //Fin de else if para END
@@ -166,7 +167,7 @@ public class Linea {
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
         else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {
-            setTamaño(null); //No mostrar un mensaje de error, la validacion cumple las condiciones
+            setTamaño("0"); //No mostrar un mensaje de error, la validacion cumple las condiciones
             setDirAux("DIRECT");            
             return "DIRECT"; //Retorna el objeto Direccion
         } //Fin de else if para EQU
