@@ -16,9 +16,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
@@ -32,9 +35,21 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 //import javax.swing.table.DefaultTableModel;
 
-public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase 
+public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
+    
+    static Metodos metodos = new Metodos();
 
     public static void main(String[] args) { //Inicio de Main
+        
+         // Nombre del archivo que deseas crear o sobrescribir
+        String nombreArchivo = "TABSIM.txt";
+
+        // Verificar si el archivo existe y eliminarlo si es el caso
+        File archivoExistente = new File(nombreArchivo);
+        if (archivoExistente.exists()) {
+            archivoExistente.delete();
+            System.out.println("Archivo existente eliminado: " + nombreArchivo);
+        }
 
         String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
         
@@ -306,12 +321,13 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
                 } //Fin de else 
                 
-                //Algoritmo para realizar busquedas en el archivo salvacion 
+                //Algoritmo para realizar busquedas en el archivo salvacion                
                 if(linea.getCodop() != null) { //Validar si codigo operando existe, nos sirve para validar comentarios
                     for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                         //Determinar Tamaño
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
-                        if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
+                        if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                            
+                            linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
                             linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
@@ -329,10 +345,13 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion  
                     
-                    if(linea.getTamaño() != "Error" && linea.getTamaño() != null) { //Validar si existe algo en tamaño 
+                    if(linea.getTamaño() != null) { //Validar si existe algo en tamaño 
                         int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
-                        int tamañodecimal = Integer.parseInt(linea.getTamaño(), 16); //Variable auxiliar 
+                        System.out.println("conversion: " + conversion);
+                        System.out.println("getvalor: " + linea.getValor());
+                        int tamañodecimal = Integer.parseInt(linea.getTamaño()); //Variable auxiliar 
                         int ValorDecimal = conversion + tamañodecimal; //Sumar variables auxiliares en decimal para posteriormente convertir a hexadecimal
+                        System.out.println("val decimal: " + ValorDecimal);
                         
                             if(ValorDecimal > 65535){
                                 //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
@@ -340,7 +359,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             } //Fin de if
                             else {
                                 String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
+                                System.out.println("Valor Anterior: " + linea.getValor());
                                 linea.setValor(valorHexadecimal); //Guarda el valor 
+                                System.out.println("Nuevo valor: " + linea.getValor());
                             } //Fin de else 
                             
                         //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
@@ -351,12 +372,39 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     
                     //IMPRESION PARA ARCHIVO DE LISTADO
                     System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
-            } //Fin de while       
+                    //Tabsim(linea.getEtiqueta(), linea.getOperando(), linea.getValor()); //tabla
+                    
+                    //Archivo TABSIM
+                        escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
+
+            } //Fin de while  
+
+            //Archivo de listado
 
             } //Fin de try                        
             catch (IOException e) { //Catch en caso de no poder abrir un archivo
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
             } //Fin de catch       
         } //Fin de main 
-
+    
+    // Función para escribir en el archivo TABSIM
+    private static void escribirEnTABSIM(String etiqueta, String codop, String operando, String valor) {
+        if (etiqueta != null) {
+            try (BufferedWriter w = new BufferedWriter(new FileWriter("TABSIM.txt", true))) {
+                // Escribir en el archivo TABSIM solo si la etiqueta no es nula
+                if (codop.equals("EQU")) {
+                    String tipo = "ABSOLUTA";
+                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.HexFormat(operando) + "\n");
+                } else {
+                    String CONTLOC = "$" + valor; //Agrega identificador de hexadecmial para que posteriormente entre a las validaciones 
+                    String tipo = "RELATIVO";
+                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.HexFormat(CONTLOC) + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error al crear el archivo");
+            }
+        }
+    }
+ 
 } //Fin de la clase principal
