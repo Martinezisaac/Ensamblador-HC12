@@ -37,7 +37,8 @@ import javax.swing.table.TableCellRenderer;
 
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     
-    static Metodos metodos = new Metodos();
+    static Metodos metodos = new Metodos(); //Instanciacion para clase metodos
+    static ArrayList<String> ArrayEtiqueta = new ArrayList<>(); //Arraylist para guardar etiquetas
 
     public static void main(String[] args) { //Inicio de Main
         
@@ -48,7 +49,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         // Verificar si el archivo existe y eliminarlo en caso de que exista
         File archivoExistente = new File(ArchivoTABSIM); 
         if (archivoExistente.exists()) { //Si el archivo TABSIM, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
-            archivoExistente.delete(); //Eliminar TABSIM
+            archivoExistente.delete(); //Eliminar TABSIM          
             System.out.println("Archivo existente eliminado: " + ArchivoTABSIM); //Mensaje de confirmacion 
         } //Fin de if 
         
@@ -65,14 +66,14 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             /*Archivos disponibles para probar el programa: 
                 - P1ASM.asm
                 - P2ASM.asm */
-            
+                   
         ArchivoSalvacion archivosalvacion = new ArchivoSalvacion("Salvation.txt"); //Instanciar objeto para mandar a llamar el archivo de Salvation
             /*Salvation es un archivo de tipo "txt", contiene toda la informacion sobre los codigos operandos, modos de direccionamiento, tamaños de los
               bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
               Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
             
         Linea linea = new Linea(null , null , null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
-    
+              
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         
         //PRUEBAS DE ISAAC PARA DESPUES DETECTAR TAMANO ///// NO MOVERLE A NADA PLS :)
@@ -349,8 +350,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 } //Fin de if 
                 
                 // Agrega una fila con los datos a la JTable
-                tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
-                //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
+                    tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                    //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion  
                     
                     //IMPRESION PARA ARCHIVO DE LISTADO (COMPROBACION EN CONSOLA)
@@ -365,7 +366,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     if(linea.getCodop().equals("EQU")) {
                         linea.setValor(linea.getEQUval());
                         System.out.println("EQU: " + linea.getEQUval());
-                    } //Fin de if
+                    } //Fin de if                   
                     else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
                         int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
                         int tamañodecimal = Integer.parseInt(linea.getTamaño()); //Variable auxiliar 
@@ -381,8 +382,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             } //Fin de else 
                     } //Fin de if
                     
-            } //Fin de while  
-
+            } //Fin de while
+            
             } //Fin de try                        
             catch (IOException e) { //Catch en caso de no poder abrir un archivo
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
@@ -393,16 +394,21 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     private static void escribirEnTABSIM(String etiqueta, String codop, String operando, String valor) {
         if (etiqueta != null) { //Si la etiqueta es diferentes de null
             try (BufferedWriter w = new BufferedWriter(new FileWriter("TABSIM.txt", true))) {
-                // Escribir en el archivo TABSIM solo si la etiqueta no es nula
-                if (codop.equals("EQU")) { //Encontrar EQU
+                // Escribir en el archivo TABSIM solo si la etiqueta no es nula 
+                
+                if(!ArrayEtiqueta.contains(etiqueta)) { //Validar etiquetas
+                    ArrayEtiqueta.add(etiqueta); //Guardar las etiquetas existentes
+                    
+                    if (codop.equals("EQU")) { //Encontrar EQU
                     String tipo = "ABSOLUTA"; //Definir tipo "ABSOLUTA"
                     w.write(tipo + "\t" + etiqueta + "\t" + metodos.FormatoHexadecimal(operando) + "\n"); //Escribir en archivo
-                } //Fin de if 
-                else {
-                    String CONTLOC = "$" + valor; //Agrega identificador de hexadecmial para que posteriormente entre a las validaciones 
-                    String tipo = "RELATIVO"; //Definir tipo "RELATIVO"
-                    w.write(tipo + "\t" + etiqueta + "\t" + metodos.FormatoHexadecimal(CONTLOC) + "\n"); //Escribir en archivo
-                } //Fin de else 
+                    } //Fin de if 
+                    else {
+                        String CONTLOC = "$" + valor; //Agrega identificador de hexadecmial para que posteriormente entre a las validaciones 
+                        String tipo = "RELATIVO"; //Definir tipo "RELATIVO"
+                        w.write(tipo + "\t" + etiqueta + "\t" + metodos.FormatoHexadecimal(CONTLOC) + "\n"); //Escribir en archivo
+                    } //Fin de else
+                } //Fin de if                
             } //Fin de try
             catch (IOException e) {
                 e.printStackTrace();
@@ -415,7 +421,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     private static void escribirEnLISTADO(String Tipo, String Valor, String Etiqueta, String Codop, String Operando) {
             try (BufferedWriter w = new BufferedWriter(new FileWriter("LISTADO.txt", true))) {
                 // Escribir en el archivo TABSIM solo si la etiqueta no es nula
-                    w.write(Tipo + "\t" + Valor + "\t" + Etiqueta + "\t" + Codop + "\t" + Operando + "\n"); //Escribir en archivo
+                    w.write(Tipo + "\t" + Valor + "\t" + Etiqueta + "\t" + Codop + "\t" + Operando + "\n"); //Escribir en archivo                   
             } //Fin de try
             catch (IOException e) {
                 e.printStackTrace();
