@@ -125,7 +125,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
             // Crear el modelo de datos para la JTable
             DefaultTableModel tabla = new DefaultTableModel( //Crear tabla
-                new Object[]{"TIPO", "VALOR", "ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
+                new Object[]{"ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
             
             DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
 
@@ -138,7 +138,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 2
             tbl.getColumnModel().getColumn(3).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 3
             tbl.getColumnModel().getColumn(4).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 4
-            tbl.getColumnModel().getColumn(5).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 5
+            //tbl.getColumnModel().getColumn(5).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 5
             
             // Configurar del frame
             JFrame frame = new JFrame("Partes de código Ensamblador"); //Nombre de la ventana
@@ -350,12 +350,12 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 } //Fin de if 
                 
                 // Agrega una fila con los datos a la JTable
-                    tabla.addRow(new Object[]{linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                    tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
                     //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                     //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion  
                     
                     //IMPRESION PARA ARCHIVO DE LISTADO (COMPROBACION EN CONSOLA)
-                    System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
+                    //System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
                     
                     //Archivo TABSIM
                     escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
