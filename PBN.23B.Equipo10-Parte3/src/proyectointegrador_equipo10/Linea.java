@@ -118,15 +118,15 @@ public class Linea {
             if(operando.startsWith("\"")){
                 setTamaño(Metodos.adcontar(operando));
             } //Fin de if 
-            else if(operando.startsWith("^($|@|%|\\d)")){
+            else if(operando.contains(",")){
             } //Fin de else if 
         } //Fin de else 
         else if(codop != null && codop.equalsIgnoreCase("DC.W") && operando != null){
             if(operando.startsWith("\"")){
                 setTamaño(Metodos.ad2bytes(Metodos.adcontar(operando), 2));
             } //Fin de if
-            else if(Metodos.IsDecimal(operando)){
-                setTamaño(Metodos.ad2bytes(operando, 2));               
+            else if(operando.contains(",")){
+                setTamaño(Metodos.ad2bytes(Metodos.adcontardc(operando), 2));               
             } //Fin de else if
         } //Fin de else if
         
