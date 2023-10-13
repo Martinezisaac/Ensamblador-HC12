@@ -197,7 +197,17 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                        - Funcion Split: Se utiliza para dividir la cadena en partes, en este caso mediante espacios "\\S+"
                          Esta funcion nos proporciona palabra por palabra, es util en nuestro codigo porque asi podemos
                          guardar dichas palabras en las variables de Etiqueta, Codop y Operando.
-                       - s+ : Significa espacios " " */                                                       
+                       - s+ : Significa espacios " " */  
+                    if(Metodos.reconocer(Palabras, "DC.B")){//Validamos que exista la palabra DC.B
+                            linea.setOperando(Metodos.separarValores(Palabras, Metodos.encontrarIndice(Palabras, "DC.B")+1));//Mandamos el valor a opernado
+                             //despues de encontrar el inidice de la cadena en la que se debe de basar para separar la parte deseada.
+
+                            }
+                        if(Metodos.reconocer(Palabras, "DC.W")){
+                            linea.setOperando(Metodos.separarValores(Palabras, Metodos.encontrarIndice(Palabras, "DC.W")+1));//Mandamos el valor a opernado
+                            //despues de encontrar el inidice de la cadena en la que se debe de basar para separar la parte deseada.  
+                        }//Fin de if
+                        System.out.println("despues"+ linea.getOperando());
 
                     for(String Palabra : Palabras) { //For each / enhanced for loop
 
