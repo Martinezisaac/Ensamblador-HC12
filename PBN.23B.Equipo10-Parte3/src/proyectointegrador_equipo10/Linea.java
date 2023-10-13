@@ -65,29 +65,7 @@ public class Linea {
                     return "Error"; //Devolver Tipo Error
                 } //Fin de else 
         } //Fin de if 
-        
-        else if(codop != null && codop.equalsIgnoreCase("DS.B") && operando.matches("\\d+")){ //Validar que CODOP sea igual a DS.B y que el operando sea decimal
-                if(Metodos.IsDecimal(operando)){ //Validar si es operando 
-                    setTamaño(operando); //Al ser de un byte, se guarda el valor del operando 
-                } //Fin de if
-        }else if(codop != null && codop.equalsIgnoreCase("DS.W") && operando.matches("\\d+")){ //Validar que CODOP sea igual a DS.W y que el operando sea decimal
-                if(Metodos.IsDecimal(operando)){
-                    setTamaño(Metodos.ad2bytes(operando, 2));
-                } //Fin de if
-        }else if(codop != null && codop.equalsIgnoreCase("DC.B") && operando != null){
-            if(operando.startsWith("\"")){
-                setTamaño(Metodos.adcontar(operando));
-            }else if(operando.startsWith("^($|@|%|\\d)")){
-            } //Fin de else if 
-        }else if(codop != null && codop.equalsIgnoreCase("DC.W") && operando != null){
-            if(operando.startsWith("\"")){
-                setTamaño(Metodos.ad2bytes(Metodos.adcontar(operando), 2));
-            }else if(Metodos.IsDecimal(operando)){
-                    setTamaño(Metodos.ad2bytes(operando, 2));
-                
-            } //Fin de else if
-        } //Fin de else if
-               
+             
         //Validar EQU
             //Siempre tiene una etiqueta
             //Tiene codigo operando
@@ -125,13 +103,32 @@ public class Linea {
                 } //Fin de else
         } //Fin de else if para EQU
         
-        //Validar END
-            //Puede o no tener una etiqueta
-            //No tiene codigo operando
-            //Su modo de direccionamiento siempre es DIRECT
-        else if (codop != null && codop.equalsIgnoreCase("END") && operando == null)  { //Si encuentra "END" sin un operando           
-            return "CONTLOC"; //Retorna CONTLOC 
-        } //Fin de else if para END
+        //Validaciones para encontrar y calcular DS.B | DS.W | DC.B | DC.W
+        else if(codop != null && codop.equalsIgnoreCase("DS.B") && operando.matches("\\d+")){ //Validar que CODOP sea igual a DS.B y que el operando sea decimal
+            if(Metodos.IsDecimal(operando)){ //Validar si es operando 
+                setTamaño(operando); //Al ser de un byte, se guarda el valor del operando 
+            } //Fin de if
+        } //Fin de else if
+        else if(codop != null && codop.equalsIgnoreCase("DS.W") && operando.matches("\\d+")){ //Validar que CODOP sea igual a DS.W y que el operando sea decimal
+            if(Metodos.IsDecimal(operando)){
+                setTamaño(Metodos.ad2bytes(operando, 2));
+            } //Fin de if
+        } //Fin de else if
+        else if(codop != null && codop.equalsIgnoreCase("DC.B") && operando != null){
+            if(operando.startsWith("\"")){
+                setTamaño(Metodos.adcontar(operando));
+            } //Fin de if 
+            else if(operando.startsWith("^($|@|%|\\d)")){
+            } //Fin de else if 
+        } //Fin de else 
+        else if(codop != null && codop.equalsIgnoreCase("DC.W") && operando != null){
+            if(operando.startsWith("\"")){
+                setTamaño(Metodos.ad2bytes(Metodos.adcontar(operando), 2));
+            } //Fin de if
+            else if(Metodos.IsDecimal(operando)){
+                setTamaño(Metodos.ad2bytes(operando, 2));               
+            } //Fin de else if
+        } //Fin de else if
         
         //Devolcer CONTLOC si el codigo operando no esta vacio 
         else if(codop != null) {
