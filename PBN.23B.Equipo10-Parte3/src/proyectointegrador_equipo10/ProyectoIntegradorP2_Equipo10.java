@@ -47,7 +47,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         
          // Crear variable para archivo TABSIM y LISTADO
         String ArchivoTABSIM = "TABSIM.txt";
-        String ArchivoLISTADO = "LISTADO.txt";
+        String ArchivoLISTADO = "LISTADO.lst";
 
         // Verificar si el archivo existe y eliminarlo en caso de que exista
         File archivoExistente = new File(ArchivoTABSIM); 
