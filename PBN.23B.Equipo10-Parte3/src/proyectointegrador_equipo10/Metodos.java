@@ -366,6 +366,39 @@ public class Metodos {
         return Integer.toString(conta);
     }
        
+       static boolean reconocer(String[] arr, String text){
+        for (String elemento : arr) {//Recorremos el array, por cada elemento
+            if (elemento.equals(text)) {//Comparamos si la cadena de texto que se ingreso es igual a alguna en el array
+                return true; // Si encontramos el carácter, retornamos true
+            }
+        }
+        return false; // Si no encontramos el carácter, retornamos false
+        }
+    
+    static String separarValores(String[] array, int startIndex) {
+        StringBuilder resultado = new StringBuilder();//Declara una obbjeto resultado 
+
+        // Comenzar desde el índice startIndex y recorrer el array
+        for (int i = startIndex; i < array.length; i++) {//Se hace un for para recorrer el array con un indice
+            resultado.append(array[i]);//Extrae las lineas que estan despues del indice
+            if (i < array.length - 1) {
+                resultado.append(" "); // Agregar un espacio entre los valores
+            }
+        }
+
+        return resultado.toString();//regresa la cadenba de texto extraida del array original.
+    }
+    
+    static int encontrarIndice(String[] array, String cadenaBuscada) {
+        for (int i = 0; i < array.length; i++) {//Recorre el array con un for y el tamaño
+            if (array[i].equals(cadenaBuscada)) {//Encuantra en la cadena buscada segun el indice
+                return i; // Se encontró la cadena, se devuelve el índice
+            }
+        }
+
+        return -1; // La cadena no se encontró en el array, se devuelve -1
+    }
+    
     /*
             public static boolean IsHexa(String x){
                 char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
