@@ -13,6 +13,7 @@ package proyectointegrador_equipo10;
 
 //Librerias
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
@@ -21,6 +22,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -384,6 +387,20 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     
             } //Fin de while
             
+            //Impresion de los dos archivos
+            try {
+                //escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
+                Path filePathListado = Paths.get("LISTADO.lst"); //Definir ruta del archivo 
+                Desktop.getDesktop().open(filePathListado.toFile()); //Abrir el archivo LISTADO.lst
+                
+                Path filePathTABSIM = Paths.get("TABSIM.txt"); //Definir ruta del archivo 
+                Desktop.getDesktop().open(filePathTABSIM.toFile()); //Abrir el archivo TABSIM.txt
+            } //Fin de try 
+            catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error al crear el archivo");
+            } //Fin de catch
+            
             } //Fin de try                        
             catch (IOException e) { //Catch en caso de no poder abrir un archivo
                 System.out.println("Error " + e.getMessage()); //Mensaje de error
@@ -419,7 +436,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     
     // Función para escribir en el archivo LISTADO
     private static void escribirEnLISTADO(String Tipo, String Valor, String Etiqueta, String Codop, String Operando) {
-            try (BufferedWriter w = new BufferedWriter(new FileWriter("LISTADO.txt", true))) {
+            try (BufferedWriter w = new BufferedWriter(new FileWriter("LISTADO.lst", true))) {
                 // Escribir en el archivo TABSIM solo si la etiqueta no es nula
                     w.write(Tipo + "\t" + Valor + "\t" + Etiqueta + "\t" + Codop + "\t" + Operando + "\n"); //Escribir en archivo                   
             } //Fin de try
