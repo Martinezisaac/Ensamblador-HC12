@@ -1,13 +1,10 @@
-/* Isaaccommit
-Proyecto Integrador Parte 2 | Programacion de bajo nivel
+/* 
+Proyecto Integrador | Programacion de bajo nivel
 Equipo 10 | Integrantes: 
     - Hernandez Gutierrez Emmanuel 
     - Jimenez Castellanos Jesus Alejandro
     - Martinez Isaac
 */
-
-// Archivo principal: Contiene todo el algoritmo que hace funcionar al programa, llama funciones de otras clases y contiene un main
-// para la ejecucion del programa
 
 package proyectointegrador_equipo10;
 
@@ -40,6 +37,7 @@ import javax.swing.table.TableCellRenderer;
 
 public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     
+    //Variables auxiliares
     static Metodos metodos = new Metodos(); //Instanciacion para clase metodos
     static ArrayList<String> ArrayEtiqueta = new ArrayList<>(); //Arraylist para guardar etiquetas
 
@@ -62,14 +60,16 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             archivoExistente2.delete(); //Eliminar LISTADO
             System.out.println("Archivo existente eliminado: " + ArchivoLISTADO); //Mensaje de confirmacion 
         } //Fin de if
-
-        String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
         
+        // Codigo para abrir el archivo de manera directa, sin abrir el explorador de archivos
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
             /*Archivos disponibles para probar el programa: 
                 - P1ASM.asm
-                - P2ASM.asm */
-                   
+                - P2ASM.asm
+                - P3ASM.asm*/
+            
+        //String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
+                    
         ArchivoSalvacion archivosalvacion = new ArchivoSalvacion("Salvation.txt"); //Instanciar objeto para mandar a llamar el archivo de Salvation
             /*Salvation es un archivo de tipo "txt", contiene toda la informacion sobre los codigos operandos, modos de direccionamiento, tamaños de los
               bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
@@ -79,29 +79,6 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
               
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         
-        //PRUEBAS DE ISAAC PARA DESPUES DETECTAR TAMANO ///// NO MOVERLE A NADA PLS :)
-        /*
-        //System.out.println(ArchivoSalvacion.Salvacion[100][0]); //impresion de prueba
-
-        //0 para CODOPS
-        //1 para operandos
-        //2 para modos de direccionamiento
-        //3 para codigo maquina
-        //4 para bytes por calcular
-        //5 para bytes totales
-
-        String Salvacion = null;
-        Salvacion = ArchivoSalvacion.Salvacion[100][0];
-            System.out.println(Salvacion);
-
-
-        for(int i = 0; i <= 587; i++) {
-        if(Linea.getDireccion() == ArchivoSalvacion[i][0]){
-            Linea.setTamaño();
-        }//Fin de if
-        } //FIn de for
-        */
-    
         File selectedFile = null;          
         JFileChooser fileChooser = new JFileChooser();
 
@@ -136,12 +113,11 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             JTable tbl = new JTable(tabla);
             tbl.setEnabled(false);
             centrar.setHorizontalAlignment(SwingConstants.CENTER);//Se decide hacia que direccion se desean acomodar.
-            tbl.getColumnModel().getColumn(0).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 0
-            tbl.getColumnModel().getColumn(1).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 1
-            tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 2
-            tbl.getColumnModel().getColumn(3).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 3
-            tbl.getColumnModel().getColumn(4).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 4
-            //tbl.getColumnModel().getColumn(5).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la coalumna 5
+            tbl.getColumnModel().getColumn(0).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 0
+            tbl.getColumnModel().getColumn(1).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 1
+            tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 2
+            tbl.getColumnModel().getColumn(3).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 3
+            tbl.getColumnModel().getColumn(4).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 4
             
             // Configurar del frame
             JFrame frame = new JFrame("Partes de código Ensamblador"); //Nombre de la ventana
@@ -149,6 +125,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             frame.setLayout(new BorderLayout());
             frame.add(new JScrollPane(tbl), BorderLayout.CENTER);
             frame.pack();
+            frame.setSize(700, 500); //Definir tamaño de la tabla
 
             // Centrar la ventana en la pantalla
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -160,9 +137,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
             //Algoritmo para detectar las partes de un ensamblador 
             while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea                  
-                //linea.DirAux = null;
                 //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
-                DecimalString = "0"; //Inicializar variable en 0 para cada iteracion realizada
+                
+                String DecimalString = "0"; //Variable auxiliar para inicializar variable en 0 para cada iteracion realizada
 
                 //Inicializar objetos en null en cada iteracion
                 //linea.setValor("Hola"); //Etiqueta
@@ -199,17 +176,17 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                          guardar dichas palabras en las variables de Etiqueta, Codop y Operando.
                        - s+ : Significa espacios " " */
                     
+                    //Definir operando para posteriormente validar
                     if(Metodos.reconocer(Palabras, "DC.B")){//Validamos que exista la palabra DC.B
-                            linea.setOperando(Metodos.separarValores(Palabras, Metodos.encontrarIndice(Palabras, "DC.B")+1));//Mandamos el valor a opernado
-                             //despues de encontrar el inidice de la cadena en la que se debe de basar para separar la parte deseada.
-
-                            }
-                        if(Metodos.reconocer(Palabras, "DC.W")){
-                            linea.setOperando(Metodos.separarValores(Palabras, Metodos.encontrarIndice(Palabras, "DC.W")+1));//Mandamos el valor a opernado
-                            //despues de encontrar el inidice de la cadena en la que se debe de basar para separar la parte deseada.  
-                        }//Fin de if
+                        linea.setOperando(Metodos.separarValores(Palabras, Metodos.encontrarIndice(Palabras, "DC.B")+1));//Mandamos el valor a operando
+                         //despues de encontrar el inidice de la cadena en la que se debe de basar para separar la parte deseada.
+                    } //Fin de if
+                    if(Metodos.reconocer(Palabras, "DC.W")){
+                        linea.setOperando(Metodos.separarValores(Palabras, Metodos.encontrarIndice(Palabras, "DC.W")+1));//Mandamos el valor a operando
+                        //despues de encontrar el inidice de la cadena en la que se debe de basar para separar la parte deseada.  
+                    }//Fin de if
                         
-                        System.out.println("despues"+ linea.getOperando());
+                    System.out.println("despues"+ linea.getOperando()); //Mensaje en consola del operando 
 
                     for(String Palabra : Palabras) { //For each / enhanced for loop
 
@@ -334,7 +311,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
                     } //Fin de for
-
+             
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
@@ -344,7 +321,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     System.out.println("DIRECCION AUX = " + linea.getDirAux()); //Impresion de Direccion por cada iteracion
                     System.out.println("TAMANO = " + linea.getTamaño() + "\n"); //Impresion de Tamaño por cada iteracion              
                 } //Fin de else 
-                
+                               
                 //Algoritmo para realizar busquedas en el archivo salvacion                
                 if(linea.getCodop() != null) { //Validar si codigo operando existe, nos sirve para validar comentarios
                     for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
@@ -362,14 +339,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             //System.out.println("hola mundo");
                         } //Fin de else                        
                     } //Fin de for
-                } //Fin de if 
-                
-                // Agrega una fila con los datos a la JTable
-                //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
-                //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion  
-
-                //IMPRESION PARA ARCHIVO DE LISTADO (COMPROBACION EN CONSOLA)
-                //System.out.println(linea.getTipo() + "  " + linea.getValor() + "  " + linea.getEtiqueta() + "  " + linea.getCodop() + "  " + linea.getOperando());
+                } //Fin de if                                  
 
                 //Validaciones DS y DC
                 if(linea.getCodop().equals("DS.B") && linea.getOperando().matches("\\d+")) {
@@ -393,58 +363,56 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         linea.setTamaño(String.valueOf((linea.getOperando().length() - 2) * 2)); // Si el operando contiene comillas, restar 2 al length y luego multiplicar por 2 para obtener solo el contenido
                     } // Fin de if 
                 } // Fin de else if
-                
-                //Impresion de valor para verificarlo 
-                System.out.println(linea.getValor());
-                
+                              
                 // Validar si la etiqueta ya existe en ArrayEtiqueta
                 if (linea.getEtiqueta() != null) { //Validar si la etiqueta es diferente de null
                     /*Se valida si es diferente debido a que en el arraylist se guardan etiquetas nulas, y por lo tanto si existen 2 etiquetas nulas se marcara
                       como "ETQ Dup", Lo que se necesita validar es entre las etiquetas que son diferentes de null */
                     if (ArrayEtiqueta.contains(linea.getEtiqueta())) { //Validar si la etiqueta ya existe en el arraylist
                         linea.setEtiqueta("ETQ Dup"); //Establecer etiqueta repetida
-                        System.out.println("Error: Etiqueta duplicada - " + linea.getEtiqueta() + "-----------------------------------------------------------------------"); //Mensaje de confirmacion
+                        System.out.println("Error: Etiqueta duplicada - " + linea.getEtiqueta()); //Mensaje de confirmacion
                         // Aquí puedes manejar el error según tus necesidades
                     } //Fin de if  
                     else { //Si la etiqueta no existe en el arraylist
                         ArrayEtiqueta.add(linea.getEtiqueta()); //Agregar etiqueta al arraylist
                     } //Fin de else  
                 } //Fin de if 
-                
-                //Impresion del arraylist con las etiquetas
-                for (int i = 0; i < ArrayEtiqueta.size(); i++) {
-                    ArrayEtiqueta.get(i);
-                } //Fin de for
-                
-                //Archivo TABSIM
+               
+                // Actualizar Archivo TABSIM y Archivo LISTADO
                 escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
-
-                //Archivo LISTADO
                 escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
                 
-                tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla
+                // Agregar una fila con los datos a la JTable
+                tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla                
+                //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
+                //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion
                 
-                if(linea.getCodop().equals("EQU")) {
-                    linea.setValor(linea.getEQUval());
-                    System.out.println("EQU: " + linea.getEQUval());
+                if(linea.getCodop().equals("EQU")) { //Validar si el codigo operando contiene EQU
+                    linea.setValor(linea.getEQUval()); //Establecer valor 
+                    System.out.println("EQU: " + linea.getEQUval()); //Impresion en consola
                 } //Fin de if                   
                 else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
                     int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
                     int tamañodecimal = Integer.parseInt(linea.getTamaño()); //Variable auxiliar 
                     int ValorDecimal = conversion + tamañodecimal; //Sumar variables auxiliares en decimal para posteriormente convertir a hexadecimal
 
-                        if(ValorDecimal > 65535){
+                        if(ValorDecimal > 65535){ //Validar bits
                             //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
                             linea.setValor("Desbordamiento"); //Guarda el valor 
                         } //Fin de if
-                        else {
+                        else { //No existe desbordamiento
                             String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
                             linea.setValor(valorHexadecimal); //Guarda el valor 
                         } //Fin de else 
                 } //Fin de if                
 
-                //tabla.addRow(new Object[]{linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla            
             } //Fin de while
+            
+            //Impresion del arraylist con las etiquetas
+            for (int i = 0; i < ArrayEtiqueta.size(); i++) {
+                System.out.println(ArrayEtiqueta.get(i));                   
+                //System.out.println(linea.getValor()); //Impresion de valor para verificarlo 
+            } //Fin de for
             
             //Impresion de los dos archivos
             try {
@@ -460,11 +428,11 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 System.out.println("Error al crear el archivo");
             } //Fin de catch
             
-            } //Fin de try                        
-            catch (IOException e) { //Catch en caso de no poder abrir un archivo
-                System.out.println("Error " + e.getMessage()); //Mensaje de error
-            } //Fin de catch       
-        } //Fin de main 
+        } //Fin de try                        
+        catch (IOException e) { //Catch en caso de no poder abrir un archivo
+            System.out.println("Error " + e.getMessage()); //Mensaje de error
+        } //Fin de catch       
+    } //Fin de main 
     
     // Función para escribir en el archivo TABSIM
     private static void escribirEnTABSIM(String etiqueta, String codop, String operando, String valor) {
