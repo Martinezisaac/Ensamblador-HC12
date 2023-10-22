@@ -75,8 +75,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
               bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
               Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
             
-        Linea linea = new Linea(null , null , null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
-              
+        Linea linea = new Linea(null , null , null, null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
+              //Contenido de Linea = linea(etiqueta, codop, operando, direccion, tamaño, DirAux, Postbyte)
+                
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
         
         File selectedFile = null;          
@@ -105,7 +106,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             
             // Crear el modelo de datos para la JTable
             DefaultTableModel tabla = new DefaultTableModel( //Crear tabla
-                new Object[]{"CONTLOC","ETQ", "CODOP", "OPR", "ADDR", "SIZE"}, 0); //Definir estructura de la tabla
+                new Object[]{"CONTLOC","ETQ", "CODOP", "OPR", "ADDR", "SIZE", "POSTBYTE"}, 0); //Definir estructura de la tabla
             
             DefaultTableCellRenderer centrar = new DefaultTableCellRenderer();//Declaracion de un objeto DefaultTableCellRenderer
 
@@ -301,6 +302,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     String tipoDireccionamiento = linea.getDireccion();
                     linea.setDireccion(tipoDireccionamiento);  
                     
+                    /*
                     //Algoritmo para realizar busquedas en el archivo salvacion 
                     for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                         //Determinar Tamaño
@@ -308,9 +310,12 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                                                 
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
                             linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
+                            linea.setPostbyte(BD.PosicionMatriz(i, 3)); //Obtener Postbyte
+                            linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
                     } //Fin de for
+                    */
              
                     //Impresion de las variables
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
@@ -325,17 +330,19 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 //Algoritmo para realizar busquedas en el archivo salvacion                
                 if(linea.getCodop() != null) { //Validar si codigo operando existe, nos sirve para validar comentarios
                     for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
-                        //Determinar Tamaño
+                        //Determinar Tamaño y Codigo postbyte
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
                         if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                            
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
-                            //linea.setTamaño(linea.getTamaño()); //Mensaje de confirmacion 
+                            linea.setPostbyte(BD.PosicionMatriz(i, 3)); //Obtener Postbyte 
                             break; //Sale del if si lo encuentra 
                         } //Fin de if                        
                         else { //Si no encuentra una coincidencia entonces manda un mensaje de error
                             linea.setTamaño("0"); //Impresion de error
-                            linea.setDirAux("Error DIR"); //Ayuda no funciona REVISAR
-                            linea.setDireccion("Error DIR"); //Ayuda no funciona REVISAR
+                            linea.setPostbyte("Error Postbyte"); //Ayuda no funciona REVISAR
+                            linea.setDirAux("Error DIR"); //Mensaje de confirmacion
+                            linea.setDireccion("Error"); //Mensaje de confirmacion
+                            
                             //System.out.println("hola mundo");
                         } //Fin de else                        
                     } //Fin de for
@@ -383,7 +390,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
                 
                 // Agregar una fila con los datos a la JTable
-                tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño()}); //Agregar objetos a la tabla                
+                tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño(), linea.getPostbyte()}); //Agregar objetos a la tabla                
                 //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                 //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion
                 
