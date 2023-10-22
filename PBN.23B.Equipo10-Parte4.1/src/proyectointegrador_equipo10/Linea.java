@@ -18,8 +18,9 @@ public class Linea {
     private String operando;  
     private String direccion;
     private String tamaño;
+    private String postbyte;
       
-    public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux) {
+    public Linea(String etiqueta, String codop, String operando, String direccion, String tamaño, String DirAux, String Postbyte) {
         
         this.tipo = tipo;
         this.valor = valor;
@@ -29,6 +30,7 @@ public class Linea {
         this.direccion = direccion;
         this.tamaño = tamaño;
         this.DirAux = DirAux; 
+        this.postbyte = postbyte;
     } //Fin de constructor 
     
     //Getters y setters 
@@ -563,5 +565,31 @@ public class Linea {
     public void setTamaño(String tamaño) {
         this.tamaño = tamaño;
     }
+
+    public String getPostbyte() {
         
+        //Ignorar directivas ORG, EQU y END
+        if(codop.equals("ORG") || codop.equals("EQU") || codop.equals("END")) {
+            return ""; //Devolver postbyte
+        } //Fin de if                
+        
+        //Calcular Inherentes
+            //Los inherentes no se calculan puesto que no tienen operandos, su codigo postbyte ya viene por defecto
+        
+        //Calcular Inmediatos
+        
+        //Calcular Directos
+        
+        //Calcular Extendidos
+        
+        //Calcular Directiva DS
+        
+        //Calcular Directiva DC
+        
+        return postbyte; //Posible Return "Error Postbyte" en caso de que no entre en ninguna de las validaciones anteriores
+    } //Fin de get Postbyte
+
+    public void setPostbyte(String postbyte) {
+        this.postbyte = postbyte;
+    }    
 } //Fin de la clase linea 
