@@ -1,4 +1,11 @@
-//Clase Linea
+/* 
+Proyecto Integrador | Programacion de bajo nivel
+Equipo 10 | Integrantes: 
+    - Hernandez Gutierrez Emmanuel 
+    - Jimenez Castellanos Jesus Alejandro
+    - Martinez Isaac
+*/
+
 package proyectointegrador_equipo10;
 
 public class Linea {
@@ -196,7 +203,8 @@ public class Linea {
         //TamañoAux = null;
         //DirAux = null;
         
-        //VALIDAR DIRECTIVAS
+        //Validar Directivas
+        
         //Validar operando y establcer direccionamiento como error
         if(getCodop().equals("Error")) { //Si el codigo operando presenta un error, entonces no puede calcular el modo de direccionamiento
             setDirAux("Error DIR"); //Mensaje de error para la tabla
@@ -239,21 +247,14 @@ public class Linea {
             setDirAux("DIRECT"); //Asignar el valor que se imprimirÃ¡ en la tabla
             return "DIRECT";
         } //Fin de if 
-
         
-        /*
-        //Si no se cumplen las condiciones, entonces muestra error en direccionamiento
-        else {
-            setDirAux("Error");
-            return "Error";
-        } //Fin de else
-        */
+        //Validar Modos de direccionamiento
         
         // Comprobar si es un INH (sin operando)
         else if (operando == null) { //Si el operando es nulo, entonces se considera INH            
             setDirAux("INH");
             return "INH";
-        } //Fin de validar INH
+        } //Fin de validar INH 
 
         else if (operando != null) {
             // Comprobar el tipo de direccionamiento Inmediato (IMM)
@@ -538,11 +539,17 @@ public class Linea {
                         return "REL(9-bit)";
                     } //Fin de if
                 } //Fin de if 
-            } //Fin de else if
-        } //Fin de else if 
+            } //Fin de else if       
+        } //Fin de else if
         
-        setDirAux("Error DIR"); 
-        return "Error"; // Si no se reconoce ningún tipo de direccionamiento      
+        //Devolver errores
+        
+        //Si no entra en ningunna de las posibles opciones, entonces el operando esta erroneo y se devuelve mensaje de error
+        setOperando("Error OPR"); //Mensaje de confirmacion
+
+        //Si no entra en ningunna de las posibles opciones, el modo de direccionamiento se devuelve como error
+        setDirAux("Error DIR"); //Mensaje de confirmacion    
+        return "Error"; // No se reconoce ningún tipo de direccionamiento      
    } //Fin de public String 
     
     public void setDireccion(String direccion) {
