@@ -1,22 +1,27 @@
-//Clase de metodos
+/* 
+Proyecto Integrador | Programacion de bajo nivel
+Equipo 10 | Integrantes: 
+    - Hernandez Gutierrez Emmanuel 
+    - Jimenez Castellanos Jesus Alejandro
+    - Martinez Isaac
+*/
+
 package proyectointegrador_equipo10;
 
-import java.awt.List;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Metodos {
     
-    public int tamaño = 0;
-    String MarcarError;
+    //public int tamaño = 0;
+    //String MarcarError;
     
     public static boolean ComprobarEtiqueta(String etiqueta) {
         if(etiqueta.matches("[a-zA-Z][a-zA-Z0-9_]{0,7}")) {
             return true; 
         } //Fin de if          
         else {
-            return true;  
+            return false;  
         } //Fin de else 
     } //Fin de compribar etiqueta
     
@@ -42,7 +47,6 @@ public class Metodos {
     
     //Funcion para validar si operando es Binario 
     public static Boolean IsBinario(String binario) {      
-
         if (binario.length() > 1) { //Valida si hay algo en binario despues de %
             binario = binario.substring(1); //Le quita el primer caracter (%) y reemplaza la misma variable
         } //Fin de if
@@ -195,7 +199,7 @@ public class Metodos {
                     return false;
                 } //Fin de if
             } //Fin de for
-        }
+        } //Finde if 
         return true;
     }//Fin de caracteretq
 
@@ -210,39 +214,19 @@ public class Metodos {
             return true;
         }//Fin de codops
         
-        /*
-        static boolean reconocer(String[] arr, String text){
-            for (String elemento : arr) {
-                if (elemento.equals(text)) {
-                    return true; // Si encontramos el carácter, retornamos true
-                }
-            }
-            return false; // Si no encontramos el carácter, retornamos false
-        }
-        */
-    
-        static String SumarHexadecimal(String Operando, String Tamaño) {
-            // Convertir los números hexadecimales a enteros
-            int entero1 = Integer.parseInt(Operando, 16);
-            int entero2 = Integer.parseInt(Tamaño, 16);
-           
-            int resultado = entero1 + entero2; // Sumar Hexadecimales
+    static String SumarHexadecimal(String Operando, String Tamaño) {
+        // Convertir los números hexadecimales a enteros
+        int entero1 = Integer.parseInt(Operando, 16);
+        int entero2 = Integer.parseInt(Tamaño, 16);
 
-            // Convertir el resultado a hexadecimal
-            String resultadoHexadecimal = Integer.toHexString(resultado);
+        int resultado = entero1 + entero2; // Sumar Hexadecimales
 
-            return resultadoHexadecimal; //Devolver resultado
-        } //Fin de la funcion para sumar hexadecimales
-        
-        /*
-        static String quitar(String texto, String quitar) {
-            // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
-            String resultado = texto.replace(quitar, "");
+        // Convertir el resultado a hexadecimal
+        String resultadoHexadecimal = Integer.toHexString(resultado);
 
-            return resultado; //Devolver resultado
-        } //Fin de la funcion para quitar un simbolo de una variable String
-        */
-        
+        return resultadoHexadecimal; //Devolver resultado
+    } //Fin de la funcion para sumar hexadecimales
+       
     public String ConvertToHexadecimal(String baseValue) {
         if (baseValue.startsWith("$")) {
             if (IsHexadecimal(baseValue)) {
@@ -463,5 +447,25 @@ public class Metodos {
             } //Fin de for
             return true;
         }//Fin vlaespacios*/
+    
+            /*
+        static String quitar(String texto, String quitar) {
+            // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
+            String resultado = texto.replace(quitar, "");
+
+            return resultado; //Devolver resultado
+        } //Fin de la funcion para quitar un simbolo de una variable String
+        */
+    
+        /*
+        static boolean reconocer(String[] arr, String text){
+            for (String elemento : arr) {
+                if (elemento.equals(text)) {
+                    return true; // Si encontramos el carácter, retornamos true
+                }
+            }
+            return false; // Si no encontramos el carácter, retornamos false
+        }
+        */
           
     } //Fin de la clase metodos 
