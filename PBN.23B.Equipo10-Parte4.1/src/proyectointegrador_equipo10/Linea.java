@@ -627,6 +627,31 @@ public class Linea {
             } //Fin de validar inmediatos de 16bits
         
         //Calcular Directos (dd)
+         if(DirAux.equals("DIR") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("dd")) {
+                String ValorOperando = operando; //Variable auxiliar para obtener operando
+
+                if(ValorOperando.matches("\\d+")){ //Verificar decimal
+                    Conversion = Integer.parseInt(ValorOperando); //Obtener valor decimal y guardar en Conversion
+                } //Fin de if para validar
+                else if(ValorOperando.matches("%[01]+")) { //Verificar binario
+                    Conversion = Integer.parseInt(ValorOperando.replace("%",""),2); //Quitar simbolo de binario y evaluar en base 2
+                } //Fin de validacion binario
+                else if(ValorOperando.matches("@[0-7]+")) { //Verificar octal
+                    Conversion = Integer.parseInt(ValorOperando.replace("@",""),8); //Quitar simbolo de octal y evaluar en base 8
+                } //Fin de validacion octal
+                else if(ValorOperando.matches("\\$[A-F0-9]+")) { //Verificar hexadecimal
+                    Conversion = Integer.parseInt(ValorOperando.replace("$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
+                } //Fin de validacion octal
+                else {
+                    System.out.println("Error");
+                    return "Error Postbyte";
+                    //return "Error OPR";
+                } //Fin de validacion 
+
+                String ValorHexadecimal = String.format("%02x", Conversion).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                postbyte = BD.PosicionMatriz(i,3).replace("dd", ValorHexadecimal); //Establecer postbyte
+                //return postbyte;
+            } //Fin de validar Directos
         
         //Calcular Extendidos (hh ll)
         
