@@ -69,16 +69,14 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 - P3ASM.asm*/
             
         //String DecimalString = "0"; //Variable auxiliar para convertir de otros sistemas a decimal
-                    
-        ArchivoSalvacion archivosalvacion = new ArchivoSalvacion("Salvation.txt"); //Instanciar objeto para mandar a llamar el archivo de Salvation
-            /*Salvation es un archivo de tipo "txt", contiene toda la informacion sobre los codigos operandos, modos de direccionamiento, tamaños de los
-              bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
-              Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
-            
+                               
         Linea linea = new Linea(null , null , null, null, null, null, null); // Instanciar objeto Linea con variables inicializadas en null
               //Contenido de Linea = linea(etiqueta, codop, operando, direccion, tamaño, DirAux, Postbyte)
                 
         ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
+            /*Salvation es un archivo de tipo "txt", contiene toda la informacion sobre los codigos operandos, modos de direccionamiento, tamaños de los
+              bytes por calcular y ya calculados, su descripcion y mas informacion relevante. 
+              Este archivo es utilizado para realizar comparaciones y devolver informacion dentro de Salvation.txt */
         
         File selectedFile = null;          
         JFileChooser fileChooser = new JFileChooser();
@@ -119,7 +117,9 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             tbl.getColumnModel().getColumn(2).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 2
             tbl.getColumnModel().getColumn(3).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 3
             tbl.getColumnModel().getColumn(4).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 4
-            
+            tbl.getColumnModel().getColumn(5).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 5
+            tbl.getColumnModel().getColumn(6).setCellRenderer(centrar);//Se acomoda al centro la infiormacion de la columna 6
+           
             // Configurar del frame
             JFrame frame = new JFrame("Partes de código Ensamblador"); //Nombre de la ventana
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,7 +164,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         System.out.println("Error Comentario\n"); //Mensaje de error
                     } //Fin de if 
                     else { //Entonces la linea si tiene de 0 a 80 caracteres                         
-                        System.out.println("COMENTARIO"); //Mostrar mensaje 
+                        System.out.println("COMMENT"); //Mostrar mensaje 
+                        linea.setCodop("COMMENT"); //Establcer comment en la tabla
                     } //Fin de else 
                 } // Fin de else if
 
@@ -318,6 +319,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     */
              
                     //Impresion de las variables
+                    System.out.println("POSTBYTE = " + linea.getPostbyte()); //Impresion de codigo postbyte calculado por cada iteracion
                     System.out.println("ETIQUETA = " + linea.getEtiqueta()); //Impresion de etiqueta por cada iteracion
                     System.out.println("CODOP = " + linea.getCodop()); //Impresion de Codigo Operando por cada iteracion
                     System.out.println("OPERANDO = " + linea.getOperando()); //Impresion de Operando por cada iteracion
@@ -341,8 +343,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                             linea.setTamaño("0"); //Impresion de error
                             linea.setPostbyte("Error Postbyte"); //Ayuda no funciona REVISAR
                             linea.setDirAux("Error DIR"); //Mensaje de confirmacion
-                            linea.setDireccion("Error"); //Mensaje de confirmacion
-                            
+                            linea.setDireccion("Error"); //Mensaje de confirmacion                     
                             //System.out.println("hola mundo");
                         } //Fin de else                        
                     } //Fin de for
