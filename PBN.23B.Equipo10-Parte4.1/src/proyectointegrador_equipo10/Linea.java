@@ -261,111 +261,85 @@ public class Linea {
         else if (operando != null) {
             // Comprobar el tipo de direccionamiento Inmediato (IMM)
             if (operando.startsWith("#")) {
-                  String operandoSinNumeral = operando.substring(1); // Quitar el símbolo "#" del operando
-                if (operandoSinNumeral.startsWith("$")) {
-                    // Comprobar si el operando es hexadecimal (#$)
-                    String valorHexadecimal = operandoSinNumeral.substring(1);
-                    try {
-                        int valor = Integer.parseInt(valorHexadecimal, 16);                       
-                        
-                        if (valor >= 0 && valor <= 255) {
-                            setDirAux("IMM(8b)"); //Variable para mostrar en tabla
-                            return "IMM"; //Retorna el objeto Direccion 
-                        }//fin de if
-                        else if (valor >= 256 && valor <= 65535) {
-                            for(int i = 0; i <=592; i++) {
-                                if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                                   setDirAux("Error DIR");
-                                   return "Error"; 
-                                } //Fin de if                 
-                            }//fin de for
-                            setDirAux("IMM(16b)");
-                            return "IMM";
-                        } //Fin de else    
-                    }//fin de try //fin de try 
-                    catch (NumberFormatException e) {
-                        // No es un valor hexadecimal válido
-                    }//fin de catch
-                }//fin de if 
                 
-            else if (operandoSinNumeral.startsWith("@")) {
-            // Comprobar si el operando es octal (#@)
-                String valorOctal = operandoSinNumeral.substring(1);
-                try {
-                    int valor = Integer.parseInt(valorOctal, 8);
-                    if (valor >= 0 && valor <= 255) {
-                        setDirAux("IMM(8b)");
-                        return "IMM";
-                    }//fin de if
-                    else if (valor >= 256 && valor <= 65535) {
-                        for(int i = 0; i <=592; i++) {
-                                if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                                    setDirAux("Error DIR");
-                                   return "Error"; 
-                                } //Fin de if                 
-                            }//fin de for
-                        setDirAux("IMM(16b)");
-                        return "IMM";
-                    }//fin de else if
-                }//fin de try//fin de try
-                    catch (NumberFormatException e) {
-                       // No es un valor octal válido
-                   }//fin de catch
-            }//fin de else if  
-
-            else if (operandoSinNumeral.startsWith("%")) {
-            // Comprobar si el operando es binario (#%)
-                String valorBinario = operandoSinNumeral.substring(1);
-                if (Metodos.IsBinario(valorBinario)) {
-                    int valor = Integer.parseInt(valorBinario, 2);
-                    if (valor >= 0 && valor <= 255) {
-                        setDirAux("IMM(8b)");
-                        return "IMM";
-                    }//fin de if
-                    else if (valor >= 256 && valor <= 65535) {
-                        for(int i = 0; i <=592; i++) {
-                            if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                                setDirAux("Error DIR");
-                                return "Error"; 
-                            } //Fin de if                 
-                        }//fin de for
-                        setDirAux("IMM(16b)");
-                        return "IMM";
-                    }//fin de else if
-                }//fin de if
-            }//fin de else if 
-
-            else if (Metodos.IsDecimal(operandoSinNumeral)) {
-            // Comprobar si el operando es decimal (#)
-                int valorDecimal = Integer.parseInt(operandoSinNumeral);
-                if (valorDecimal >= 0 && valorDecimal <= 255) {
-                    setDirAux("IMM(8b)");
-                    return "IMM";
-                }//fin de if
-                else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                    for(int i = 0; i <=592; i++) {
-                        if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                            setDirAux("Error DIR");
-                            return "Error"; 
-                        } //Fin de if                 
-                    }//fin de for
-                    setDirAux("IMM(16b)");
-                    return "IMM";
-                }//fin de else if
-            }//fin de else if
-        
-            // Comprobar si el operando es decimal
-            else if (Metodos.IsDecimal(operandoSinNumeral)) {
-                int valorDecimal = Integer.parseInt(operandoSinNumeral);
-                if (valorDecimal >= 0 && valorDecimal <= 255) {
-                    setDirAux("IMM(8b)");
-                    return "IMM";
-                }//fin de if 
-                else if (valorDecimal >= 256 && valorDecimal <= 65535) {
-                    setDirAux("IMM(16b)");
-                    return "IMM";
-                }//fin de else if
-            } //fin de else if
+                if (operando.contains("#$") || operando.contains("#@") || operando.contains("#%")) { //Validar sistemas numericos para hexadecimal, octal y binario                    
+                    String ValorOperando = operando.substring(2); // Quitar el símbolo "#" y "%|$|@" del operando    
+                    int valor = Integer.parseInt(ValorOperando, 16); 
+                        try {
+                            if(operando.contains("#$")){
+                                valor = Integer.parseInt(ValorOperando, 16); 
+                            } //Fin de if
+                            else if(operando.contains("#@")){
+                                valor = Integer.parseInt(ValorOperando, 8); 
+                            } //Fin de if
+                            else if(operando.contains("#%")){                           
+                                valor = Integer.parseInt(ValorOperando, 2); 
+                            } //Fin de if
+                                                                         
+                            if (valor >= 0 && valor <= 255) {
+                                for(int i = 0; i <=592; i++) {
+                                    if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                        setDirAux("IMM(8b)"); //Variable para mostrar en tabla
+                                        return "IMM"; //Retorna el objeto Direccion
+                                    } //Fin de if
+                                    else if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
+                                        setDirAux("IMM(16b)");
+                                        return "IMM"; 
+                                    } //Fin de else     
+                                }//fin de for                            
+                            }//fin de if
+                            else if (valor >= 256 && valor <= 65535) {
+                                for(int i = 0; i <=592; i++) {
+                                    if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                        setDirAux("Error DIR");
+                                        return "Error"; 
+                                    } //Fin de if
+                                    else if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
+                                        setDirAux("IMM(16b)");
+                                        return "IMM"; 
+                                    } //Fin de else     
+                                }//fin de for                         
+                            } //Fin de else if 
+                        }//fin de try
+                        catch (NumberFormatException e) {
+                            // No es un valor hexadecimal válido
+                        }//fin de catch                   
+                } //Fin de if
+                
+                if(operando.contains("#")) { //Validar sistema numerico decimal
+                    String ValorOperando = operando.substring(1); // Quitar el símbolo "#" del operando
+                        try {
+                            int valor = Integer.parseInt(ValorOperando);                       
+                        
+                            if (valor >= 0 && valor <= 255) {
+                                for(int i = 0; i <=592; i++) {
+                                    if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                        setDirAux("IMM(8b)"); //Variable para mostrar en tabla
+                                        return "IMM"; //Retorna el objeto Direccion
+                                    } //Fin de if
+                                    else if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
+                                        setDirAux("IMM(16b)");
+                                        return "IMM"; 
+                                    } //Fin de else     
+                                }//fin de for                            
+                            }//fin de if
+                            else if (valor >= 256 && valor <= 65535) {
+                                for(int i = 0; i <=592; i++) {
+                                    if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                                        setDirAux("Error DIR");
+                                        return "Error"; 
+                                    } //Fin de if
+                                    else if(codop.equals(BD.PosicionMatriz(i, 0)) && "#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
+                                       setDirAux("IMM(16b)");
+                                       return "IMM"; 
+                                    } //Fin de else                                
+                                }//fin de for                         
+                            } //Fin de else if   
+                        }//fin de try
+                        catch (NumberFormatException e) {
+                            // No es un valor hexadecimal válido
+                        }//fin de catch
+                } //Fin de else if               
             } //fin if de IMM
 
             // Comprobar el tipo de direccionamiento Directo (DIR)
@@ -567,6 +541,23 @@ public class Linea {
     }
 
     public String getPostbyte() {
+        /*
+        Para calcular postbyte podemos hacer uso de algunas validaciones que tenemos anteriormente para asignar el postbyte en caso de que este correcto, caso contrario
+        marcamos un "Error Postbyte". Basicamente:           
+            - Si el operando esta mal, Direccion esta mal porque no se puede asignar
+            - Si direccion esta mal, Tamaño se asigna a "0" por lo que la linea leida no afecta al contador de programa
+            - Las directivas tienen tamaño "0", no afecta al contador de programa y por ello sigue sumando sin ser afectado */
+        
+        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
+        int Conversion = 0; //Variable auxiliar
+        
+        for(int i = 0; i <= 592; i++) { //Recorrer Archivo salvacion para todas las validaciones
+        
+        /* Utilzimos 3 validaciones en cada if
+            - Validacion 1 | Si el modo de direccionamiento coincide con el archivo salvacion
+            - Validacion 2 | Si el CODOP coincide con el archivo salvacion
+            - Validacion 3 | Si las dos validaciones anteriores son correctas enotnces procede a buscar caracteres dentro de la forma del operando, los cuales
+                       iremos sustituyendo a medida que el codigo avanza */
         
         //Ignorar directivas ORG, EQU y END
         if(codop.equals("ORG") || codop.equals("EQU") || codop.equals("END")) {
@@ -576,15 +567,74 @@ public class Linea {
         //Calcular Inherentes
             //Los inherentes no se calculan puesto que no tienen operandos, su codigo postbyte ya viene por defecto
         
-        //Calcular Inmediatos
+        //Calcular Inmediatos 8 bits (ii)
+        if(DirAux.equals("IMM(8b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("ii")) {
+                String ValorOperando = operando; //Variable auxiliar para obtener operando
+                
+                //En estas validaciones quitamos # de todos los sistemas numericos, principal identificador para los inmediatos
+
+                if(ValorOperando.matches("#\\d+")){ //Verificar decimal
+                    Conversion = Integer.parseInt(ValorOperando.replace("#","")); //Obtener valor decimal y guardar en Conversion
+                } //Fin de if para validar
+                else if(ValorOperando.matches("#%[01]+")) { //Verificar binario
+                    Conversion = Integer.parseInt(ValorOperando.replace("#%",""),2); //Quitar simbolo de binario y evaluar en base 2
+                } //Fin de validacion binario
+                else if(ValorOperando.matches("#@[0-7]+")) { //Verificar octal
+                    Conversion = Integer.parseInt(ValorOperando.replace("#@",""),8); //Quitar simbolo de octal y evaluar en base 8
+                } //Fin de validacion octal
+                else if(ValorOperando.matches("#\\$[A-F0-9]+")) { //Verificar hexadecimal
+                    Conversion = Integer.parseInt(ValorOperando.replace("#$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
+                } //Fin de validacion octal
+                else {
+                    System.out.println("Error");
+                    return "Error Postbyte";
+                    //return "Error OPR";
+                } //Fin de validacion 
+
+                String ValorHexadecimal = String.format("%02x", Conversion).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                postbyte = BD.PosicionMatriz(i,3).replace("ii", ValorHexadecimal); //Establecer postbyte
+                //return postbyte;
+            } //Fin de validar inmediatos de 8 bits
         
-        //Calcular Directos
+        //Calcular Inmediatos 16 bits (jj kk)
+        if(DirAux.equals("IMM(16b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("jj kk")) {
+                String ValorOperando = operando; //Variable auxiliar para obtener operando
+                
+                //En estas validaciones quitamos # de todos los sistemas numericos, principal identificador para los inmediatos
+
+                if(ValorOperando.matches("#\\d+")){ //Verificar decimal
+                    Conversion = Integer.parseInt(ValorOperando.replace("#","")); //Obtener valor decimal y guardar en Conversion
+                } //Fin de if para validar
+                else if(ValorOperando.matches("#%[01]+")) { //Verificar binario
+                    Conversion = Integer.parseInt(ValorOperando.replace("#%",""),2); //Quitar simbolo de binario y evaluar en base 2
+                } //Fin de validacion binario
+                else if(ValorOperando.matches("#@[0-7]+")) { //Verificar octal
+                    Conversion = Integer.parseInt(ValorOperando.replace("#@",""),8); //Quitar simbolo de octal y evaluar en base 8
+                } //Fin de validacion octal
+                else if(ValorOperando.matches("#\\$[A-F0-9]+")) { //Verificar hexadecimal
+                    Conversion = Integer.parseInt(ValorOperando.replace("#$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
+                } //Fin de validacion octal
+                else {
+                    System.out.println("Error");
+                    return "Error Postbyte";
+                    //return "Error OPR";
+                } //Fin de validacion 
+
+                String ValorHexadecimal = String.format("%04x", Conversion).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                String ValorSeparado = ValorHexadecimal.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+                postbyte = BD.PosicionMatriz(i,3).replace("jj kk", ValorSeparado); //Establecer postbyte
+                //return postbyte;
+            } //Fin de validar inmediatos de 16bits
         
-        //Calcular Extendidos
+        //Calcular Directos (dd)
+        
+        //Calcular Extendidos (hh ll)
         
         //Calcular Directiva DS
         
         //Calcular Directiva DC
+        
+        } //Fin de for
         
         return postbyte; //Posible Return "Error Postbyte" en caso de que no entre en ninguna de las validaciones anteriores
     } //Fin de get Postbyte
