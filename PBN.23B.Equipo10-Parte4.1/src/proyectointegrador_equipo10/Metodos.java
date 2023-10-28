@@ -8,8 +8,12 @@ Equipo 10 | Integrantes:
 
 package proyectointegrador_equipo10;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static proyectointegrador_equipo10.ArchivoSalvacion.Salvacion;
 
 public class Metodos {
     
@@ -381,6 +385,17 @@ public class Metodos {
         }
 
         return -1; // La cadena no se encontró en el array, se devuelve -1
+    }
+    
+    //Metodos pra tabla A-3
+    public static String ta3(String opr){
+        ArchivoSalvacion A3 = new ArchivoSalvacion("Tabla A-3.txt"); //Objeto con archivo salvacion
+        for(int i=0; i<=256; i++){
+            if(opr.equals(A3.PosicionMatriz(i, 1))){
+                return A3.PosicionMatriz(i, 0);
+            }
+        }
+        return "error";
     }
     
     /*
