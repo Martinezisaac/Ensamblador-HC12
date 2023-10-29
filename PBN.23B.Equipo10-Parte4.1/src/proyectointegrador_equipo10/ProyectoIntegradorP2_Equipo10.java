@@ -10,9 +10,14 @@ package proyectointegrador_equipo10;
 
 //Librerias
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,8 +29,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -135,6 +142,39 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             frame.setLocation(x, y);
 
             frame.setVisible(true); //Hacer visible la tabla
+            
+            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Evitar el cierre directo por defecto, cuando el usuario seleccione que no o seleccione la flecha de cierre entonces la tabla no se cierra
+            
+            //Añadir un JOptionPane cuando el usuario cierre la ventana/tabla
+            frame.addWindowListener(new WindowAdapter() { //Agregar un WindowsListener a la tabla
+            @Override //Sobreescribir metodo
+            public void windowClosing(WindowEvent e) { //Funcion para cerrar una ventana (es decir la tabla)
+                int option = JOptionPane.showConfirmDialog(frame, "¿Estás seguro de que deseas cerrar la tabla?", "Cerrar Aplicación", JOptionPane.YES_NO_OPTION); //JOptionPane emergente 
+                if (option == JOptionPane.YES_OPTION) { //Validar si en el joptionpane el usuario presiona que si 
+                    frame.dispose(); //Cerrar la tabla al presionar el botón "Reiniciar"
+                } //Fin de if 
+                //En caso de presionar que no, la ventana emergente se cierra y la tabla continua 
+            } //Fin de windows Closing 
+            }); //Fin de WindowsListener 
+
+            //Crear boton para reinciar el programa y buscar otro archivo 
+            JButton BotonReiniciar = new JButton("Buscar otro ASM"); //Crear boton para buscar archivo nuevamente
+            Color ColorPersonalizado = new Color(220, 220, 220); // Color personalizado del boton: Color negro 
+            //BotonReiniciar.setForeground(Color.WHITE); // Color personalizado de la letra del boton: Color blanco
+            BotonReiniciar.setBackground(ColorPersonalizado); //Aplicar color al boton 
+            frame.add(BotonReiniciar, BorderLayout.SOUTH); //Agregar boton en la tabla en la parte inferior          
+            
+            //Funcion para reiniciar el programa y abrirlo nuevamente en caso de apretar el boton para reiniciar 
+            BotonReiniciar.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
+                @Override //Sobreescribir metodo
+                public void actionPerformed(ActionEvent e) { //Funcion para determinar la accion a realizar
+                    ArrayEtiqueta.clear(); //Reinicar el arraylist con las etiquetas guardadas para almacenar las nuevas etiquetas del archivo a abrir
+                    //frame.setVisible(false); //Ocultar la tabla al presionar el botón "Reiniciar"
+                    frame.dispose(); //Cerrar la tabla al presionar el botón "Reiniciar"
+                    //tabla.setRowCount(0); //Reiniciar filas a 0
+                    ProyectoIntegradorP2_Equipo10.main(args); //Mandar a llamar todo el main nuevamente 
+                } //Fin de action performed
+            }); //Fin para reiniciar tabla
             
             //Algoritmo para detectar las partes de un ensamblador 
             while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea                  
