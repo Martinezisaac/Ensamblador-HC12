@@ -899,6 +899,45 @@ public class Linea {
             }
         }//Fin IDX Pre/Post Incremento/Decremento
         
+        //Calcular Directiva DS
+        if (codop.equals("DS.B") && codop.equals(BD.PosicionMatriz(i, 0))) {
+            String ValPostbyte = null; // Variable auxiliar para guardar el valor postbyte
+            String OperandoDS = operando; // Variable auxiliar para tener el operando del DS
+            int DSdecimal = Integer.parseInt(OperandoDS); // Convertir a decimal el operando
+
+            if (DSdecimal > 0) { // Evaluar si el operando es mayor que 0
+                StringBuilder stringBuilder = new StringBuilder(); //Declarar string builder 
+                for (int x = 0; x < DSdecimal; x++) { //Repetir la cantidad de veces que el operando (DSdecimal) tenga
+                    String DSString = "00"; //Declarar variable como 00
+                    stringBuilder.append(DSString).append(" "); //Agregar 00 y un espacio 
+                } //Fin de for 
+                ValPostbyte = stringBuilder.toString().trim(); //La variable auxiliar guarda el valor del string builder
+            } //Fin de if 
+            else {
+                postbyte = "Error PostByte"; //Mensaje de error
+            } //Fin de else 
+            postbyte = BD.PosicionMatriz(i,3).replace("-",ValPostbyte); //Establecer postbyte            
+        } //Fin de if para calcular DS.B
+        
+        if (codop.equals("DS.W") && codop.equals(BD.PosicionMatriz(i, 0))) {
+            String ValPostbyte = null; // Variable auxiliar para guardar el valor postbyte
+            String OperandoDS = operando; // Variable auxiliar para tener el operando del DS
+            int DSdecimal = Integer.parseInt(OperandoDS); // Convertir a decimal el operando
+
+            if (DSdecimal > 0) { // Evaluar si el operando es mayor que 0
+                StringBuilder stringBuilder = new StringBuilder(); //Declarar string builder 
+                for (int x = 0; x < DSdecimal; x++) { //Repetir la cantidad de veces que el operando (DSdecimal) tenga
+                    String DSString = "00 00"; //Declarar variable como 00
+                    stringBuilder.append(DSString).append(" "); //Agregar 00 y un espacio 
+                } //Fin de for 
+                ValPostbyte = stringBuilder.toString().trim(); //La variable auxiliar guarda el valor del string builder
+            } //Fin de if 
+            else {
+                postbyte = "Error PostByte"; //Mensaje de error
+            } //Fin de else 
+            postbyte = BD.PosicionMatriz(i,3).replace("-",ValPostbyte); //Establecer postbyte            
+        } //Fin de if para calcular DS.W
+        
         } //Fin de for
         
         return postbyte; //Posible Return "Error Postbyte" en caso de que no entre en ninguna de las validaciones anteriores
