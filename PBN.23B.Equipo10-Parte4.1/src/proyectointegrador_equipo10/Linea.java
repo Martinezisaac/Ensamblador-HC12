@@ -762,6 +762,66 @@ public class Linea {
         }//Fin IDX5B
         */
         
+        //Calcular indexados(9b -> IDX1) (xb ff)
+        if(DirAux.equals("IDX1") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ff")) {
+            //Variables auxiliares para calcular los indexados
+            String FormaXB9 = "111rr0zs"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
+            String ValorFF = null; //Variable auxiliar para calcular ff
+            String Binario = null; //Variable auxiliar para guardar binarios
+            String[] partes = operando.split(","); //Dividir en dos el operando separandolo por la coma
+            String ValorNumerico = partes[0]; //Parte 1 con el valor numerico
+            String ValorRegistro = partes[1]; //Parte 2 con los registros
+            
+            //Calcular "rr" | Registros
+            if (ValorRegistro.equalsIgnoreCase("X")) { //Validar el registro X
+                FormaXB9 = FormaXB9.replace("rr", "00"); //Establecer valor del registro X = 00
+            } //Fin para validar registro X 
+            else if (ValorRegistro.equalsIgnoreCase("Y")) { //Validar el registro Y
+                FormaXB9 = FormaXB9.replace("rr", "01"); //Establecer valor del registro Y = 01
+            } //Fin de validar el registro Y
+            else if(ValorRegistro.equalsIgnoreCase("SP")) { //Validar el registro SP
+                FormaXB9 = FormaXB9.replace("rr", "10"); //Establecer valor del registro Y = 10
+            } //Fin de validar el registro SP
+            else if(ValorRegistro.equalsIgnoreCase("PC")) { //Validar el registro PC
+                FormaXB9 = FormaXB9.replace("rr", "11"); //Establecer valor del registro PC = 11
+            } //Fin de validar para el registro PC 
+            else {
+                System.out.println("Error"); //Si no concuerda con ninguna de las estructuras de las bases
+                return "Error Postbyte";
+            } //Fin de else
+            
+            //Calcular z | En este caso ya sabemos que es de 9 bits, por lo tando z = 0
+            FormaXB9 = FormaXB9.replace("z","0"); //Reemplazar z por 0 en la forma
+            
+            //Calcular s | if z = s = 1 -> En pocas palabras, si el numero es negativo entonces s = 1, caso contrario s = 0
+            int ValorDecimal = Integer.parseInt(ValorNumerico); //Declarar variable auxiliar con valor decimal        
+            if(ValorDecimal < 0) { //Validar si la primera parte del operando es negatica
+                FormaXB9 = FormaXB9.replace("s","1"); //Reemplazar s por 1 en la forma                                
+            } //Fin de if para validar si el numero es negatico
+            else { //Entonces la primera parte del operando es positiva
+                FormaXB9 = FormaXB9.replace("s","0"); //Reemplazar z por 0 en la forma
+            } //Finde if para validar si el numero es negatico
+            //Hasta este punto la forma ya esta calculada
+                     
+            //En este punto la forma ya esta calculada, por lo que podemos obtener XB | Convertir a decimal la forma xb
+            int ConversionDecimal = Integer.parseInt(FormaXB9, 2); //Convertir de binario a decimal 
+            String ValorConvertidoDecimal = String.format("%02x", ConversionDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+            String ValorSeparado = ValorConvertidoDecimal.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+            
+            //Calcular ff | Primera parte del operando 
+            if(ValorDecimal < 0) { //Validar si la primera parte del operando es negativa
+                Binario = Integer.toBinaryString(ValorDecimal); //Convertir a binario el valor decimal
+                Binario = Binario.substring(Binario.length()-8); //Si es negativo, toma los ultimos 8 valores de la cadena
+                ConversionDecimal = Integer.parseInt(Binario, 2); //Convertir de binario a decimal
+                ValorFF = String.format("%02x", ConversionDecimal).toUpperCase(); //Asignar el valor decimal a FF y completar con 0 en caso de necesitarlo
+            } //Fin de if para validar si el numero es negatico
+            else { //Entonces la primera parte del operando es positiva
+                ValorFF = String.format("%02x", ValorDecimal).toUpperCase(); //Asignar el valor decimal a FF y completar con 0 en caso de necesitarlo
+            } //Finde if para validar si el numero es negatico
+            
+            postbyte = BD.PosicionMatriz(i,3).replace("xb", ValorSeparado).replace("ff",ValorFF); //Establecer postbyte
+        } //Fin de if para calcular IDX1
+        
         //Calcular IDX Pre/Post Incremento/Decremento
         if(DirAux.matches("^IDX\\((PreDec|PreInc|PostDec|PostInc)\\)$") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
             String[] parts = operando.split(",");
