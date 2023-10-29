@@ -389,7 +389,7 @@ public class Metodos {
     
     //Metodos pra tabla A-3
     public static String ta3(String opr){
-        ArchivoSalvacion A3 = new ArchivoSalvacion("Tabla A-3.txt"); //Objeto con archivo salvacion
+        TablaA3 A3 = new TablaA3("Tabla A-3.txt"); //Objeto con archivo salvacion
         for(int i=0; i<=256; i++){
             if(opr.equals(A3.PosicionMatriz(i, 1))){
                 return A3.PosicionMatriz(i, 0);
