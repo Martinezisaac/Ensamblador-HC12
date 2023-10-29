@@ -686,7 +686,7 @@ public class Linea {
         
         //Calcular Directiva DC
         
-        //Calcular idx5
+        //Calcular IDX5B
         if(DirAux.equals("IDX(5b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
             String[] parts = operando.split(",");
             int valorIndexado = Integer.parseInt(parts[0]);
@@ -697,8 +697,32 @@ public class Linea {
             System.out.println("opernado " + operando);
             System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
             postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-        }//Fin
+        }//Fin IDX5B
         
+        //Calcular IDX Pre/Post Incremento/Decremento
+        if(DirAux.matches("^IDX\\((PreDec|PreInc|PostDec|PostInc)\\)$") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
+            String[] parts = operando.split(",");
+            int valorIndexado = Integer.parseInt(parts[0]);
+            if(operando.matches("^[1-8],\\+(X|Y|SP|PC)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Pre-inc
+                System.out.println("opernado " + operando);
+                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+                postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
+            }else if(operando.matches("^[1-8],\\-(X|Y|SP|PC)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Pre-dec
+                System.out.println("opernado " + operando);
+                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+                postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
+            }else if(operando.matches("^[1-8],(X\\+|Y\\+|SP\\+|PC\\+)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Post-dec
+                System.out.println("opernado " + operando);
+                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+                postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
+            }else if(operando.matches("^[1-8],(X\\-|Y\\-|SP\\-|PC\\-)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Post-inc
+                System.out.println("opernado " + operando);
+                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+                postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
+            }else{
+             return "Error 1";
+            }
+        }//Fin IDX Pre/Post Incremento/Decremento
         
         } //Fin de for
         
