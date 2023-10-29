@@ -686,6 +686,20 @@ public class Linea {
         
         //Calcular Directiva DC
         
+        //Calcular idx5
+        if(DirAux.equals("IDX(5b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
+            String[] parts = operando.split(",");
+            int valorIndexado = Integer.parseInt(parts[0]);
+            if(!operando.matches("(-16|[\\-0-9]|1[0-5]),(X|Y|SP|PC)")&&(valorIndexado >= -16 && valorIndexado <= 15)){
+                
+                return "Error 1";
+            }
+            System.out.println("opernado " + operando);
+            System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+            postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
+        }//Fin
+        
+        
         } //Fin de for
         
         return postbyte; //Posible Return "Error Postbyte" en caso de que no entre en ninguna de las validaciones anteriores
