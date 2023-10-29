@@ -264,6 +264,7 @@ public class Linea {
                 
                 if (operando.contains("#$") || operando.contains("#@") || operando.contains("#%")) { //Validar sistemas numericos para hexadecimal, octal y binario                    
                     String ValorOperando = operando.substring(2); // Quitar el símbolo "#" y "%|$|@" del operando    
+                    if (ValorOperando.matches("([01]+)|([0-9A-Fa-f]+)|([0-7]+)")) {
                     int valor = Integer.parseInt(ValorOperando, 16); 
                         try {
                             if(operando.contains("#$")){
@@ -305,6 +306,7 @@ public class Linea {
                             // No es un valor hexadecimal válido
                         }//fin de catch                   
                 } //Fin de if
+                } //Fin de matcher
                 
                 if(operando.contains("#")) { //Validar sistema numerico decimal
                     String ValorOperando = operando.substring(1); // Quitar el símbolo "#" del operando
@@ -395,7 +397,7 @@ public class Linea {
             } //Fin de if
 
             // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
-            if (operando.matches("^\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
+            if (operando.matches("^-?\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= -16 && valorIndexado <= 15) {
@@ -406,6 +408,11 @@ public class Linea {
                     setDirAux("IDX1");
                     return "IDX1";
                 } //Fin de else if
+            } //Fin de else if  
+            
+            if (operando.matches("^,((X|x|Y|y|SP|sp|PC|pc))$")) { //Validar en caso de que la primera parte del operando no exista
+                setDirAux("IDX(5b)");
+                return "IDX";
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
@@ -686,6 +693,61 @@ public class Linea {
         
         //Calcular Directiva DC
         
+        //Calcular Indexados
+        //Calcular Indexados(5b) (xb)
+        if(DirAux.equals("IDX(5b)") && codop.equals(BD.PosicionMatriz(i, 0)) && "oprx0_xysp".equals(BD.PosicionMatriz(i, 1)) &&BD.PosicionMatriz(i, 3).contains("xb")) {
+            String FormaXB5 = "rr0nnnnn"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
+            //Variables auxiliares para calcular los indexados
+            String Binario = null; //Variable auxiliar para guardar binarios
+            String[] partes = operando.split(","); //Dividir en dos el operando separandolo por la coma
+            String ValorNumerico = partes[0]; //Parte 1 con el valor numerico
+            String ValorRegistro = partes[1]; //Parte 2 con los registros
+            
+            //Calcular "rr" | Registros
+            if (ValorRegistro.equalsIgnoreCase("X")) { //Validar el registro X
+                FormaXB5 = FormaXB5.replace("rr", "00"); //Establecer valor del registro X = 00
+            } //Fin para validar registro X 
+            else if (ValorRegistro.equalsIgnoreCase("Y")) { //Validar el registro Y
+                FormaXB5 = FormaXB5.replace("rr", "01"); //Establecer valor del registro Y = 01
+            } //Fin de validar el registro Y
+            else if(ValorRegistro.equalsIgnoreCase("SP")) { //Validar el registro SP
+                FormaXB5 = FormaXB5.replace("rr", "10"); //Establecer valor del registro Y = 10
+            } //Fin de validar el registro SP
+            else if(ValorRegistro.equalsIgnoreCase("PC")) { //Validar el registro PC
+                FormaXB5 = FormaXB5.replace("rr", "11"); //Establecer valor del registro PC = 11
+            } //Fin de validar para el registro PC 
+            else {
+                System.out.println("Error"); //Si no concuerda con ninguna de las estructuras de las bases
+                return "Error Postbyte";
+            } //Fin de else 
+            
+            //Con estas validaciones se sustituye rr de la forma del xb
+            //rr0nnnnn -> rr = 00 | rr = 01 | rr = 10 | rr = 11
+            
+            //Calcular "nnnnn" | Valor Numerico            
+            if(operando.startsWith(",")) { //Validar que exista algo dentro de la primera parte del operando (un valor antes de la coma)
+                FormaXB5 = FormaXB5.replace("nnnnn", "00000"); //Establecer valor deafult con 00000, no existe la primera parte del operando 
+            } //Fin de validacion en caso de que no xista nada en la primera parte del operando
+            else { //Entonces si hay un valor 
+                int ValorDecimal = Integer.parseInt(ValorNumerico); //Declarar variable auxiliar para obtener el decimal del valor numerico 
+                Binario = Integer.toBinaryString(ValorDecimal); //Convertir el valor decimal a un valor numerico 
+                
+                if(ValorDecimal < 0) { //Validar en caso de que la primera parte del operando es negativo
+                    Binario = Binario.substring(Binario.length()-5); //Si es negativo, toma los ultimos 5 valores de la cadena
+                } //Fin de validar en caso de que el valor decimal sea negativo
+             
+                String BinarioCompleto = String.format("%5s", Binario).replace(' ', '0'); //Colocar formato de cinco digitos (rellenar con 0 en caso de tener espacios con blanco)                                
+                FormaXB5 = FormaXB5.replace("nnnnn", BinarioCompleto); //SustituciÃ³n de nnnnn por el binario calculado
+            } //Fin de else para saber si hay un valor en la primera parte del operando                             
+            
+            int ConversionDecimal = Integer.parseInt(FormaXB5, 2); //Convertir de binario a decimal             
+            String ValorConvertidoDecimal = String.format("%02x", ConversionDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+            String ValorSeparado = ValorConvertidoDecimal.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+            postbyte = BD.PosicionMatriz(i,3).replace("xb", ValorSeparado); //Establecer postbyte
+            //postbyte = FormaXB5; //Validar forma en la tabla
+        } //Fin de if para calcular IDX(5b)
+        
+        /*
         //Calcular IDX5B
         if(DirAux.equals("IDX(5b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
             String[] parts = operando.split(",");
@@ -698,6 +760,7 @@ public class Linea {
             System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
             postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
         }//Fin IDX5B
+        */
         
         //Calcular IDX Pre/Post Incremento/Decremento
         if(DirAux.matches("^IDX\\((PreDec|PreInc|PostDec|PostInc)\\)$") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
