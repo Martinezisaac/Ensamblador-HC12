@@ -936,7 +936,7 @@ public class Linea {
                 postbyte = "Error PostByte"; //Mensaje de error
             } //Fin de else 
             postbyte = BD.PosicionMatriz(i,3).replace("-",ValPostbyte); //Establecer postbyte            
-        } //Fin de if para calcular DS.W
+        } //Fin de if para calcular DS.W  
         //Calcular IDX con acumulador
         if(DirAux.equals("IDX(Acc)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
             //String[] parts = operando.split(",");
@@ -947,6 +947,53 @@ public class Linea {
                 postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
             }
         }//Fin IDX con acumulador
+                
+        //Calcular indexados -> [IDX2]) (xb ee ff)
+        //se cambio [IDX2], xb ee ff
+        if(DirAux.equals("[IDX2]") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ee ff")) {
+            //Variables auxiliares para calcular los indexados
+            String FormaXB9 = "111rr011"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
+            String ValorFF = null; //Variable auxiliar para calcular ff
+            String[] partes = operando.split(","); //Dividir en dos el operando separandolo por la coma
+            String ValorNumerico = Metodos.eliminarCorchetes(partes[0]); //Parte 1 con el valor numerico
+            String ValorRegistro = Metodos.eliminarCorchetes(partes[1]); //Parte 2 con los registros
+            
+            //Calcular "rr" | Registros
+            if (ValorRegistro.equalsIgnoreCase("X")) { //Validar el registro X
+                FormaXB9 = FormaXB9.replace("rr", "00"); //Establecer valor del registro X = 00
+            } //Fin para validar registro X 
+            else if (ValorRegistro.equalsIgnoreCase("Y")) { //Validar el registro Y
+                FormaXB9 = FormaXB9.replace("rr", "01"); //Establecer valor del registro Y = 01
+            } //Fin de validar el registro Y
+            else if(ValorRegistro.equalsIgnoreCase("SP")) { //Validar el registro SP
+                FormaXB9 = FormaXB9.replace("rr", "10"); //Establecer valor del registro Y = 10
+            } //Fin de validar el registro SP
+            else if(ValorRegistro.equalsIgnoreCase("PC")) { //Validar el registro PC
+                FormaXB9 = FormaXB9.replace("rr", "11"); //Establecer valor del registro PC = 11
+            } //Fin de validar para el registro PC 
+            else {
+                System.out.println("Error"); //Si no concuerda con ninguna de las estructuras de las bases
+                return "Error Postbyte";
+            } //Fin de else
+            
+            //Calcular z | En este caso ya sabemos que es de 16 bits, por lo tando z = 1
+            
+            //Calcular s | if z = s = 1 -> En pocas palabras, si el numero es negativo entonces s = 1, caso contrario s = 0
+            int ValorDecimal = Integer.parseInt(ValorNumerico); //Declarar variable auxiliar con valor decimal        
+            
+            //En este punto la forma ya esta calculada, por lo que podemos obtener XB | Convertir a decimal la forma xb
+            int ConversionDecimal = Integer.parseInt(FormaXB9, 2); //Convertir de binario a decimal 
+            String ValorConvertidoDecimal = String.format("%02x", ConversionDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+            String ValorSeparado = ValorConvertidoDecimal.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar            
+            
+            //Calcular ff | Primera parte del operando            
+            //No es necesario calcular en caso de negativos, los IDX2 son positivos y su rango va desde 256 hasta 65535
+            ValorFF = String.format("%04x", ValorDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+            String ValorSeparadoFF = ValorFF.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar 
+            
+            postbyte = BD.PosicionMatriz(i,3).replace("xb", ValorSeparado).replace("ee ff",ValorSeparadoFF); //Establecer postbyte
+        } //Fin de calcular IDX2
+        
         
         } //Fin de for
         
