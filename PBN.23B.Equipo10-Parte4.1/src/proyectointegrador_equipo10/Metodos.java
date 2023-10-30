@@ -386,7 +386,7 @@ public class Metodos {
 
         return -1; // La cadena no se encontró en el array, se devuelve -1
     }
-    
+     
     //Metodos pra tabla A-3
     public static String ta3(String opr){
         TablaA3 A3 = new TablaA3("Tabla A-3.txt"); //Objeto con archivo salvacion
@@ -397,6 +397,14 @@ public class Metodos {
         }
         return "error";
     }
+    
+    //Rempolazar corchete para [IDX2]
+    public static String eliminarCorchetes(String cadena) {
+    // Reemplazamos "[" y "]" con una cadena vacía ""
+    String cadenaSinCorchetes = cadena.replace("[", "").replace("]", "");
+    
+    return cadenaSinCorchetes;
+}
     
     /*
             public static boolean IsHexa(String x){
