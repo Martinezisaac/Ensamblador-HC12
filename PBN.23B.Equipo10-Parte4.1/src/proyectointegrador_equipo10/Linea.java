@@ -994,6 +994,18 @@ public class Linea {
             postbyte = BD.PosicionMatriz(i,3).replace("xb", ValorSeparado).replace("ee ff",ValorSeparadoFF); //Establecer postbyte
         } //Fin de calcular IDX2
         
+        //Calcular IDX [D,IDX]
+        if(DirAux.equals("[D,IDX]") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
+            String Valoropr = operando;
+           // String[] parts = operando.split(",");
+            //int valorIndexado = Integer.parseInt(parts[0]); 
+            if(!operando.matches("^\\[D,(X|Y|SP|PC)\\]$")){
+                return "Error 1";
+            }
+            System.out.println("opernado " + Valoropr);
+            System.out.println("valor de la tabal A-3 "+ Metodos.ta3(Valoropr));
+            postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(Valoropr));
+        }//Fin IDX [D,IDX]
         
         } //Fin de for
         
