@@ -937,6 +937,16 @@ public class Linea {
             } //Fin de else 
             postbyte = BD.PosicionMatriz(i,3).replace("-",ValPostbyte); //Establecer postbyte            
         } //Fin de if para calcular DS.W
+        //Calcular IDX con acumulador
+        if(DirAux.equals("IDX(Acc)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
+            //String[] parts = operando.split(",");
+            //int valorIndexado = Integer.parseInt(parts[0]);
+            if(operando.matches("[ABD],(X|Y|SP|PC)")){//Pre-inc
+                System.out.println("opernado " + operando);
+                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+                postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
+            }
+        }//Fin IDX con acumulador
         
         } //Fin de for
         
