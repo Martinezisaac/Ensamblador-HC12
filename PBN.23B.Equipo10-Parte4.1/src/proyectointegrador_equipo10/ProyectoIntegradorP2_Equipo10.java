@@ -487,7 +487,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 } //Fin de if               
             } //Fin de while   ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             
-            System.out.println(LineaCompleta.toString()); //Imprimir variable con toda la tabla 
+            System.out.println(LineaCompleta.toString()); //Imprimir variable con toda la tabla                         
 
             String[] lineas = LineaCompleta.toString().split("\n");
             Object[][] datos = new Object[lineas.length][];
@@ -513,85 +513,116 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             frame2.pack();
             frame2.setVisible(true);
                        
+            //Impresion del arraylist con las etiquetas
+            for (int i = 0; i < ArrayEtiqueta.size(); i++) {
+                System.out.println(ArrayEtiqueta.get(i));
+                //System.out.println(linea.getValor()); //Impresion de valor para verificarlo 
+            } //Fin de for
+                       
             for(int i = 0; i < tabla.getRowCount(); i++){ //for para contenido de la tabla
                 for(int u = 0; u <= numlineas-1; u++) { //Fin de for para contenido de TABSIM
-                    
-                 
+                                    
                 //Crear variable auxiliar para obtener valores de las etiquetas
                 ArchivoSalvacion tabsim = new ArchivoSalvacion("TABSIM.txt"); //Objeto con archivo salvacion               
                 
-                //Variables Auxiliares obtenidos de la tabla Original
-                String Postbyte = tabla.getValueAt(i, 6).toString(); // Obtener Codigo Postbyte posterior
+                //Variables Auxiliares obtenidos de la tabla Original                
+                String Postbyte = tabla.getValueAt(i, 6).toString(); //Obtener Postbyte de la tabla
+                
                 String Direccionamiento = tabla.getValueAt(i, 4).toString();
                 
-                String Tamaño = tabla.getValueAt(i, 5).toString(); // Obtener Tamaño de la tabla
-                int ValorTamaño = Integer.parseInt(Tamaño); //Valor decimal de tamaño
-                String Valor = tabla.getValueAt(i, 0).toString(); //Obtener Valor/CONTLOC
-                int ValorDecimal = Integer.parseInt(Valor, 16); //Valor decimal de CONTLOC
-                int ValorCONTLOC = ValorTamaño + ValorDecimal;
-                String CONTLOC = Integer.toHexString(ValorCONTLOC);
-                                
-                                      
+                //System.out.println("postbyte" + Postbyte);
+                //System.out.println("direcciona: " + Direccionamiento);
                 
+                String Tamaño = tabla.getValueAt(i, 5).toString(); //Valor del tamaño en hexadecimal
+                int ValorTamaño = Integer.parseInt(Tamaño); //Valor del tamaño en decimal
+                
+                String Valor = tabla.getValueAt(i, 0).toString(); //Valor del CONTLOC misma linea en hexadecimal
+                int ValorDecimal = Integer.parseInt(Valor, 16); //Valor del CONTLOC de la misma linea en decimal
+                
+                int ValorCONTLOC = ValorTamaño + ValorDecimal; //Valor del CONTLOC posterior en decimal (se suma tamaño para obtener el valor de la fila siguiente)
+                String CONTLOC = Integer.toHexString(ValorCONTLOC); //Valor del CONTLOC posterior en Hexadecimal
+                                              
                 //Mensajes de impresion para pruebas 
                 //System.out.println("Postbyte: " + Postbyte); //Imprimir Codigo postbyte de la nueva tabla
                 //System.out.println("ValorCONTLOC: " + Valor); //Imprimir Postbyte
                 
-                    if(Direccionamiento.equals("REL(16b)") && Postbyte.endsWith("qq rr")) { //Validar si el postbyte termina con "rr" para REL(16b)
-                        //Realizar calculo para REL(16b)                                              
+                    if(tabla.getValueAt(i, 4).equals("REL(16b)") && tabla.getValueAt(i, 6).toString().endsWith("qq rr")) { //Validar si el postbyte termina con "rr" para REL(16b)
+                        //Realizar calculo para REL(16b)
                         
-                        System.out.println("ValorDecimal: " + Valor);
-                        tabla.setValueAt("16b", i, 6); // Colocar nuevo valor en la tabla original                        
+                        if(tabla.getValueAt(i, 3).equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM
+                        
+                            String PostCalc = null;
+                            String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+
+                            if(ValorCONTLOC > ValTabsimDecimal) { //Destino > Origen
+                                int VaLFinal = ValorCONTLOC - ValTabsimDecimal; //Destino - Origen
+                                String ValFinalHex = String.format("%04X", VaLFinal).replaceAll("(.{2})(?!$)", "$1 "); //Convertir a hexadecimal, Rellenar con 0s en caso de y separar de dos en dos
+                                String PostbyteCalculado = Postbyte.replace("qq rr", ValFinalHex); //Reemplazar "rr" por el valor calculado                               
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                            
+                            } //Fin de Origen > Destino                           
+                            else if(ValorCONTLOC < ValTabsimDecimal) {
+                                int VaLFinal = ValTabsimDecimal - ValorCONTLOC; //Origen - Destino
+                                String ValFinalHex = String.format("%04X", VaLFinal).replaceAll("(.{2})(?!$)", "$1 "); //Convertir a hexadecimal, Rellenar con 0s en caso de y separar de dos en dos
+                                String PostbyteCalculado = Postbyte.replace("qq rr", ValFinalHex); //Reemplazar "rr" por el valor calculado
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                              
+                            } //Fin de
+                            else if(ValorCONTLOC == ValTabsimDecimal) { //Origen == Destino
+                                String PostbyteCalculado = Postbyte.replace("qq rr", "00 00"); //Reemplazar "rr" por el valor calculado
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                                
+                            } //Fin de validar si Origen == Destino
+                            System.out.println("Valor Tabsim: " + ValTabsim); 
+                            
+                        } //Validar si las etiquetas concuerdan
+                        else {
+                          //No se realiza nada... 
+                        } //Entonces no existen etiquetas para calcular
                     } //Fin de if 
                     
-                    else if(Postbyte.endsWith("lb rr")) { //Validar si el postbyte termina con "lb rr" para REL(9b)
+                    else if(tabla.getValueAt(i, 4).equals("REL(9b)") && tabla.getValueAt(i, 6).toString().endsWith("lb rr")) { //Validar si el postbyte termina con "lb rr" para REL(9b)
                         //Realizar calculo para REL(9b)
                         tabla.setValueAt("9b", i, 6); // Colocar nuevo valor en la tabla original
                         
                     } //Fin de if
                     
-                    else if(Postbyte.endsWith("rr")) { //Validar si el postbyte termina con "rr" para REL(8b)              
+                    else if(tabla.getValueAt(i, 4).equals("REL(8b)") && tabla.getValueAt(i, 6).toString().endsWith("rr")) { //Validar si el postbyte termina con "rr" para REL(8b)              
                         
-                        //if(){
+                        if(tabla.getValueAt(i, 3).equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM
+                            //System.out.println("hola mundito :) ");
+                            //System.out.println("CONTLOC Post: " + CONTLOC); 
                             
-                        //} //Fin de if para validar etiquetas
-                        //tabla.getValueAt(i, 1).toString();
-                        //tabsim.PosicionMatriz(u, 1);
-                        
-                        //System.out.println("etqieta: " + Etq);
-                        //System.out.println("EtqTabsim: " + EtqTabsim);
-                        
-                        /*
-                        String ValorETQ = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Obtener valor de la etiqueta de acuerdo al TABSIM y quitar los espacios para poder calcular
-                        int ValorDecimalETQ = Integer.parseInt(ValorETQ, 16); //Valor decimal de Etiqueta
-                        System.out.println("ValorDecimal: " + Valor);
-                        
-                        //Realizar calculo para REL(8b)
-                        if(ValorCONTLOC > ValorDecimalETQ) { //Origen - Destino
-                            System.out.println("ValCal = " + Valor + " | " + ValorCONTLOC);
-                            System.out.println("ValDecimalETQ" + ValorETQ + " | " + ValorDecimalETQ);
+                            String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
                             
-                            int ValorCalculado = ValorCONTLOC - ValorDecimalETQ; //Origen - Destino
-                            String HexadecimalCalculado = Integer.toHexString(ValorCalculado); //Obtener Valor Hexadecimal
+                            if(ValorCONTLOC > ValTabsimDecimal) { //Destino > Origen
+                                int VaLFinal = ValorCONTLOC - ValTabsimDecimal; //Destino - Origen
+                                String ValFinalHex = Integer.toHexString(VaLFinal).toUpperCase(); //Valor Final en hexadecimal y en mayusculas                               
+                                String PostbyteCalculado = Postbyte.replace("rr", ValFinalHex); //Reemplazar "rr" por el valor calculado                              
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                            
+                            } //Fin de Origen > Destino                           
+                            else if(ValorCONTLOC < ValTabsimDecimal) {
+                                int VaLFinal = ValTabsimDecimal - ValorCONTLOC; //Origen - Destino
+                                String ValFinalHex = Integer.toHexString(VaLFinal).toUpperCase(); //Valor Final en hexadecimal y en mayusculas                               
+                                String PostbyteCalculado = Postbyte.replace("rr", ValFinalHex); //Reemplazar "rr" por el valor calculado                               
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                              
+                            } //Fin de
+                            else if(ValorCONTLOC == ValTabsimDecimal) { //Origen == Destino
+                                String PostbyteCalculado = Postbyte.replace("rr", "00"); //Reemplazar "rr" por el valor calculado
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal  
+                            } //Fin de validar si Origen == Destino
+                            System.out.println("Valor Tabsim: " + ValTabsim);
                             
-                            System.out.println("ValDecimalfinal" + HexadecimalCalculado);
-                            
-                            
-                            tabla.setValueAt(HexadecimalCalculado, i, 6); // Colocar nuevo valor en la tabla original
-                        } //Fin de if 
-                    */
-                        tabla.setValueAt("8b", i, 6); // Colocar nuevo valor en la tabla original
+                        } //Validar si las etiquetas concuerdan
+                        else {
+                          //No se realiza nada... 
+                        } //Entonces no existen etiquetas para calcular
+                        System.out.println("postbyte" + tabla.getValueAt(i, 6));
+                        System.out.println("direcciona: " + tabla.getValueAt(i, 4));
                     } //Fin de if
                     
             } //Fin de for TABSIM
             } //Fin de for Tabla
-                 
-            //Impresion del arraylist con las etiquetas
-            for (int i = 0; i < ArrayEtiqueta.size(); i++) {
-                System.out.println(ArrayEtiqueta.get(i));
-                //System.out.println(linea.getValor()); //Impresion de valor para verificarlo 
-            } //Fin de for            
-            
+
             //Impresion de los dos archivos
             try {
                 //escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
