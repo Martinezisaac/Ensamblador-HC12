@@ -47,8 +47,12 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
     //Variables auxiliares
     static Metodos metodos = new Metodos(); //Instanciacion para clase metodos
     static ArrayList<String> ArrayEtiqueta = new ArrayList<>(); //Arraylist para guardar etiquetas
-
+    static ArrayList<String> ArrayLinea = new ArrayList<>(); //Arraylist para guardar etiquetas
+    
     public static void main(String[] args) { //Inicio de Main
+        
+        StringBuilder LineaCompleta = new StringBuilder();
+        int numlineas = 0; //Variable auxiliar para determinar el numero de lineas 
         
          // Crear variable para archivo TABSIM y LISTADO
         String ArchivoTABSIM = "TABSIM.txt";
@@ -66,7 +70,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         if (archivoExistente2.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
             archivoExistente2.delete(); //Eliminar LISTADO
             System.out.println("Archivo existente eliminado: " + ArchivoLISTADO); //Mensaje de confirmacion 
-        } //Fin de if
+        } //Fin de if        
         
         // Codigo para abrir el archivo de manera directa, sin abrir el explorador de archivos
         //String Archivo = ("P2ASM.asm"); //Variable auxiliar para leer el archivo
@@ -105,7 +109,7 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
         //BufferedReader Read = new BufferedReader(new FileReader(Archivo)); //Lee el archivo contenido en la variable Archivo
             
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta    
-            String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable
+            String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable            
            
             //Si el archivo se abre de manera correcta entonces entra al try y crea la tabla con la informacion del archivo .asm
             
@@ -177,8 +181,8 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             }); //Fin para reiniciar tabla
             
             //Algoritmo para detectar las partes de un ensamblador 
-            while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea                  
-                //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual
+            while((Linea = br.readLine()) != null) { //Guardar cada linea en la variable Linea                 
+                //(LineaRead.readLine()) != null - Caso alternativo para leer archivos con direcciones que coloquemos de manera manual              
                 
                 String DecimalString = "0"; //Variable auxiliar para inicializar variable en 0 para cada iteracion realizada
 
@@ -423,21 +427,26 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                     } //Fin de if  
                     else { //Si la etiqueta no existe en el arraylist
                         ArrayEtiqueta.add(linea.getEtiqueta()); //Agregar etiqueta al arraylist
+                        numlineas++;
                     } //Fin de else  
                 } //Fin de if 
+                
+                // NO ENTIENDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+                System.out.println("valorwtf: " + linea.getValor());
+                ArrayLinea.add(linea.getValor() + "\t");
                
                 // Actualizar Archivo TABSIM y Archivo LISTADO
                 escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
                 escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
-                
+                                              
                 // Agregar una fila con los datos a la JTable
                 tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño(), linea.getPostbyte()}); //Agregar objetos a la tabla                
                 //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                 //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion
                 
                 if(linea.getCodop().equals("EQU")) { //Validar si el codigo operando contiene EQU
-                    linea.setValor(linea.getEQUval()); //Establecer valor 
-                    System.out.println("EQU: " + linea.getEQUval()); //Impresion en consola
+                    linea.setValor(linea.getEQUval()); //Establecer valor
+                    System.out.println("EQU: " + linea.getEQUval()); //Impresion en consola                    
                 } //Fin de if                   
                 else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
                     int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
@@ -450,17 +459,138 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         } //Fin de if
                         else { //No existe desbordamiento
                             String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
-                            linea.setValor(valorHexadecimal); //Guarda el valor 
+                            linea.setValor(valorHexadecimal); //Guarda el valor
                         } //Fin de else 
-                } //Fin de if                
-
-            } //Fin de while
+                } //Fin de if
+                
+                //Codigo Auxiliar para el algoritmo de dos fases               
+                //Agregar lo calculado en un arraylist y separarlos con tabulador 
+                
+                System.out.println("valorgamardo: " + linea.getValor());
+                               
+                ArrayLinea.add(linea.getEtiqueta() + "\t");
+                ArrayLinea.add(linea.getCodop() + "\t");
+                ArrayLinea.add(linea.getOperando() + "\t");
+                ArrayLinea.add(linea.getDirAux() + "\t");                
+                ArrayLinea.add(linea.getTamaño() + "\t");
+                ArrayLinea.add(linea.getPostbyte() + "\n");                  
+                
+                //For each para guardar el contenido de arreglo etiqueta en un String Builder, de esta manera guardamos todo el programa en un StringBuilder
+                for (String lineas : ArrayLinea) {
+                    LineaCompleta.append(lineas); // Agregar cada objeto seguido de un tabulador al StringBuilder
+                } //Fin de for
+                
+                ArrayLinea.clear(); //Limpiar informacion de la linea para que no se duplique en el arraylist
+                
+                if(Linea != null && Linea.contains("END")) { //Validar que la ultima linea sea el END
+                    break; //Salir del ciclo y terminar programa
+                } //Fin de if               
+            } //Fin de while   ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
             
+            System.out.println(LineaCompleta.toString()); //Imprimir variable con toda la tabla 
+
+            String[] lineas = LineaCompleta.toString().split("\n");
+            Object[][] datos = new Object[lineas.length][];
+            int fila = 0;
+
+            for (String nuevalinea : lineas) {
+                String[] columnas = nuevalinea.split("\t");
+                datos[fila] = columnas;
+                fila++;
+            } //Fin de for
+
+            // Crear el modelo de la tabla y asignar los datos
+            String[] columnas = {"Columna1", "Columna2", "Columna3", "Columna4", "Columna5", "Columna6", "Columna7"}; //Encabezados
+            DefaultTableModel modelo = new DefaultTableModel(datos, columnas);
+
+            // Crear el JTable y asignar el modelo
+            JTable nuevatabla = new JTable(modelo);
+
+            // Mostrar la tabla en un JFrame
+            JFrame frame2 = new JFrame();
+            frame2.add(new JScrollPane(nuevatabla));
+            frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame2.pack();
+            frame2.setVisible(true);
+                       
+            for(int i = 0; i < tabla.getRowCount(); i++){ //for para contenido de la tabla
+                for(int u = 0; u <= numlineas-1; u++) { //Fin de for para contenido de TABSIM
+                    
+                 
+                //Crear variable auxiliar para obtener valores de las etiquetas
+                ArchivoSalvacion tabsim = new ArchivoSalvacion("TABSIM.txt"); //Objeto con archivo salvacion               
+                
+                //Variables Auxiliares obtenidos de la tabla Original
+                String Postbyte = tabla.getValueAt(i, 6).toString(); // Obtener Codigo Postbyte posterior
+                String Direccionamiento = tabla.getValueAt(i, 4).toString();
+                
+                String Tamaño = tabla.getValueAt(i, 5).toString(); // Obtener Tamaño de la tabla
+                int ValorTamaño = Integer.parseInt(Tamaño); //Valor decimal de tamaño
+                String Valor = tabla.getValueAt(i, 0).toString(); //Obtener Valor/CONTLOC
+                int ValorDecimal = Integer.parseInt(Valor, 16); //Valor decimal de CONTLOC
+                int ValorCONTLOC = ValorTamaño + ValorDecimal;
+                String CONTLOC = Integer.toHexString(ValorCONTLOC);
+                                
+                                      
+                
+                //Mensajes de impresion para pruebas 
+                //System.out.println("Postbyte: " + Postbyte); //Imprimir Codigo postbyte de la nueva tabla
+                //System.out.println("ValorCONTLOC: " + Valor); //Imprimir Postbyte
+                
+                    if(Direccionamiento.equals("REL(16b)") && Postbyte.endsWith("qq rr")) { //Validar si el postbyte termina con "rr" para REL(16b)
+                        //Realizar calculo para REL(16b)                                              
+                        
+                        System.out.println("ValorDecimal: " + Valor);
+                        tabla.setValueAt("16b", i, 6); // Colocar nuevo valor en la tabla original                        
+                    } //Fin de if 
+                    
+                    else if(Postbyte.endsWith("lb rr")) { //Validar si el postbyte termina con "lb rr" para REL(9b)
+                        //Realizar calculo para REL(9b)
+                        tabla.setValueAt("9b", i, 6); // Colocar nuevo valor en la tabla original
+                        
+                    } //Fin de if
+                    
+                    else if(Postbyte.endsWith("rr")) { //Validar si el postbyte termina con "rr" para REL(8b)              
+                        
+                        //if(){
+                            
+                        //} //Fin de if para validar etiquetas
+                        //tabla.getValueAt(i, 1).toString();
+                        //tabsim.PosicionMatriz(u, 1);
+                        
+                        //System.out.println("etqieta: " + Etq);
+                        //System.out.println("EtqTabsim: " + EtqTabsim);
+                        
+                        /*
+                        String ValorETQ = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Obtener valor de la etiqueta de acuerdo al TABSIM y quitar los espacios para poder calcular
+                        int ValorDecimalETQ = Integer.parseInt(ValorETQ, 16); //Valor decimal de Etiqueta
+                        System.out.println("ValorDecimal: " + Valor);
+                        
+                        //Realizar calculo para REL(8b)
+                        if(ValorCONTLOC > ValorDecimalETQ) { //Origen - Destino
+                            System.out.println("ValCal = " + Valor + " | " + ValorCONTLOC);
+                            System.out.println("ValDecimalETQ" + ValorETQ + " | " + ValorDecimalETQ);
+                            
+                            int ValorCalculado = ValorCONTLOC - ValorDecimalETQ; //Origen - Destino
+                            String HexadecimalCalculado = Integer.toHexString(ValorCalculado); //Obtener Valor Hexadecimal
+                            
+                            System.out.println("ValDecimalfinal" + HexadecimalCalculado);
+                            
+                            
+                            tabla.setValueAt(HexadecimalCalculado, i, 6); // Colocar nuevo valor en la tabla original
+                        } //Fin de if 
+                    */
+                        tabla.setValueAt("8b", i, 6); // Colocar nuevo valor en la tabla original
+                    } //Fin de if
+                    
+            } //Fin de for TABSIM
+            } //Fin de for Tabla
+                 
             //Impresion del arraylist con las etiquetas
             for (int i = 0; i < ArrayEtiqueta.size(); i++) {
-                System.out.println(ArrayEtiqueta.get(i));                   
+                System.out.println(ArrayEtiqueta.get(i));
                 //System.out.println(linea.getValor()); //Impresion de valor para verificarlo 
-            } //Fin de for
+            } //Fin de for            
             
             //Impresion de los dos archivos
             try {
@@ -475,6 +605,16 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                 e.printStackTrace();
                 System.out.println("Error al crear el archivo");
             } //Fin de catch
+           
+            ArchivoSalvacion tabsim = new ArchivoSalvacion("TABSIM.txt"); //Objeto con archivo salvacion
+            
+            for(int i = 0; i <= numlineas-1; i++) { //Recorrer Archivo tabsim
+                System.out.println(tabsim.PosicionMatriz(i, 1));
+                System.out.println(tabsim.PosicionMatriz(i, 2));
+            } //Fin de for 
+            
+            //Agregar columna a la tabla
+            //tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño(), linea.getPostbyte()}); //Agregar objetos a la tabla
             
         } //Fin de try                        
         catch (IOException e) { //Catch en caso de no poder abrir un archivo
@@ -554,5 +694,4 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
             } //Fin de catch 
         } //Fin de else if 
     } //Fin de la funcion
- 
 } //Fin de la clase principal
