@@ -406,6 +406,17 @@ public class Metodos {
     return cadenaSinCorchetes;
 }
     
+    public static String rel9(String opr, String cadenaC, String cadenaR){
+        TablaA3 A3 = new TablaA3("PrimitivePost.txt"); //Objeto con archivo PrimitivePost.txt
+        for(int i=0; i<=72; i++){//Recorre el array en el que se guarda el contenido del archivo
+            if(opr.equals(A3.PosicionMatriz(i, 0)) && cadenaC.equals(A3.PosicionMatriz(i, 1)) && cadenaR.equals(A3.PosicionMatriz(i, 2))){//Verifica la fila contega en las tres primeras columnas los valores que da el copdigo.
+                return A3.PosicionMatriz(i, 3);//Retorna el valor de la 4ta columna que coicida con la fila que se valido anteriormente
+        }
+        }
+        return "error";
+    }
+    
+    
     /*
             public static boolean IsHexa(String x){
                 char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
