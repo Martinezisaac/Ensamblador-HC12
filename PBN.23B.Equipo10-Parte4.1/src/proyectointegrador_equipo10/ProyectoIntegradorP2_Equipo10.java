@@ -579,10 +579,43 @@ public class ProyectoIntegradorP2_Equipo10 { //Inicio de la clase
                         } //Entonces no existen etiquetas para calcular
                     } //Fin de if 
                     
-                    else if(tabla.getValueAt(i, 4).equals("REL(9b)") && tabla.getValueAt(i, 6).toString().endsWith("lb rr")) { //Validar si el postbyte termina con "lb rr" para REL(9b)
+else if(tabla.getValueAt(i, 4).equals("REL(9-bit)") && tabla.getValueAt(i, 6).toString().endsWith("lb rr")) { //Validar si el postbyte termina con "lb rr" para REL(9b)
                         //Realizar calculo para REL(9b)
-                        tabla.setValueAt("9b", i, 6); // Colocar nuevo valor en la tabla original
-                        
+                         String[] partes = String.valueOf(tabla.getValueAt(i, 3)).split(","); //Dividir en dos el operando separandolo por la coma
+                        //tabla.setValueAt("9b", i, 6); // Colocar nuevo valor en la tabla original
+                         if(partes[1].equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM
+                            String PostCalc = null;
+                            String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+                            String RB = null;
+
+                            if(ValorCONTLOC > ValTabsimDecimal) { //Destino > Origen negativo
+                                RB = "Negativo";
+                                int VaLFinal = (ValTabsimDecimal - ValorCONTLOC); //Destino - Origen
+                                String ValFinalHex = String.format("%02X", VaLFinal).replaceAll("(.{2})(?!$)", "$1 "); //Convertir a hexadecimal, Rellenar con 0s en caso de y separar de dos en dos
+                                int tamvalfinal = ValFinalHex.length();//Determino el tamaño de la cadena del complemento
+                                String sub = ValFinalHex.substring(tamvalfinal-2, tamvalfinal);//Pongo los rtangos para extraer el valor de la cadena con el complemetno a dos
+                                String PostbyteCalculado = Postbyte.replace("rr", sub).replace("lb", Metodos.rel9(String.valueOf(tabla.getValueAt(i, 2)), partes[0], RB)); //Reemplazar "rr" por el valor calculado                               
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                            
+                            } //Fin de Origen > Destino                           
+                            else if(ValorCONTLOC < ValTabsimDecimal) {
+                                RB = "Positivo";
+                                int VaLFinal = ValTabsimDecimal - ValorCONTLOC; //Origen - Destino
+                                System.out.println("Valor rr "+ VaLFinal);
+                                String ValFinalHex = String.format("%02X", VaLFinal).replaceAll("(.{2})(?!$)", "$1 "); //Convertir a hexadecimal, Rellenar con 0s en caso de y separar de dos en dos
+                                String PostbyteCalculado = Postbyte.replace("rr", ValFinalHex).replace("lb", Metodos.rel9(String.valueOf(tabla.getValueAt(i, 2)), partes[0], RB)); //Reemplazar "rr" por el valor calculado
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                              
+                            } //Fin de
+                            else if(ValorCONTLOC == ValTabsimDecimal) { //Origen == Destino
+                                String PostbyteCalculado = Postbyte.replace("lb rr", "00 00"); //Reemplazar "rr" por el valor calculado
+                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal                                
+                            } //Fin de validar si Origen == Destino
+                            System.out.println("Valor Tabsim: " + ValTabsim); 
+                            
+                        } //Validar si las etiquetas concuerdan
+                        else {
+                          //No se realiza nada... 
+                        } //Entonces no existen etiquetas p
                     } //Fin de if
                     
                     else if(tabla.getValueAt(i, 4).equals("REL(8b)") && tabla.getValueAt(i, 6).toString().endsWith("rr")) { //Validar si el postbyte termina con "rr" para REL(8b)              
