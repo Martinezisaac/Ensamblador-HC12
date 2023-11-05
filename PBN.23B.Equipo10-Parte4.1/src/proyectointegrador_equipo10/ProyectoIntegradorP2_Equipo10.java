@@ -583,9 +583,40 @@ public class ProyectoIntegradorP2_Equipo10 {
                                 tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal  
                             } //Fin de validar si Origen == Destino                           
                         } //Validar si las etiquetas concuerdan
-                    } //Fin de Validar si Direccionamiento = REL(16b) && Postbyte termina con "qq rr"                  
+                    } //Fin de Validar si Direccionamiento = REL(16b) && Postbyte termina con "qq rr" 
+                    
+                    //Etiquetas como Operando en los modos de direccionamiento DIR, EXT y IMM  
+                    //Reconocer y establecer valores de etiqueta para DIR y EXT
+                    if(tabla.getValueAt(i, 4).equals("DIR") && tabla.getValueAt(i, 4).toString().matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
+                        if(tabla.getValueAt(i, 3).equals(tabsim.PosicionMatriz(u, 1))) {
+                            String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+
+                            if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 255) { //Validar si es de 8 bits
+                                tabla.setValueAt("hola8", i, 6); //Establecer postbyte en la tabla principal
+                            } //Fin de if
+                            else if (ValTabsimDecimal >= 256 && ValTabsimDecimal <= 65535) { //Validar si es de 16 bits
+                                tabla.setValueAt("hola16", i, 6); //Establecer postbyte en la tabla principal
+                            } //Fin de if
+                        } //Fin de validar si el operando coincide con una etiqueta de TABSIM
+                    } //Fin de if   
+                    
+                    //Reconocer y establecer valores de etiqueta para IMM(8b y 16b)
+                    if(tabla.getValueAt(i, 4).equals("IMM(8b)") && tabla.getValueAt(i, 3).toString().matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
+                        String Operando = tabla.getValueAt(i, 3).toString().substring(1); // Eliminar # del operando
+                        if(Operando.equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM 
+                            tabla.setValueAt("imm8", i, 6); //Establecer postbyte en la tabla principal
+                        } //Fin de validar si el operando coincide con una etiqueta de TABSIM
+                    } //Fin de if
+                    
+                    if(tabla.getValueAt(i, 4).equals("IMM(16b)") && tabla.getValueAt(i, 3).toString().matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
+                        String Operando = tabla.getValueAt(i, 3).toString().substring(1); // Eliminar # del operando
+                        if(Operando.equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM 
+                            tabla.setValueAt("imm16", i, 6); //Establecer postbyte en la tabla principal
+                        } //Fin de validar si el operando coincide con una etiqueta de TABSIM
+                    } //Fin de if
                 } //Fin de Validar si en operando existe una etiqueta ya registrada en TABSIM
-            } //Fin de for Tabla
+            } //Fin de for Tabla           
             
             //Impresion del arraylist con las etiquetas
             System.out.println("ETIQUETAS"); //Indicar impresion del TABSIM
