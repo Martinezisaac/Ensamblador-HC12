@@ -17,9 +17,6 @@ import static proyectointegrador_equipo10.ArchivoSalvacion.Salvacion;
 
 public class Metodos {
     
-    //public int tamaño = 0;
-    //String MarcarError;
-    
     public static boolean ComprobarEtiqueta(String etiqueta) {
         if(etiqueta.matches("[a-zA-Z][a-zA-Z0-9_]{0,7}")) {
             return true; 
@@ -216,20 +213,7 @@ public class Metodos {
                 } //Fin de if
             } //Fin de for
             return true;
-        }//Fin de codops
-        
-    static String SumarHexadecimal(String Operando, String Tamaño) {
-        // Convertir los números hexadecimales a enteros
-        int entero1 = Integer.parseInt(Operando, 16);
-        int entero2 = Integer.parseInt(Tamaño, 16);
-
-        int resultado = entero1 + entero2; // Sumar Hexadecimales
-
-        // Convertir el resultado a hexadecimal
-        String resultadoHexadecimal = Integer.toHexString(resultado);
-
-        return resultadoHexadecimal; //Devolver resultado
-    } //Fin de la funcion para sumar hexadecimales
+        }//Fin de codops       
        
     public String ConvertToHexadecimal(String baseValue) {
         if (baseValue.startsWith("$")) {
@@ -318,43 +302,8 @@ public class Metodos {
             return "Error Formato";
         } //Fin de catch
     } //Fin de la funcion para devolver en FormatoHehadecimal
-            
- //Metodo para sumar cuando se deba hacer el alojamientoa dos bytes
-    static String ad2bytes(String opr, int num){
-        int oprint = Integer.parseInt(opr);//se hace int el valor string que se ha ingresado 
-        int result = oprint * num; //Se hace la operacion 
-        return Integer.toString(result);//retorna un string para poder ser usado
-    }
-    
-    //Metodo para obtener el valor de los operandos con ""
-    static String adcontar(String opr){
-        opr = opr.replace("\"", "");
-        int result = opr.length();
-        return Integer.toString(result);
-    }
-    
-   /* static String adseparar(String opr){
-        opr = opr.replace(" ", "");
-        int result = opr.length();
-        for(int i=0; i <= result; i++){
-            if()
-        }
-    }*/
-     
-    //Metodo para contar los operandos de DC 
-    static String adcontardc(String opr){
-        String[] bloques = opr.split(",");
-        int conta = 0;
-        for(String elemento : bloques){
-            String nuevoelemento = elemento.trim();
-            if(!nuevoelemento.isEmpty()){
-                conta ++;
-            }
-        }
-        return Integer.toString(conta);
-    }
-       
-       static boolean reconocer(String[] arr, String text){
+                  
+    static boolean reconocer(String[] arr, String text){
         for (String elemento : arr) {//Recorremos el array, por cada elemento
             if (elemento.equals(text)) {//Comparamos si la cadena de texto que se ingreso es igual a alguna en el array
                 return true; // Si encontramos el carácter, retornamos true
@@ -383,7 +332,6 @@ public class Metodos {
                 return i; // Se encontró la cadena, se devuelve el índice
             }
         }
-
         return -1; // La cadena no se encontró en el array, se devuelve -1
     }
      
@@ -404,7 +352,7 @@ public class Metodos {
     String cadenaSinCorchetes = cadena.replace("[", "").replace("]", "");
     
     return cadenaSinCorchetes;
-}
+    }
     
     public static String rel9(String opr, String cadenaC, String cadenaR){
         TablaA3 A3 = new TablaA3("PrimitivePost.txt"); //Objeto con archivo PrimitivePost.txt
@@ -415,91 +363,127 @@ public class Metodos {
         }
         return "error";
     }
-    
-    
+       
     /*
-            public static boolean IsHexa(String x){
-                char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-                String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-                String patronhexa = "^[0-9A-F]+$";//Declaracn de la variable que cintene los caracteres para comparar.
-                Pattern pattern = Pattern.compile(patronhexa);//junta los caracteres en un objeto para ser comparados.
-                Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
-                return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
-        }//Fin de IsHexa
-    */
-/*
-        public static boolean rangohexa(String x){
-            char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-            try{
-                int hexaint = Integer.parseInt(newx, 16);//Convierte la cadena de texto a int.
-                System.out.println(hexaint);
-                return hexaint >= 0 && hexaint <= 0xFFFF;//Compara si el hexadecimal esta en el rango de 0 a 65535
-            }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
-                return false;
-            }//Fin de try catch
-        }//Fin de rangohexa.
-*/
+    public static boolean IsHexa(String x){
+        char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+        String patronhexa = "^[0-9A-F]+$";//Declaracn de la variable que cintene los caracteres para comparar.
+        Pattern pattern = Pattern.compile(patronhexa);//junta los caracteres en un objeto para ser comparados.
+        Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
+        return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
+    }//Fin de IsHexa
 
-        /*
-        public static boolean IsOctal(String x){
-                char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-                String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-                String patronocta = "^[0-7]+$";//Declaracn de la variable que cintene los caracteres para comparar.
-                Pattern pattern = Pattern.compile(patronocta);//junta los caracteres en un objeto para ser comparados.
-                Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
-                return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
-        }//Fin de IsOctal
-    */
-/*
-        public static boolean rangoocta(String x){
-            char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
-            String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
-            if(newx.length() > 6){
-                return false;
-            }
+    public static boolean rangohexa(String x){
+        char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+        try{
+            int hexaint = Integer.parseInt(newx, 16);//Convierte la cadena de texto a int.
+            System.out.println(hexaint);
+            return hexaint >= 0 && hexaint <= 0xFFFF;//Compara si el hexadecimal esta en el rango de 0 a 65535
+        }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
+            return false;
+        }//Fin de try catch
+    }//Fin de rangohexa.
 
-            try{
-                int octaint = Integer.parseInt(newx, 8);//Convierte la cadena de texto a int.
-                System.out.println(octaint);
-                return octaint >= 0 && octaint <= 65535;//Compara si el hexadecimal esta en el rango de 0 a 65535
-            }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
-                return false;
-            }//Fin de try catch
-
-        }//Fin de rangooctal
-*/
+    public static boolean IsOctal(String x){
+        char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+        String patronocta = "^[0-7]+$";//Declaracn de la variable que cintene los caracteres para comparar.
+        Pattern pattern = Pattern.compile(patronocta);//junta los caracteres en un objeto para ser comparados.
+        Matcher matcher = pattern.matcher(newx);//Crea un objeto para contner la cadena de la variable de entrada.
+        return matcher.matches();//Da el return verdadero si la cadena contiene los caracteres del patron.
+    }//Fin de IsOctal
     
-            /*
-        static boolean valespacios(String y){
-            String cet2 = ":\t\s";//Caracteres permitidos en la comparacion.
-            for(int i=0; i < y.length();i++){//Recorre la cadena y, que se ingresa a la funcion. 
-                char vals = y.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
-                if(cet2.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet2.
-                    return false;
-                } //Fin de if
-            } //Fin de for
-            return true;
-        }//Fin vlaespacios*/
+    public static boolean rangoocta(String x){
+        char caractdel = '@';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
+        String newx = x.replace(String.valueOf(caractdel), "");//Se remplaza el caractern a eliminar con une spacio en blanco.
+        if(newx.length() > 6){
+            return false;
+    }
+    try{
+        int octaint = Integer.parseInt(newx, 8);//Convierte la cadena de texto a int.
+        System.out.println(octaint);
+        return octaint >= 0 && octaint <= 65535;//Compara si el hexadecimal esta en el rango de 0 a 65535
+    }catch(NumberFormatException e){//Exepcion para el caso contrario del catch.
+        return false;
+    }//Fin de try catch
+    }//Fin de rangooctal
     
-            /*
-        static String quitar(String texto, String quitar) {
-            // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
-            String resultado = texto.replace(quitar, "");
-
-            return resultado; //Devolver resultado
-        } //Fin de la funcion para quitar un simbolo de una variable String
-        */
+    static boolean valespacios(String y){
+        String cet2 = ":\t\s";//Caracteres permitidos en la comparacion.
+        for(int i=0; i < y.length();i++){//Recorre la cadena y, que se ingresa a la funcion. 
+            char vals = y.charAt(i);//Se recorre la cadena caracter por caracter en la pisicion de i.
+            if(cet2.indexOf(vals) == -1){//Se revisa si los caracteres si estan en cet2.
+                return false;
+            } //Fin de if
+        } //Fin de for
+        return true;
+    }//Fin vlaespacios
     
-        /*
-        static boolean reconocer(String[] arr, String text){
-            for (String elemento : arr) {
-                if (elemento.equals(text)) {
-                    return true; // Si encontramos el carácter, retornamos true
-                }
-            }
-            return false; // Si no encontramos el carácter, retornamos false
+    //Metodo para sumar cuando se deba hacer el alojamientoa dos bytes
+    static String ad2bytes(String opr, int num){
+        int oprint = Integer.parseInt(opr);//se hace int el valor string que se ha ingresado 
+        int result = oprint * num; //Se hace la operacion 
+        return Integer.toString(result);//retorna un string para poder ser usado
+    }
+    
+    //Metodo para obtener el valor de los operandos con ""
+    static String adcontar(String opr){
+        opr = opr.replace("\"", "");
+        int result = opr.length();
+        return Integer.toString(result);
+    }
+    
+    static String adseparar(String opr){
+        opr = opr.replace(" ", "");
+        int result = opr.length();
+        for(int i=0; i <= result; i++){
+            if()
         }
-        */
+    }
+    
+    //Metodo para contar los operandos de DC 
+    static String adcontardc(String opr){
+        String[] bloques = opr.split(",");
+        int conta = 0;
+        for(String elemento : bloques){
+            String nuevoelemento = elemento.trim();
+            if(!nuevoelemento.isEmpty()){
+                conta ++;
+            }
+        }
+        return Integer.toString(conta);
+    }
+
+    static String quitar(String texto, String quitar) {
+        // Utiliza el método replace para reemplazar la parte a eliminar con una cadena vacía
+        String resultado = texto.replace(quitar, "");
+
+        return resultado; //Devolver resultado
+    } //Fin de la funcion para quitar un simbolo de una variable String
+
+    static boolean reconocer(String[] arr, String text){
+        for (String elemento : arr) {
+            if (elemento.equals(text)) {
+                return true; // Si encontramos el carácter, retornamos true
+            }
+        }
+        return false; // Si no encontramos el carácter, retornamos false
+    
+    static String SumarHexadecimal(String Operando, String Tamaño) {
+        // Convertir los números hexadecimales a enteros
+        int entero1 = Integer.parseInt(Operando, 16);
+        int entero2 = Integer.parseInt(Tamaño, 16);
+
+        int resultado = entero1 + entero2; // Sumar Hexadecimales
+
+        // Convertir el resultado a hexadecimal
+        String resultadoHexadecimal = Integer.toHexString(resultado);
+
+        return resultadoHexadecimal; //Devolver resultado
+    } //Fin de la funcion para sumar hexadecimales
+    
+    } */
           
-    } //Fin de la clase metodos 
+} //Fin de la clase metodos 
