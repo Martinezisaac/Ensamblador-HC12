@@ -1,0 +1,4 @@
+	ORG 	0
+JUMP:	LDAA	5,Y
+	IBNE	A,JUMP
+	END

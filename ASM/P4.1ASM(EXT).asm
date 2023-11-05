@@ -1,0 +1,5 @@
+	ORG	0
+Valor1:	LDAA	@777	
+	LDAA	$FFFF
+	LDAA	$3800
+	END
