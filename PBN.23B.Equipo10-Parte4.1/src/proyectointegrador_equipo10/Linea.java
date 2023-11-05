@@ -260,6 +260,19 @@ public class Linea {
             // Comprobar el tipo de direccionamiento Inmediato (IMM)
             if (operando.startsWith("#")) {
                 
+                for(int i = 0; i <=592; i++) {
+                    if (codop.equals(BD.PosicionMatriz(i, 0)) && operando.matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) { //Validar si el codop coincide con archivo y salvacion y el operando cumple conficiones de estructura de etiqueta                   
+                        if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
+                            setDirAux("IMM(8b)"); //Variable para mostrar en tabla
+                            return "IMM"; //Retorna el objeto Direccion
+                        } //Fin de if
+                        else if("#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
+                            setDirAux("IMM(16b)");
+                            return "IMM"; 
+                                } //Fin de else                                                    
+                    } //Fin de if para validar estructura de etiqueta
+                }//Fin de for
+                
                 if (operando.contains("#$") || operando.contains("#@") || operando.contains("#%")) { //Validar sistemas numericos para hexadecimal, octal y binario                    
                     String ValorOperando = operando.substring(2); // Quitar el símbolo "#" y "%|$|@" del operando    
                     if (ValorOperando.matches("([01]+)|([0-9A-Fa-f]+)|([0-7]+)")) {
@@ -343,7 +356,7 @@ public class Linea {
             } //fin if de IMM
 
             // Comprobar el tipo de direccionamiento Directo (DIR)
-            if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
+            if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$") || operando.matches("^[a-zA-Z][a-zA-Z0-9]{0,7}$|^-?\\d{0,8}$")) {
                 // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
                 String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
@@ -366,10 +379,16 @@ public class Linea {
                 catch (NumberFormatException e) {
                    // No es un valor válido
                 } //Fin de catch
+                
+                if (Metodos.ComprobarEtiqueta(operando)) { //Si el operando coincide con las condiciones de etiqueta y cumple con operando de 8bits
+                    setDirAux("DIR"); //Devolver modo de direccionamiento
+                    return "DIR"; //Devolver modo de direccionamiento  
+                } //Fin de if
+                
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Extendido (EXT)
-            if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$")) {
+            if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$") || operando.matches("^[a-zA-Z][a-zA-Z0-9]{0,7}$|^-?\\d{0,8}$")) {
                 // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
                 String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
@@ -392,8 +411,14 @@ public class Linea {
                 catch (NumberFormatException e) {
                    // No es un valor válido
                 } //Fin de catch
+                
+                if (Metodos.ComprobarEtiqueta(operando)) { //Validar si el operando cumple con las condiciones de etiqueta
+                    setDirAux("EXT"); //Devolver modo de direccionamiento
+                    return "EXT"; //Devolver modo de direccionamiento    
+                } //Fin de if
+                
             } //Fin de if
-
+            
             // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
             if (operando.matches("^-?\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
                 String[] parts = operando.split(",");
