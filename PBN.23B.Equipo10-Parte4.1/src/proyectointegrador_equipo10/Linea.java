@@ -41,9 +41,8 @@ public class Linea {
             //Validar ORG
             //No tiene etiqueta
             //Tiene codigo operando
-            //Su modo de direccionamiento siempre es DIRECT
+            //Su modo de direccionamiento siempre es DIRECT        
         if (codop != null && etiqueta == null && codop.equalsIgnoreCase("ORG") && operando != null)  { //Si encuentra "ORG" con un operando
-            System.out.println("entre a org");
             int Conversion = 0;
             valor = operando;
                 if(valor.matches("\\d+")){ //Verificar decimal
@@ -80,7 +79,6 @@ public class Linea {
             //Tiene codigo operando
             //Su modo de direccionamiento siempre es DIRECT
         else if(codop != null && etiqueta != null && codop.equalsIgnoreCase("EQU") && operando != null) {  
-            System.out.println("entre a equ");
             int Conversion = 0;
             valor = operando;
                 if(valor.matches("\\d+")){ //Verificar decimal
@@ -555,7 +553,7 @@ public class Linea {
             - Si direccion esta mal, Tamaño se asigna a "0" por lo que la linea leida no afecta al contador de programa
             - Las directivas tienen tamaño "0", no afecta al contador de programa y por ello sigue sumando sin ser afectado */
         
-        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
+        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion        
         int Conversion = 0; //Variable auxiliar
         
         for(int i = 0; i <= 592; i++) { //Recorrer Archivo salvacion para todas las validaciones
@@ -747,21 +745,6 @@ public class Linea {
             //postbyte = FormaXB5; //Validar forma en la tabla
         } //Fin de if para calcular IDX(5b)
         
-        /*
-        //Calcular IDX5B
-        if(DirAux.equals("IDX(5b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
-            String[] parts = operando.split(",");
-            int valorIndexado = Integer.parseInt(parts[0]);
-            if(!operando.matches("(-16|[\\-0-9]|1[0-5]),(X|Y|SP|PC)")&&(valorIndexado >= -16 && valorIndexado <= 15)){
-                
-                return "Error 1";
-            }
-            System.out.println("opernado " + operando);
-            System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
-            postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-        }//Fin IDX5B
-        */
-        
         //Calcular indexados(9b -> IDX1) (xb ff)
         if(DirAux.equals("IDX1") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ff")) {
             //Variables auxiliares para calcular los indexados
@@ -879,25 +862,21 @@ public class Linea {
             String[] parts = operando.split(",");
             int valorIndexado = Integer.parseInt(parts[0]);
             if(operando.matches("^[1-8],\\+(X|Y|SP|PC)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Pre-inc
-                System.out.println("opernado " + operando);
-                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
                 postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-            }else if(operando.matches("^[1-8],\\-(X|Y|SP|PC)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Pre-dec
-                System.out.println("opernado " + operando);
-                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+            } //Fin de if
+            else if(operando.matches("^[1-8],\\-(X|Y|SP|PC)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Pre-dec
                 postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-            }else if(operando.matches("^[1-8],(X\\+|Y\\+|SP\\+|PC\\+)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Post-dec
-                System.out.println("opernado " + operando);
-                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+            } //Fin de else if
+            else if(operando.matches("^[1-8],(X\\+|Y\\+|SP\\+|PC\\+)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Post-dec
                 postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-            }else if(operando.matches("^[1-8],(X\\-|Y\\-|SP\\-|PC\\-)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Post-inc
-                System.out.println("opernado " + operando);
-                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
+            } //Fin de else if
+            else if(operando.matches("^[1-8],(X\\-|Y\\-|SP\\-|PC\\-)$")&&(valorIndexado >= 1 && valorIndexado <= 8)){//Post-inc
                 postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-            }else{
+            } //Fin de else if
+            else{
              return "Error 1";
-            }
-        }//Fin IDX Pre/Post Incremento/Decremento
+            } //Fin de else
+        } //Fin IDX Pre/Post Incremento/Decremento
         
         //Calcular Directiva DS
         if (codop.equals("DS.B") && codop.equals(BD.PosicionMatriz(i, 0))) {
@@ -942,10 +921,8 @@ public class Linea {
             //String[] parts = operando.split(",");
             //int valorIndexado = Integer.parseInt(parts[0]);
             if(operando.matches("[ABD],(X|Y|SP|PC)")){//Pre-inc
-                System.out.println("opernado " + operando);
-                System.out.println("valor de la tabal A-3 "+ Metodos.ta3(operando));
                 postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(operando));
-            }
+            } //Fin de if
         }//Fin IDX con acumulador
                 
         //Calcular indexados -> [IDX2]) (xb ee ff)
@@ -1001,11 +978,9 @@ public class Linea {
             //int valorIndexado = Integer.parseInt(parts[0]); 
             if(!operando.matches("^\\[D,(X|Y|SP|PC)\\]$")){
                 return "Error 1";
-            }
-            System.out.println("opernado " + Valoropr);
-            System.out.println("valor de la tabal A-3 "+ Metodos.ta3(Valoropr));
+            } //Fin de if 
             postbyte =  BD.PosicionMatriz(i,3).replace("xb", Metodos.ta3(Valoropr));
-        }//Fin IDX [D,IDX]
+        }//Fin IDX [D,IDX]  
         
         } //Fin de for
         
