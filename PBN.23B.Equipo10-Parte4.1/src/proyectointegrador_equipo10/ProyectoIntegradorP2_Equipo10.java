@@ -535,8 +535,8 @@ public class ProyectoIntegradorP2_Equipo10 {
 
                             if(Origen > Destino) { //Destino > Origen negativo
                                 RB = "Negativo";
-                                int VaLFinal = (Destino - Origen); //Destino - Origen
-                                String ValFinalHex = String.format("%02X", VaLFinal).replaceAll("(.{2})(?!$)", "$1 "); //Convertir a hexadecimal, Rellenar con 0s en caso de y separar de dos en dos
+                                int Salto = (Destino - Origen); //Destino - Origen
+                                String ValFinalHex = String.format("%02X", Salto).replaceAll("(.{2})(?!$)", "$1 "); //Convertir a hexadecimal, Rellenar con 0s en caso de y separar de dos en dos
                                 int tamvalfinal = ValFinalHex.length();//Determino el tamaño de la cadena del complemento
                                 String sub = ValFinalHex.substring(tamvalfinal-2, tamvalfinal);//Pongo los rtangos para extraer el valor de la cadena con el complemetno a dos
                                 String PostbyteCalculado = Postbyte.replace("rr", sub).replace("lb", Metodos.rel9(String.valueOf(tabla.getValueAt(i, 2)), partes[0], RB)); //Reemplazar "rr" por el valor calculado                               
@@ -598,26 +598,52 @@ public class ProyectoIntegradorP2_Equipo10 {
                             else if (ValTabsimDecimal >= 256 && ValTabsimDecimal <= 65535) { //Validar si es de 16 bits
                                 tabla.setValueAt("hola16", i, 6); //Establecer postbyte en la tabla principal
                             } //Fin de if
+                            else { //Validar desbordamiento 
+                                tabla.setValueAt("Desbordamiento", i, 6); //Establecer postbyte en la tabla principal
+                                tabla.setValueAt("0", i, 5); //Establecer tamaño en la tabla principal
+                            } //Fin de else 
                         } //Fin de validar si el operando coincide con una etiqueta de TABSIM
                     } //Fin de if   
                     
                     //Reconocer y establecer valores de etiqueta para IMM(8b y 16b)
                     if(tabla.getValueAt(i, 4).equals("IMM(8b)") && tabla.getValueAt(i, 3).toString().matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
+                        
                         String Operando = tabla.getValueAt(i, 3).toString().substring(1); // Eliminar # del operando
-                        if(Operando.equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM 
-                            tabla.setValueAt("imm8", i, 6); //Establecer postbyte en la tabla principal
+                        if(Operando.equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM                            
+                            String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+
+                            if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 255) { //Validar si es de 8 bits
+                                tabla.setValueAt("imm8", i, 6); //Establecer postbyte en la tabla principal
+                            } //Fin de if
+                            else {
+                                tabla.setValueAt("Desbordamiento", i, 6); //Establecer postbyte en la tabla principal
+                                tabla.setValueAt("0", i, 5); //Establecer tamaño en la tabla principal
+                            } //Fin de else 
                         } //Fin de validar si el operando coincide con una etiqueta de TABSIM
                     } //Fin de if
                     
                     if(tabla.getValueAt(i, 4).equals("IMM(16b)") && tabla.getValueAt(i, 3).toString().matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
                         String Operando = tabla.getValueAt(i, 3).toString().substring(1); // Eliminar # del operando
                         if(Operando.equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM 
-                            tabla.setValueAt("imm16", i, 6); //Establecer postbyte en la tabla principal
+                            String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+                            
+                            if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 65535) { //Validar si es de 8 bits
+                                tabla.setValueAt("imm16", i, 6); //Establecer postbyte en la tabla principal
+                            } //Fin de if
+                            else { //Validar desbordamiento
+                                tabla.setValueAt("Desbordamiento", i, 6); //Establecer postbyte en la tabla principal
+                                tabla.setValueAt("0", i, 5); //Establecer tamaño en la tabla principal
+                            } //Fin de else 
                         } //Fin de validar si el operando coincide con una etiqueta de TABSIM
                     } //Fin de if
                 } //Fin de Validar si en operando existe una etiqueta ya registrada en TABSIM
-            } //Fin de for Tabla           
+            } //Fin de for Tabla      
             
+            //ESPACIO PARA ALGORITMO PARA VALIDAR NUEVAMEBTE CONTLOC 
+                //Es necesario validar el CONTOLOC para modificar los tamaños modificados en el algoritmo anterior 
+                               
             //Impresion del arraylist con las etiquetas
             System.out.println("ETIQUETAS"); //Indicar impresion del TABSIM
             for (int i = 0; i < ArrayEtiqueta.size(); i++) {
@@ -662,7 +688,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             System.out.println("\nTABLA (Fase 1) \n" + LineaCompleta.toString()); //Imprimir StringBuilder (Validamos el contenido de la tabla)
             
             // Abrir archivos TABSIM y LISTADO
-            /*
+            
             try { //Impresion de los dos archivos
                 //escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
                 Path filePathListado = Paths.get("LISTADO.lst"); //Definir ruta del archivo 
@@ -675,7 +701,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 e.printStackTrace();
                 System.out.println("Error al crear el archivo");
             } //Fin de catch
-            */
+            
             
         } //Fin de try                        
         catch (IOException e) { //Catch en caso de no poder abrir un archivo
