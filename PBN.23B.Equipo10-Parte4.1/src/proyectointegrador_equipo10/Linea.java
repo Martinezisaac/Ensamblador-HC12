@@ -261,7 +261,7 @@ public class Linea {
             if (operando.startsWith("#")) {
                 
                 for(int i = 0; i <=592; i++) {
-                    if (codop.equals(BD.PosicionMatriz(i, 0))) { //Validar si el codop coincide con archivo y salvacion y el operando cumple conficiones de estructura de etiqueta                   
+                    if (codop.equals(BD.PosicionMatriz(i, 0)) && operando.matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) { //Validar si el codop coincide con archivo y salvacion y el operando cumple conficiones de estructura de etiqueta                   
                         if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
                             setDirAux("IMM(8b)"); //Variable para mostrar en tabla
                             return "IMM"; //Retorna el objeto Direccion
@@ -269,10 +269,10 @@ public class Linea {
                         else if("#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
                             setDirAux("IMM(16b)");
                             return "IMM"; 
-                                } //Fin de else                                                    
+                        } //Fin de else                                                    
                     } //Fin de if para validar estructura de etiqueta
-                }//Fin de for
-                
+                }//Fin de for               
+                                          
                 if (operando.contains("#$") || operando.contains("#@") || operando.contains("#%")) { //Validar sistemas numericos para hexadecimal, octal y binario                    
                     String ValorOperando = operando.substring(2); // Quitar el símbolo "#" y "%|$|@" del operando    
                     if (ValorOperando.matches("([01]+)|([0-9A-Fa-f]+)|([0-7]+)")) {
@@ -353,11 +353,11 @@ public class Linea {
                         catch (NumberFormatException e) {
                             // No es un valor hexadecimal válido
                         }//fin de catch
-                } //Fin de else if               
+                } //Fin de else if                               
             } //fin if de IMM
 
             // Comprobar el tipo de direccionamiento Directo (DIR)
-            else if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
+            if (operando.matches("^[#@$]?[0-9]+$|^%[0-1]{1,8}$")) {
                 // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
                 String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
@@ -383,7 +383,7 @@ public class Linea {
             } //Fin de else if
             
             // Comprobar el tipo de direccionamiento Extendido (EXT)
-            else if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$")) {
+            if (operando.matches("^[#@$]?+[0-9A-Fa-f]+$|^%[0-1]{8}$")) {
                 // Quitar el símbolo "#" u otros caracteres iniciales si están presentes
                 String operandoSinSimbolo = operando.replaceAll("^[#@$]+", "");
 
@@ -420,7 +420,7 @@ public class Linea {
             */
              
             // Comprobar el tipo de direccionamiento Indexado de 5 bits (IDX)
-            else if (operando.matches("^-?\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
+            if (operando.matches("^-?\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= -16 && valorIndexado <= 15) {
@@ -433,13 +433,13 @@ public class Linea {
                 } //Fin de else if
             } //Fin de else if  
             
-            else if (operando.matches("^,((X|x|Y|y|SP|sp|PC|pc))$")) { //Validar en caso de que la primera parte del operando no exista
+            if (operando.matches("^,((X|x|Y|y|SP|sp|PC|pc))$")) { //Validar en caso de que la primera parte del operando no exista
                 setDirAux("IDX(5b)");
                 return "IDX";
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits (IDX2)
-            else if (operando.matches("^\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
+            if (operando.matches("^\\d+,((X|x|Y|y|SP|sp|PC|pc))$")) {
                 String[] parts = operando.split(",");
                 int valorIndexado = Integer.parseInt(parts[0]);
                 if (valorIndexado >= 256 && valorIndexado <= 65535) {
@@ -449,7 +449,7 @@ public class Linea {
             } //Fin de if
 
                // Comprobar el tipo de direccionamiento Indexado indirecto de 16 bits ([IDX2])
-            else if (operando.matches("^\\[\\d{1,5},((X|x|Y|y|SP|sp|PC|pc))+\\]$")) {
+            if (operando.matches("^\\[\\d{1,5},((X|x|Y|y|SP|sp|PC|pc))+\\]$")) {
                 // Extraer el valor dentro de los corchetes y comprobar si está en el rango de 0 a 65535
                 String operandoSinCorchetes = operando.substring(1, operando.length() - 1);
                 String[] parts = operandoSinCorchetes.split(",");
@@ -461,44 +461,44 @@ public class Linea {
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado predecremento(IDX)
-            else if (operando.matches("^[1-8],([-](X|x|Y|y|SP|sp))$")) {
+            if (operando.matches("^[1-8],([-](X|x|Y|y|SP|sp))$")) {
                 setDirAux("IDX(PreDec)");
                 return "IDX";
             } //Fin de else 
             
             // Comprobar el tipo de direccionamiento Indexado postdecremento(IDX)
-            else if (operando.matches("^[1-8],([+](X|x|Y|y|SP|sp))$")) {
+            if (operando.matches("^[1-8],([+](X|x|Y|y|SP|sp))$")) {
                 setDirAux("IDX(PreInc)");
                 return "IDX";
             } //Fin de else
 
             // Comprobar el tipo de direccionamiento Indexado postdecremento(IDX)
-            else if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[-])$")) {
+            if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[-])$")) {
                 DirAux = "IDX(PostDec)";
                 return "IDX";
             } //Fin de else if
             
             // Comprobar el tipo de direccionamiento Indexado postincremento (IDX)
-            else if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[+])$")) {
+            if (operando.matches("^[1-8],((X|x|Y|y|SP|sp)[+])$")) {
                 DirAux = "IDX(PostInc)";
                 return "IDX";
             } //Fin de else if
 
             // Comprobar el tipo de direccionamiento Indexado de acumulador (IDX)
-            else if (operando.matches("^(A|a|B|b|D|d),(X|x|Y|y|SP|sp|PC|pc)$")) {
+            if (operando.matches("^(A|a|B|b|D|d),(X|x|Y|y|SP|sp|PC|pc)$")) {
                 DirAux = "IDX(Acc)";
                 return "IDX";
             }//fin de else if
             
             // Comprobar el tipo de direccionamiento Indexado acumulador indirecto ([D,IDX])
             //if (operando.matches("^\\[\\d{1,5},((X|x|Y|y|SP|sp|PC|pc))+\\]$"))
-            else if (operando.matches("\\[[Dd],(?i)(X|Y|SP|PC)\\]")) {
+            if (operando.matches("\\[[Dd],(?i)(X|Y|SP|PC)\\]")) {
                 setDirAux("[D,IDX]");
                 return "[D,IDX]";
             }//fin de else if
 
             //Relativo REL
-            else if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
+            if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
             // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
                 if (Metodos.ComprobarEtiqueta(operando)) {
                     for(int i = 0; i<=592; i++) {
@@ -534,7 +534,7 @@ public class Linea {
             } //Fin de else if
             
             //Rel con ciclo 
-            else if (operando.matches("^(A|a|B|b|D|d|X|x|Y|y|SP|sp|PC|pc),[a-zA-Z_][a-zA-Z0-7_]+$")) {
+            if (operando.matches("^(A|a|B|b|D|d|X|x|Y|y|SP|sp|PC|pc),[a-zA-Z_][a-zA-Z0-7_]+$")) {
                 String[] partes = operando.split(",");
                 String registro = partes[0].toUpperCase(); // Convertir el registro a mayúsculas para hacer comparaciones sin distinción de mayúsculas y minúsculas
                 String resto = partes[1].trim(); // Eliminar espacios en blanco antes y después de la parte después de la coma
