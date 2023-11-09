@@ -8,6 +8,8 @@ Equipo 10 | Integrantes:
 
 package proyectointegrador_equipo10;
 
+import java.util.HashMap;
+
 public class Linea {
     private String tipo;
     private String valor;
@@ -32,6 +34,8 @@ public class Linea {
         this.DirAux = DirAux; 
         this.postbyte = postbyte;
     } //Fin de constructor 
+    
+    HashMap<String, String> miHashMap = new HashMap<>(); //HashMap para relacionar etiqueta con su valor
     
     //Getters y setters 
     public String getTipo() {     
@@ -60,8 +64,9 @@ public class Linea {
                 else {
                     System.out.println("Error");
                     //return "Error OPR";
-                } //Fin de validacion 
+                } //Fin de validacion                               
                 
+                try {
                 if(Conversion >= 0 && Conversion <= 65535) { //Evaluar 16 bytes
                     //valor = Integer.toHexString(Conversion).toUpperCase(); //Convierte a Hexadecimal y hace todo a mayusculas
                     String valorHexadecimal = String.format("%04X", Conversion); //Rellena con 0s a la izquierda para cumplir con el formato
@@ -69,9 +74,12 @@ public class Linea {
                     return "DIR_INIC"; //Retorna DIR_INIC
                 } //Fin de if
                 else {
-                    valor = "Desbordamiento";
-                    return "Error"; //Devolver Tipo Error
-                } //Fin de else 
+                    //valor = "Desbordamiento";
+                    return valor; //Devolver Tipo Error
+                } //Fin de else
+                } catch (Exception e) {
+                    return valor;
+                } //Fin de catch 
         } //Fin de if 
              
         //Validar EQU
@@ -199,7 +207,7 @@ public class Linea {
     }
 
     public String getDireccion() {
-        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion
+        ArchivoSalvacion BD = new ArchivoSalvacion("Salvation.txt"); //Objeto con archivo salvacion        
         //TamañoAux = null;
         //DirAux = null;
         
@@ -261,18 +269,81 @@ public class Linea {
             if (operando.startsWith("#")) {
                 
                 for(int i = 0; i <=592; i++) {
-                    if (codop.equals(BD.PosicionMatriz(i, 0)) && operando.matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) { //Validar si el codop coincide con archivo y salvacion y el operando cumple conficiones de estructura de etiqueta                   
-                        if("#opr8i".equals((BD.PosicionMatriz(i, 1)))){
-                            setDirAux("IMM(8b)"); //Variable para mostrar en tabla
-                            return "IMM"; //Retorna el objeto Direccion
-                        } //Fin de if
-                        else if("#opr16i".equals((BD.PosicionMatriz(i, 1))))  {
-                            setDirAux("IMM(16b)");
-                            return "IMM"; 
-                        } //Fin de else                                                    
+                    if (codop.equals(BD.PosicionMatriz(i, 0)) && operando.matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$") && "#opr8i".equals(BD.PosicionMatriz(i, 1))) { //Validar si el codop coincide con archivo y salvacion y el operando cumple conficiones de estructura de etiqueta                                                                  
+                        TablaA3 Tabsim = new TablaA3("TABSIM.txt"); //Llamar el archivo TABSIM
+
+                        for(int x = 0; x <= ProyectoIntegradorP2_Equipo10.ArrayEtiqueta.size(); x++) { //Recorrer el arraylist de etiqueta, en donde se guardan las etiquetas que va leyendo                                 
+                            //Como utilizar el archivo TABSIM
+                            //0 = Tipo
+                            //1 = Etiqueta
+                            //2 = Valor 
+                                                       
+                            try { //Intentar encontrar coincidencias entre el TABSIM y el operando 
+                                String TabsimGato = "#" + Tabsim.PosicionMatriz(x, 1).toUpperCase(); //Validar Etiqueta con #
+                                if(operando.equals(TabsimGato)) { //Validar si el operando contiene una etiqueta del Tabsim
+                                    miHashMap.put(operando.toUpperCase(), valor);
+                                    System.out.println("Valor HashMap imm8 " + miHashMap.get(operando));
+                                    String ValTabsim = Tabsim.PosicionMatriz(x, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                                    int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+
+                                    if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 255) { //Validar si es de 8 bits
+                                        String ValorHexadecimal = String.format("%02x", ValTabsimDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                                        miHashMap.put(operando, ValorHexadecimal);
+                                        setDirAux("IMM(8b)"); //Devolver modo de direccionamiento EXT para mostrar en pantalla
+                                        return "IMM"; //Devolver modo de direccionamiento EXT
+                                    } //Fin de if
+                                    else { //Validar desbordamiento 
+                                        setDirAux("Error DIR");
+                                        return "Error";
+                                    } //Fin de else
+                                } //Fin de if 
+                            } //Fin de try 
+                            catch (ArrayIndexOutOfBoundsException e) { //Entonces no encontro coincidencias y muestra error en Direccionamiento
+                                setDirAux("Error DIR"); //Devolver error de direccionamiento en la tabla
+                                return "Error"; //Devolver error de direccionamiento 
+                            } //Fin de catch
+                        } //Fin de for                                                  
                     } //Fin de if para validar estructura de etiqueta
-                }//Fin de for               
-                                          
+                    
+                    else if (codop.equals(BD.PosicionMatriz(i, 0)) && operando.matches("^#[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$") && "#opr16i".equals(BD.PosicionMatriz(i, 1))) { //Validar si el codop coincide con archivo y salvacion y el operando cumple conficiones de estructura de etiqueta                                                                  
+                        TablaA3 Tabsim = new TablaA3("TABSIM.txt"); //Llamar el archivo TABSIM                       
+
+                        for(int x = 0; x <= ProyectoIntegradorP2_Equipo10.ArrayEtiqueta.size(); x++) { //Recorrer el arraylist de etiqueta, en donde se guardan las etiquetas que va leyendo                                 
+                            //Como utilizar el archivo TABSIM
+                            //0 = Tipo
+                            //1 = Etiqueta
+                            //2 = Valor 
+                                                       
+                            try { //Intentar encontrar coincidencias entre el TABSIM y el operando 
+                                String TabsimGato = "#" + Tabsim.PosicionMatriz(x, 1); //Validar Etiqueta con #
+                                
+                                if(operando.equals(TabsimGato)) { //Validar si el operando contiene una etiqueta del Tabsim
+                                    miHashMap.put(operando, valor);
+                                    System.out.println("Valor HashMap imm16 " + miHashMap.get(valor));
+                                    String ValTabsim = Tabsim.PosicionMatriz(x, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                                    int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+
+                                    if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 65535) { //Validar si es de 8 bits
+                                        String ValorHexadecimal = String.format("%04x", ValTabsimDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                                        String ValorSeparado = ValorHexadecimal.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+                                        miHashMap.put(operando, ValorSeparado);
+                                        setDirAux("IMM(16b)"); //Devolver modo de direccionamiento EXT para mostrar en pantalla
+                                        return "IMM"; //Devolver modo de direccionamiento EXT
+                                    } //Fin de if
+                                    else { //Validar desbordamiento 
+                                        setDirAux("Error DIR"); //Devolver error de direccionamiento en la tabla
+                                        return "Error"; //Devolver error de direccionamiento 
+                                    } //Fin de else
+                                } //Fin de if 
+                            } //Fin de try 
+                            catch (ArrayIndexOutOfBoundsException e) { //Entonces no encontro coincidencias y muestra error en Direccionamiento
+                                setDirAux("Error DIR"); //Devolver error de direccionamiento en la tabla
+                                return "Error"; //Devolver error de direccionamiento 
+                            } //Fin de catch
+                        } //Fin de for                                                  
+                    } //Fin de if para validar estructura de etiqueta                  
+                } //Fin de for
+               
                 if (operando.contains("#$") || operando.contains("#@") || operando.contains("#%")) { //Validar sistemas numericos para hexadecimal, octal y binario                    
                     String ValorOperando = operando.substring(2); // Quitar el símbolo "#" y "%|$|@" del operando    
                     if (ValorOperando.matches("([01]+)|([0-9A-Fa-f]+)|([0-7]+)")) {
@@ -497,30 +568,61 @@ public class Linea {
                 return "[D,IDX]";
             }//fin de else if
 
-            //Relativo REL
+            //Relativo REL, DIR y EXT
             if (operando.matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
-            // Comprobar si el operando es una etiqueta válida o un valor decimal en el rango adecuado
-                if (Metodos.ComprobarEtiqueta(operando)) {
-                    for(int i = 0; i<=592; i++) {
-                        if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "rel8".equals(BD.PosicionMatriz(i, 1))) {
-                            setDirAux("REL(8b)");
-                            return "REL";
-                        } //Fin de if 
+                TablaA3 Tabsim = new TablaA3("TABSIM.txt"); //Llamar el archivo TABSIM
 
-                        else if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "rel16".equals(BD.PosicionMatriz(i, 1))) {
-                            setDirAux("REL(16b)");
-                            return "REL";
-                        } //Fin de else if  
-                        
-                        else if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "opr8a".equals(BD.PosicionMatriz(i, 1))) {           
-                            if (Metodos.ComprobarEtiqueta(operando)) { //Validar si el operando cumple con las condiciones de etiqueta
-                                setDirAux("DIR"); //Devolver modo de direccionamiento
-                                return "DIR"; //Devolver modo de direccionamiento    
-                            } //Fin de if              
-                        } //Fin de if
-                        
-                    } //Fin de for                                       
-                } //Fin de if
+                for(int i = 0; i<=592; i++) { //For para archivo salvacion 
+                    if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "rel8".equals(BD.PosicionMatriz(i, 1))) { //Validar relativos de 8 
+                        setDirAux("REL(8b)");
+                        return "REL";
+                    } //Fin de if 
+
+                    else if(getCodop().equals(BD.PosicionMatriz(i, 0)) && "rel16".equals(BD.PosicionMatriz(i, 1))) { //Validar relativos de 16
+                        setDirAux("REL(16b)");
+                        return "REL";
+                    } //Fin de else if  
+
+                    else if(getCodop().equals(BD.PosicionMatriz(i, 0)) && ("opr8a".equals(BD.PosicionMatriz(i, 1)) || "opr16a".equals(BD.PosicionMatriz(i, 1)))) { //Validar directos y extendidos         
+                        for(int x = 0; x <= ProyectoIntegradorP2_Equipo10.ArrayEtiqueta.size(); x++) { //Recorrer el arraylist de etiqueta, en donde se guardan las etiquetas que va leyendo                                 
+                            //Como utilizar el archivo TABSIM
+                            //0 = Tipo
+                            //1 = Etiqueta
+                            //2 = Valor   
+
+                            try { //Intentar encontrar coincidencias entre el TABSIM y el operando                               
+                                if(operando.equals(Tabsim.PosicionMatriz(x, 1))) { //Validar si el operando contiene una etiqueta del Tabsim
+                                    String ValTabsim = Tabsim.PosicionMatriz(x, 2).replace(" ", ""); //Quitar espacio para su posterior conversion    
+                                    //System.out.println("Valor HashMap Directos y extendidos" + miHashMap.get(operando));
+                                    int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
+
+                                    if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 255) { //Validar si es de 8 bits
+                                        String ValorHexadecimal = String.format("%02x", ValTabsimDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                                        miHashMap.put(operando, ValorHexadecimal);
+                                        setDirAux("DIR"); //Devolver modo de direccionamiento EXT para mostrar en pantalla
+                                        return "DIR"; //Devolver modo de direccionamiento EXT
+                                    } //Fin de if
+                                    else if (ValTabsimDecimal >= 256 && ValTabsimDecimal <= 65535) { //Validar si es de 16 bits
+                                        String ValorHexadecimal = String.format("%04x", ValTabsimDecimal).toUpperCase(); //Colocar formato de dos digitos (rellenar con 0 en caso de)
+                                        String ValorSeparado = ValorHexadecimal.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+                                        miHashMap.put(operando, ValorSeparado);                                       
+                                        setDirAux("EXT"); //Devolver modo de direccionamiento EXT para mostrar en pantalla
+                                        return "EXT"; //Devolver modo de direccionamiento EXT
+                                    } //Fin de if
+                                    else { //Validar desbordamiento 
+                                        postbyte = "Error Postbyte";
+                                        setDirAux("Error DIR");
+                                        return "Error";
+                                    } //Fin de else
+                                } //Fin de validar si el operando coincide con una etiqueta de TABSIM
+                            } //Fin de try
+                            catch (ArrayIndexOutOfBoundsException e) { //Entonces no encontro coincidencias y muestra error en Direccionamiento
+                                setDirAux("Error DIR"); //Devolver error de direccionamiento en la tabla
+                                return "Error"; //Devolver error de direccionamiento 
+                            } //Fin de catch
+                        } //Fin de for                               
+                    } //Fin de for                           
+                } //Fin de for
                 
                 int valorDecimal = Integer.parseInt(operando);
                 if (valorDecimal >= -128 && valorDecimal <= 127) { //REL 8bit
@@ -565,7 +667,7 @@ public class Linea {
         setDirAux("Error DIR"); //Mensaje de confirmacion    
         return "Error"; // No se reconoce ningún tipo de direccionamiento      
    } //Fin de public String 
-    
+        
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
@@ -598,7 +700,7 @@ public class Linea {
                        iremos sustituyendo a medida que el codigo avanza */
         
         //Ignorar directivas ORG, EQU y END
-        if(codop.equals("ORG") || codop.equals("EQU") || codop.equals("END")) {
+        if(codop.equalsIgnoreCase("ORG") || codop.equalsIgnoreCase("EQU") || codop.equalsIgnoreCase("END")) {
             return ""; //Devolver postbyte
         } //Fin de if                
         
@@ -606,7 +708,7 @@ public class Linea {
             //Los inherentes no se calculan puesto que no tienen operandos, su codigo postbyte ya viene por defecto
         
         //Calcular Inmediatos 8 bits (ii)
-        if(DirAux.equals("IMM(8b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("ii")) {
+        if(DirAux.equalsIgnoreCase("IMM(8b)") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("ii")) {
                 String ValorOperando = operando; //Variable auxiliar para obtener operando
                 
                 //En estas validaciones quitamos # de todos los sistemas numericos, principal identificador para los inmediatos
@@ -623,6 +725,11 @@ public class Linea {
                 else if(ValorOperando.matches("#\\$[A-F0-9]+")) { //Verificar hexadecimal
                     Conversion = Integer.parseInt(ValorOperando.replace("#$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
                 } //Fin de validacion octal
+                else if(miHashMap.containsKey(operando)) { 
+                    String valorgamardo = miHashMap.get(operando);
+                    postbyte = BD.PosicionMatriz(i,3).replace("ii", valorgamardo); //Establecer postbyte
+                    return postbyte;
+                } //Fin para validar si tiene estructura de etiqueta
                 else {
                     System.out.println("Error");
                     return "Error Postbyte";
@@ -635,7 +742,7 @@ public class Linea {
             } //Fin de validar inmediatos de 8 bits
         
         //Calcular Inmediatos 16 bits (jj kk)
-        if(DirAux.equals("IMM(16b)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("jj kk")) {
+        if(DirAux.equalsIgnoreCase("IMM(16b)") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("jj kk")) {
                 String ValorOperando = operando; //Variable auxiliar para obtener operando
                 
                 //En estas validaciones quitamos # de todos los sistemas numericos, principal identificador para los inmediatos
@@ -652,6 +759,11 @@ public class Linea {
                 else if(ValorOperando.matches("#\\$[A-F0-9]+")) { //Verificar hexadecimal
                     Conversion = Integer.parseInt(ValorOperando.replace("#$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
                 } //Fin de validacion octal
+                else if(miHashMap.containsKey(operando)) { 
+                    String valorgamardo = miHashMap.get(operando);
+                    postbyte = BD.PosicionMatriz(i,3).replace("jj kk", valorgamardo); //Establecer postbyte
+                    return postbyte;
+                } //Fin para validar si tiene estructura de etiqueta
                 else {
                     System.out.println("Error");
                     return "Error Postbyte";
@@ -665,7 +777,7 @@ public class Linea {
             } //Fin de validar inmediatos de 16bits
         
         //Calcular Directos (dd)
-         if(DirAux.equals("DIR") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("dd")) {
+         if(DirAux.equalsIgnoreCase("DIR") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("dd")) {
                 String ValorOperando = operando; //Variable auxiliar para obtener operando
 
                 if(ValorOperando.matches("\\d+")){ //Verificar decimal
@@ -680,6 +792,11 @@ public class Linea {
                 else if(ValorOperando.matches("\\$[A-F0-9]+")) { //Verificar hexadecimal
                     Conversion = Integer.parseInt(ValorOperando.replace("$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
                 } //Fin de validacion octal
+                else if(miHashMap.containsKey(operando)) { 
+                    String valorgamardo = miHashMap.get(operando);
+                    postbyte = BD.PosicionMatriz(i,3).replace("dd", valorgamardo); //Establecer postbyte
+                    return postbyte;
+                } //Fin para validar si tiene estructura de etiqueta
                 else {
                     System.out.println("Error");
                     return "Error Postbyte";
@@ -693,7 +810,7 @@ public class Linea {
         
         //Calcular Extendidos (hh ll)
         
-            if(DirAux.equals("EXT") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("hh ll")) {
+            if(DirAux.equalsIgnoreCase("EXT") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("hh ll")) {
                 String ValorOperando = operando; //Variable auxiliar para obtener operando
 
                 if(ValorOperando.matches("\\d+")){ //Verificar decimal
@@ -708,6 +825,11 @@ public class Linea {
                 else if(ValorOperando.matches("\\$[A-F0-9]+")) { //Verificar hexadecimal
                     Conversion = Integer.parseInt(ValorOperando.replace("$",""),16); //Quitar simbolo de hexadecimal y evaluar en base 16
                 } //Fin de validacion octal
+                else if(miHashMap.containsKey(operando)) { 
+                    String valorgamardo = miHashMap.get(operando);
+                    postbyte = BD.PosicionMatriz(i,3).replace("hh ll", valorgamardo); //Establecer postbyte
+                    return postbyte;
+                } //Fin para validar si tiene estructura de etiqueta
                 else {
                     System.out.println("Error");
                     return "Error Postbyte";
@@ -726,7 +848,7 @@ public class Linea {
         
         //Calcular Indexados
         //Calcular Indexados(5b) (xb)
-        if(DirAux.equals("IDX(5b)") && codop.equals(BD.PosicionMatriz(i, 0)) && "oprx0_xysp".equals(BD.PosicionMatriz(i, 1)) &&BD.PosicionMatriz(i, 3).contains("xb")) {
+        if(DirAux.equalsIgnoreCase("IDX(5b)") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && "oprx0_xysp".equalsIgnoreCase(BD.PosicionMatriz(i, 1)) &&BD.PosicionMatriz(i, 3).contains("xb")) {
             String FormaXB5 = "rr0nnnnn"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
             //Variables auxiliares para calcular los indexados
             String Binario = null; //Variable auxiliar para guardar binarios
@@ -779,7 +901,7 @@ public class Linea {
         } //Fin de if para calcular IDX(5b)
         
         //Calcular indexados(9b -> IDX1) (xb ff)
-        if(DirAux.equals("IDX1") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ff")) {
+        if(DirAux.equalsIgnoreCase("IDX1") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ff")) {
             //Variables auxiliares para calcular los indexados
             String FormaXB9 = "111rr0zs"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
             String ValorFF = null; //Variable auxiliar para calcular ff
@@ -838,7 +960,7 @@ public class Linea {
             postbyte = BD.PosicionMatriz(i,3).replace("xb", ValorSeparado).replace("ff",ValorFF); //Establecer postbyte
         } //Fin de if para calcular IDX1
         
-        if(DirAux.equals("IDX2") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ee ff")) {
+        if(DirAux.equalsIgnoreCase("IDX2") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ee ff")) {
             //Variables auxiliares para calcular los indexados
             String FormaXB9 = "111rr0zs"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
             String ValorFF = null; //Variable auxiliar para calcular ff
@@ -912,7 +1034,7 @@ public class Linea {
         } //Fin IDX Pre/Post Incremento/Decremento
         
         //Calcular Directiva DS
-        if (codop.equals("DS.B") && codop.equals(BD.PosicionMatriz(i, 0))) {
+        if (codop.equalsIgnoreCase("DS.B") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0))) {
             String ValPostbyte = null; // Variable auxiliar para guardar el valor postbyte
             String OperandoDS = operando; // Variable auxiliar para tener el operando del DS
             int DSdecimal = Integer.parseInt(OperandoDS); // Convertir a decimal el operando
@@ -931,7 +1053,7 @@ public class Linea {
             postbyte = BD.PosicionMatriz(i,3).replace("-",ValPostbyte); //Establecer postbyte            
         } //Fin de if para calcular DS.B
         
-        if (codop.equals("DS.W") && codop.equals(BD.PosicionMatriz(i, 0))) {
+        if (codop.equalsIgnoreCase("DS.W") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0))) {
             String ValPostbyte = null; // Variable auxiliar para guardar el valor postbyte
             String OperandoDS = operando; // Variable auxiliar para tener el operando del DS
             int DSdecimal = Integer.parseInt(OperandoDS); // Convertir a decimal el operando
@@ -950,7 +1072,7 @@ public class Linea {
             postbyte = BD.PosicionMatriz(i,3).replace("-",ValPostbyte); //Establecer postbyte            
         } //Fin de if para calcular DS.W  
         //Calcular IDX con acumulador
-        if(DirAux.equals("IDX(Acc)") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
+        if(DirAux.equalsIgnoreCase("IDX(Acc)") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
             //String[] parts = operando.split(",");
             //int valorIndexado = Integer.parseInt(parts[0]);
             if(operando.matches("[ABD],(X|Y|SP|PC)")){//Pre-inc
@@ -960,7 +1082,7 @@ public class Linea {
                 
         //Calcular indexados -> [IDX2]) (xb ee ff)
         //se cambio [IDX2], xb ee ff
-        if(DirAux.equals("[IDX2]") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ee ff")) {
+        if(DirAux.equalsIgnoreCase("[IDX2]") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).contains("xb ee ff")) {
             //Variables auxiliares para calcular los indexados
             String FormaXB9 = "111rr011"; //Declaramos la forma para calcular, al ya tener validado el modo de direccionamiento podemos declarar una variable auxiliara para cuando entre a este caso con la forma a calcular
             String ValorFF = null; //Variable auxiliar para calcular ff
@@ -1005,7 +1127,7 @@ public class Linea {
         } //Fin de calcular IDX2
         
         //Calcular IDX [D,IDX]
-        if(DirAux.equals("[D,IDX]") && codop.equals(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
+        if(DirAux.equalsIgnoreCase("[D,IDX]") && codop.equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && BD.PosicionMatriz(i, 3).endsWith("xb")) {
             String Valoropr = operando;
            // String[] parts = operando.split(",");
             //int valorIndexado = Integer.parseInt(parts[0]); 
