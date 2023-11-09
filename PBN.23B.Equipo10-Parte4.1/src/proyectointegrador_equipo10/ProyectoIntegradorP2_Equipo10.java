@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +40,7 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 //import javax.swing.table.DefaultTableModel;
 
@@ -160,7 +162,13 @@ public class ProyectoIntegradorP2_Equipo10 {
             Color ColorPersonalizado = new Color(220, 220, 220); // Color personalizado del boton: Color negro 
             //BotonReiniciar.setForeground(Color.WHITE); // Color personalizado de la letra del boton: Color blanco
             BotonReiniciar.setBackground(ColorPersonalizado); //Aplicar color al boton 
-            frame.add(BotonReiniciar, BorderLayout.SOUTH); //Agregar boton en la tabla en la parte inferior          
+            frame.add(BotonReiniciar, BorderLayout.SOUTH); //Agregar boton en la tabla en la parte inferior
+            
+            JTableHeader encabezado = tbl.getTableHeader(); //Asignar color a los headers 
+            encabezado.setForeground(Color.BLACK);
+            encabezado.setBackground(new Color(220, 220, 220));
+            
+            //tbl.setFont(new Font("Consolas", Font.PLAIN, 12)); //Asignar fuente a la tabla
             
             //Funcion para reiniciar el programa y abrirlo nuevamente en caso de apretar el boton para reiniciar 
             BotonReiniciar.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
@@ -227,13 +235,14 @@ public class ProyectoIntegradorP2_Equipo10 {
                     }//Fin de if
 
                     for(String Palabra : Palabras) { //For each / enhanced for loop
-
+                        
+                        Palabra.toUpperCase(); //Establecer todo como mayuscula
                         Pattern patronetiqueta = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]{0,7}$"); //Definir un patron con minusculas, mayusculas, puntos y con una longitud de 0 a 8 caracteres                 
                         Matcher matcheretiqueta = patronetiqueta.matcher(Palabra); // Crear un Matcher para verificar si la etiqueta cumple con el patrón
 
                         //Validar etiqueta
                         if(Palabra.endsWith(":")) { //Si empieza con ":"   
-                            Palabra = Palabra.substring(0, Palabra.length() - 1 ); //Eliminar ":" de la palabra etiqueta
+                            Palabra = Palabra.substring(0, Palabra.length() - 1 ).toUpperCase(); //Eliminar ":" de la palabra etiqueta
                             if (!matcheretiqueta.matches() && Metodos.cracteretq(Palabra) && Palabra.length()<=7) { //Validar la longitud maxima de 8 caracteres y los caracteres que hay en "Palabra"  
                                 linea.setEtiqueta(Palabra); //La palabra identificada se guardara en el objeto etiqueta
                             } //Fin de if
@@ -260,7 +269,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                             for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                                 //Validar Codigos Operandos
                                 //El if compara si el CODOP del .asm y del archivo salvacion coinciden, si no encuentra ninguna coincidencia entonces CODOP esta mal escrito en el archivo .asm
-                                if(Palabra.equals((BD.PosicionMatriz(i, 0)))) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
+                                if(Palabra.equalsIgnoreCase((BD.PosicionMatriz(i, 0)))) { //Si los CODOPS de .asm y ArchivoSalvation son iguales                                                 
                                    linea.setCodop(Palabra); //Escribir CODOP 
                                    break; //Romper ciclo 
                                 } //Fin de if 
@@ -273,7 +282,7 @@ public class ProyectoIntegradorP2_Equipo10 {
 
                         //Validaciones para Operando                    
                         else if(linea.getOperando() == null) { //Si el operando es igual a null                        
-                            linea.setOperando(Palabra); //La palabra identificada se guardara en el objeto Operando
+                            linea.setOperando(Palabra.toUpperCase()); //La palabra identificada se guardara en el objeto Operando
 
                             /*Validadores para identificar que tipo de operando es
                                 - Se valida cada sistema numerico:
@@ -317,7 +326,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                             
                             //Si el operando no cae en ninguno de los sistemas numericos anteriores, entonces cae aqui
                             else { //Si no es nignuno de los posibles tipos de operandos, entonces es invalido
-                                linea.setOperando(Palabra); //FALTA VALIDAR SI ES OTRO TIPO DE OPERANDO FUERA DE HEXA,OCTAL,BIN O DECIMAL 
+                                linea.setOperando(Palabra.toUpperCase()); //FALTA VALIDAR SI ES OTRO TIPO DE OPERANDO FUERA DE HEXA,OCTAL,BIN O DECIMAL 
                             } //Fin de else if
                         } //Fin de else if                       
 
@@ -331,18 +340,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         linea.setEtiqueta("Error ETQ"); // Restablecer etiqueta si es inválida
                     } //Fin de if      
 
-                    int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits
-             
-                    //Impresion de las variables
-                    System.out.println("CONTLOC = " + linea.getValor());
-                    System.out.println("VALOR DECIMAL = " + Decimal);
-                    System.out.println("ETIQUETA = " + linea.getEtiqueta());
-                    System.out.println("CODOP = " + linea.getCodop());
-                    System.out.println("OPERANDO = " + linea.getOperando());
-                    System.out.println("DIRECCION = " + linea.getDireccion());
-                    System.out.println("DIRECCION AUX = " + linea.getDirAux());
-                    System.out.println("TAMANO = " + linea.getTamaño()); 
-                    System.out.println("POSTBYTE = " + linea.getPostbyte() + "\n");
+                    int Decimal = Integer.valueOf(DecimalString); //Convertir Decimal String a variable de tipo decimal para validar la cantidad de bits                                
                 } //Fin de else 
                                
                 //Algoritmo para realizar busquedas en el archivo salvacion                
@@ -350,7 +348,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                     for(int i = 0; i <= 592; i++) { //Busca desde la linea 0 hasta las 592 lineas que conforma el archivo salvacion 
                         //Determinar Tamaño y Codigo postbyte
                         //El if compara si el CODOP y la direccion del .asm son iguales al del archivo salvacion, en dado caso de que ambos sean iguales entonces encontro una coincidencia
-                        if(linea.getCodop().equals(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equals(BD.PosicionMatriz(i, 2))) {                            
+                        if(linea.getCodop().equalsIgnoreCase(BD.PosicionMatriz(i, 0)) && linea.getDireccion().equalsIgnoreCase(BD.PosicionMatriz(i, 2))) {                            
                             linea.setTamaño(BD.PosicionMatriz(i, 5)); //Obtener tamaño
                             linea.setPostbyte(BD.PosicionMatriz(i, 3)); //Obtener Postbyte 
                             break; //Sale del if si lo encuentra 
@@ -365,15 +363,15 @@ public class ProyectoIntegradorP2_Equipo10 {
                 } //Fin de if                                  
 
                 //Validaciones DS y DC
-                if(linea.getCodop().equals("DS.B") && linea.getOperando().matches("\\d+")) {
+                if(linea.getCodop().equalsIgnoreCase("DS.B") && linea.getOperando().matches("\\d+")) {
                     linea.setTamaño("1");
                     linea.setTamaño(String.valueOf(Integer.parseInt(linea.getTamaño())*Integer.parseInt(linea.getOperando()))); //Multiplicar el size por el operando
                 } //Fin de if
-                else if (linea.getCodop().equals("DS.W") && linea.getOperando().matches("\\d+")) {
+                else if (linea.getCodop().equalsIgnoreCase("DS.W") && linea.getOperando().matches("\\d+")) {
                     linea.setTamaño("2"); //Si es .W tiene peso de 2 bytes
                     linea.setTamaño(String.valueOf(Integer.parseInt(linea.getTamaño())*Integer.parseInt(linea.getOperando()))); //Multiplicar el size por el operando
                 } //Fin de else if
-                if (linea.getCodop().equals("DC.B")) {
+                if (linea.getCodop().equalsIgnoreCase("DC.B")) {
                     String[] partes = linea.getOperando().split(","); // Dividir el operando si tiene ","
                     linea.setTamaño(String.valueOf(partes.length)); // Poner tamaño del length de cuantas partes tiene el operando
                     if (linea.getOperando().contains("\"")) {
@@ -405,44 +403,68 @@ public class ProyectoIntegradorP2_Equipo10 {
                 // Actualizar Archivo TABSIM y Archivo LISTADO
                 escribirEnTABSIM(linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getValor());
                 escribirEnLISTADO(linea.getTipo(), linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando());
-                                              
+                      
+                //Impresion de las variables
+                    System.out.println("CONTLOC = " + linea.getValor());
+                    //System.out.println("VALOR DECIMAL = " + Decimal);
+                    System.out.println("ETIQUETA = " + linea.getEtiqueta());
+                    System.out.println("CODOP = " + linea.getCodop());
+                    System.out.println("OPERANDO = " + linea.getOperando());
+                    System.out.println("DIRECCION = " + linea.getDireccion());
+                    System.out.println("DIRECCION AUX = " + linea.getDirAux());
+                    System.out.println("TAMANO = " + linea.getTamaño()); 
+                    System.out.println("POSTBYTE = " + linea.getPostbyte() + "\n");
+                    
+                    //Agregar lo calculado en un arraylist y separarlos con tabulador                 
+                    ArrayLinea.add(linea.getValor() + "\t"); //Separar espacios por tabuldaroes             
+                    ArrayLinea.add(linea.getEtiqueta() + "\t");
+                    ArrayLinea.add(linea.getCodop() + "\t");
+                    ArrayLinea.add(linea.getOperando() + "\t");
+                    ArrayLinea.add(linea.getDirAux() + "\t");                
+                    ArrayLinea.add(linea.getTamaño() + "\t");
+                    ArrayLinea.add(linea.getPostbyte() + "\n"); //Aqui indica una separacion de linea
+                
                 // Agregar una fila con los datos a la JTable
                 tabla.addRow(new Object[]{linea.getValor(), linea.getEtiqueta(), linea.getCodop(), linea.getOperando(), linea.getDirAux(), linea.getTamaño(), linea.getPostbyte()}); //Agregar objetos a la tabla                
                 //Aqui muestra el objeto DirAux para que indique las especificaciones de algunos modos de direccionamiento
                 //El objeto Direccion contiene el modo de direccionamiento tal cual viene en el archivo Salvacion
-                
-                if(linea.getCodop().equals("EQU")) { //Validar si el codigo operando contiene EQU
+                               
+                //Devolver el CONTLOC con lo que llevaba
+                if(linea.getCodop().equalsIgnoreCase("EQU")) { //Validar si el codigo operando contiene EQU
                     linea.setValor(linea.getEQUval()); //Establecer valor
-                    System.out.println("EQU: " + linea.getEQUval()); //Impresion en consola                    
-                } //Fin de if                   
+                    //System.out.println("EQU: " + linea.getEQUval()); //Impresion en consola
+                    //System.out.println("EQU val = " + linea.getValor());
+                } //Fin de if 
+                
+                
+                //Devolver CONTLOC desde ORG sumando 
                 else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
-                    int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
+                    try {
+                        int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
+                    
+                    
                     int tamañodecimal = Integer.parseInt(linea.getTamaño()); //Variable auxiliar 
                     int ValorDecimal = conversion + tamañodecimal; //Sumar variables auxiliares en decimal para posteriormente convertir a hexadecimal
 
                         if(ValorDecimal > 65535){ //Validar bits
                             //String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
-                            linea.setValor("Desbordamiento"); //Guarda el valor 
+                            linea.setValor("Desbordamiento"); //Guarda el valor
                         } //Fin de if
                         else { //No existe desbordamiento
                             String valorHexadecimal = String.format("%04X", ValorDecimal); //Convierte el valor a hexadecimal y rellena con 0s
                             linea.setValor(valorHexadecimal); //Guarda el valor
-                        } //Fin de else 
+                        } //Fin de else
+                        }
+                        catch(Exception e) {
+                        System.out.println("Desbordamiento");
+                    }
                 } //Fin de if
                 
+                                
                 //Codigo Auxiliar para el algoritmo de dos fases
                 /* El ArrayList ArrayLinea guarda cada uno de los campos ya calculados, se agrega dentro del while para evitar que en la siguiente iteración se eliminen.
                 Posteriormente se guarda en un String Builder mediante un fore each, de esta manera al terminar el ciclo while tenemos toda la tabla almacenada en un 
-                StringBuilder */
-     
-                //Agregar lo calculado en un arraylist y separarlos con tabulador                 
-                ArrayLinea.add(linea.getValor() + "\t"); //Separar espacios por tabuldaroes             
-                ArrayLinea.add(linea.getEtiqueta() + "\t");
-                ArrayLinea.add(linea.getCodop() + "\t");
-                ArrayLinea.add(linea.getOperando() + "\t");
-                ArrayLinea.add(linea.getDirAux() + "\t");                
-                ArrayLinea.add(linea.getTamaño() + "\t");
-                ArrayLinea.add(linea.getPostbyte() + "\n"); //Aqui indica una separacion de linea                  
+                StringBuilder */                  
                                
                 for (String lineas : ArrayLinea) { //For each para guardar el contenido de arreglo etiqueta en un String Builder, de esta manera guardamos todo el programa en un StringBuilder
                     LineaCompleta.append(lineas); // Agregar cada objeto seguido de un tabulador al StringBuilder
@@ -528,7 +550,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                     else if(tabla.getValueAt(i, 4).equals("REL(9-bit)") && tabla.getValueAt(i, 6).toString().endsWith("lb rr")) { //Validar si - Direccionamiento = REL(9b) && Postbyte termina con "lb rr" 
                         //Realizar calculo para REL(9b)
                          String[] partes = String.valueOf(tabla.getValueAt(i, 3)).split(","); //Dividir en dos el operando separandolo por la coma
-                        if(partes[1].equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM
+                        if(partes[1].equalsIgnoreCase(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM
                             String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
                             int Destino = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
                             String RB = null;
@@ -585,6 +607,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                         } //Validar si las etiquetas concuerdan
                     } //Fin de Validar si Direccionamiento = REL(16b) && Postbyte termina con "qq rr" 
                     
+                    /*
                     //Etiquetas como Operando en los modos de direccionamiento DIR, EXT y IMM  
                     //Reconocer y establecer valores de etiqueta para DIR y EXT
                     if(tabla.getValueAt(i, 4).equals("DIR") && tabla.getValueAt(i, 4).toString().matches("^[a-zA-Z_][a-zA-Z0-9_]{0,7}$|^-?\\d{0,8}$")) {
@@ -611,10 +634,14 @@ public class ProyectoIntegradorP2_Equipo10 {
                         String Operando = tabla.getValueAt(i, 3).toString().substring(1); // Eliminar # del operando
                         if(Operando.equals(tabsim.PosicionMatriz(u, 1))) { //Validar si en operando existe una etiqueta ya registrada en TABSIM                            
                             String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
+                            String ValTabsimRecortado = ValTabsim.substring(Math.max(ValTabsim.length() - 2, 0));; //Extraer el numero despues del espacio 
                             int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
 
                             if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 255) { //Validar si es de 8 bits
-                                tabla.setValueAt("imm8", i, 6); //Establecer postbyte en la tabla principal
+                                String ValorSeparado = ValTabsim.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+                                tabla.setValueAt(Postbyte.replace("ii", ValTabsimRecortado), i, 6); //Establecer postbyte                                                     
+                                //tabla.setValueAt("imm16", i, 6); //Establecer postbyte en la tabla principal
+                                //tabla.setValueAt("imm8", i, 6); //Establecer postbyte en la tabla principal
                             } //Fin de if
                             else {
                                 tabla.setValueAt("Desbordamiento", i, 6); //Establecer postbyte en la tabla principal
@@ -629,8 +656,10 @@ public class ProyectoIntegradorP2_Equipo10 {
                             String ValTabsim = tabsim.PosicionMatriz(u, 2).replace(" ", ""); //Quitar espacio para su posterior conversion
                             int ValTabsimDecimal = Integer.parseInt(ValTabsim, 16); //Valor del CONTLOC de la misma linea en decimal
                             
-                            if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 65535) { //Validar si es de 8 bits
-                                tabla.setValueAt("imm16", i, 6); //Establecer postbyte en la tabla principal
+                            if (ValTabsimDecimal >= 0 && ValTabsimDecimal <= 65535) { //Validar si es de 8 bits                            
+                                String ValorSeparado = ValTabsim.replaceAll("(.{2})", "$1 ").trim(); //Colocar espacio por cada dos caracteres con una variable auxiliar
+                                tabla.setValueAt(Postbyte.replace("jj kk", ValorSeparado), i, 6); //Establecer postbyte                                                     
+                                //tabla.setValueAt("imm16", i, 6); //Establecer postbyte en la tabla principal
                             } //Fin de if
                             else { //Validar desbordamiento
                                 tabla.setValueAt("Desbordamiento", i, 6); //Establecer postbyte en la tabla principal
@@ -638,8 +667,10 @@ public class ProyectoIntegradorP2_Equipo10 {
                             } //Fin de else 
                         } //Fin de validar si el operando coincide con una etiqueta de TABSIM
                     } //Fin de if
+                */
                 } //Fin de Validar si en operando existe una etiqueta ya registrada en TABSIM
-            } //Fin de for Tabla      
+            } //Fin de for Tabla   
+            
             
             //ESPACIO PARA ALGORITMO PARA VALIDAR NUEVAMEBTE CONTLOC 
                 //Es necesario validar el CONTOLOC para modificar los tamaños modificados en el algoritmo anterior 
@@ -686,7 +717,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             
             //Contenido de la tabla (1era Fase)
             System.out.println("\nTABLA (Fase 1) \n" + LineaCompleta.toString()); //Imprimir StringBuilder (Validamos el contenido de la tabla)
-            
+            //frame.setVisible(true); //Hacer visible la tabla
             // Abrir archivos TABSIM y LISTADO
             
             try { //Impresion de los dos archivos
@@ -701,8 +732,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 e.printStackTrace();
                 System.out.println("Error al crear el archivo");
             } //Fin de catch
-            
-            
+             
         } //Fin de try                        
         catch (IOException e) { //Catch en caso de no poder abrir un archivo
             System.out.println("Error " + e.getMessage()); //Mensaje de error
@@ -718,7 +748,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 if(ArrayEtiqueta.contains(etiqueta)) { //Validar etiquetas
                     //ArrayEtiqueta.add(etiqueta); //Guardar las etiquetas existentes
                     
-                    if (codop.equals("EQU")) { //Encontrar EQU
+                    if (codop.equalsIgnoreCase("EQU")) { //Encontrar EQU
                     String tipo = "ABSOLUTA"; //Definir tipo "ABSOLUTA"
                     w.write(tipo + "\t" + etiqueta + "\t" + metodos.FormatoHexadecimal(operando) + "\n"); //Escribir en archivo
                     } //Fin de if 
