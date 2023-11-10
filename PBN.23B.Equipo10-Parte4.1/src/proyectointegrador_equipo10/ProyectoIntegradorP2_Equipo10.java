@@ -649,6 +649,66 @@ public class ProyectoIntegradorP2_Equipo10 {
     tabla.setValueAt(convertFinal, i, 6);
                         }
                     }
+              
+                    
+                    else if(tabla.getValueAt(i, 2).equals("DC.W")) { //Validar si el postbyte termina DC.B
+                        
+                        if(tabla.getValueAt(i, 3).toString().startsWith("\"")) {
+                            // Se verifica si el operando inicia con "
+                            String cadena = tabla.getValueAt(i, 3).toString().replace("\"", ""); // Se reemplazan las comillas existentes por un espacio en blanco 
+                            String cadenaasci = Metodos.cAHex(cadena).trim(); // Se convierten en hexadecimal 
+
+                            // Formatear la cadena hexadecimal para asegurar que cada par tenga al menos cuatro dígitos
+                            StringBuilder cadenaFormateada = new StringBuilder();
+
+                            for (int j = 0; j < cadenaasci.length(); j += 2) {
+                                String par = cadenaasci.substring(j, Math.min(j + 2, cadenaasci.length()));
+                                // Rellenar con ceros a la izquierda si es necesario
+                                String parFormateado = String.format("%04X", Long.parseLong(par, 16));
+                                cadenaFormateada.append(parFormateado).append("");
+                            }
+
+                            // Eliminar el espacio adicional al final y establecer el resultado en la tabla principal
+                            String ValFinalHex = cadenaFormateada.toString().replaceAll("(.{2})(?!$)", "$1 ");
+                            tabla.setValueAt(ValFinalHex, i, 6);
+                        }  
+                        if(tabla.getValueAt(i, 3).toString().replace(" ", "").contains(",")){
+                            
+                            String opr = tabla.getValueAt(i, 3).toString().replace(" ", "");
+                            System.out.println("Operando= "+opr);
+                            
+                             String convertFinal = "";  
+                             
+                            String[] partes = opr.split(",");
+                            
+                            for (String elemento : partes){
+                                String convert;
+                            if(elemento.startsWith("%")){
+                                convert = Metodos.binAHexa(elemento.replace("%", ""));
+                                System.out.println("Valor de DC.B bintohexa = "+convert);
+                            }else if(elemento.startsWith("@")){
+                                convert = Metodos.OctAHexa(elemento.replace("@", ""));
+                                System.out.println("Valor de DC.B octtohexa = "+convert);
+                            }else if(elemento.startsWith("$")){
+                                convert = elemento.replace("$", "");
+                                System.out.println("Valor de DC.B sin $ = "+convert);
+                            }else{
+                                convert = Metodos.DecimalToHexadecimal(elemento);
+                                System.out.println("Valor de DC.B sin $ = "+convert);  
+                            }
+                             // Concatenar el resultado al final de la cadena
+                             convert = String.format("%04X", Long.parseLong(convert, 16)).replaceAll("(.{2})(?!$)", "$1 ");
+                             convertFinal += convert + " ";
+                            
+                            }
+                             // Eliminar el espacio adicional al final y establecer el resultado en la tabla
+    convertFinal = convertFinal.trim();
+    tabla.setValueAt(convertFinal, i, 6);
+                        }
+
+                        
+                    }//Fin de validar si el postbyte termina DC.W
+                    
                     /*
                     //Etiquetas como Operando en los modos de direccionamiento DIR, EXT y IMM  
                     //Reconocer y establecer valores de etiqueta para DIR y EXT
