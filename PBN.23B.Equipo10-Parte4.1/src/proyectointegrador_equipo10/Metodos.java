@@ -364,6 +364,54 @@ public class Metodos {
         return "error";
     }
        
+    public static String cAHex(String texto) {
+        StringBuilder resultado = new StringBuilder();
+        for (char caracter : texto.toCharArray()) {
+            // Obtener el valor ASCII del caracter
+            int valorAscii = (int) caracter;
+            // Convertir el valor ASCII a hexadecimal
+            String valorHexadecimal = Integer.toHexString(valorAscii);
+            // Agregar el resultado al StringBuilder
+            resultado.append(valorHexadecimal);
+        }
+        return String.valueOf(resultado);
+    }
+
+    public static String concatS(String... cadenas) {
+        StringBuilder resultado = new StringBuilder();
+
+        for (String cadena : cadenas) {
+            resultado.append(cadena);
+        }
+
+        return resultado.toString();
+    }
+    
+    public static String binAHexa(String binario) {
+        // Convierte el binario a decimal
+        int decimal = Integer.parseInt(binario, 2);
+
+        // Convierte el decimal a hexadecimal
+        String hexadecimal = Integer.toHexString(decimal);
+
+        return hexadecimal.toUpperCase(); // Convierte a mayúsculas para consistencia
+    }
+    
+    public static String OctAHexa(String numeroOctal) {
+        try {
+            // Convertir el número octal a decimal
+            int decimal = Integer.parseInt(numeroOctal, 8);
+
+            // Convertir el decimal a hexadecimal
+            String hexadecimal = Integer.toHexString(decimal).toUpperCase();
+
+            return hexadecimal;
+        } catch (NumberFormatException e) {
+            // Manejar posibles errores al analizar el número
+            System.err.println("Error al convertir el número octal a hexadecimal: " + e.getMessage());
+            return null;  // O cualquier otro manejo de errores que desees
+        }
+    }
     /*
     public static boolean IsHexa(String x){
         char caractdel = '$';//Declaracion del caracter que se tiene que quitar para hacer la comparacion.
