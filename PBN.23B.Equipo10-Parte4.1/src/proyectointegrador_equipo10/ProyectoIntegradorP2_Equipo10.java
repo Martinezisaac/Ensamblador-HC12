@@ -607,6 +607,48 @@ public class ProyectoIntegradorP2_Equipo10 {
                         } //Validar si las etiquetas concuerdan
                     } //Fin de Validar si Direccionamiento = REL(16b) && Postbyte termina con "qq rr" 
                     
+                    else if(tabla.getValueAt(i, 2).equals("DC.B")) { //Validar si el postbyte termina DC.B
+                        
+                        if(tabla.getValueAt(i, 3).toString().startsWith("\"")){//se verifica si el operando inicia con "
+                           String cadena = tabla.getValueAt(i, 3).toString().replace("\"", "");//Se remplazan las comillas existentes por un epacio en blanco 
+                           String cadenaasci = Metodos.cAHex(cadena);//Se convierten en hexadecimal 
+                           String ValFinalHex = cadenaasci.replaceAll("(.{2})(?!$)", "$1 ");//Se separa la cadena de ASCII en hexadecimal por espacios
+                           tabla.setValueAt(ValFinalHex, i, 6); //Establecer postbyte en la tabla principal
+                        }  
+                        if(tabla.getValueAt(i, 3).toString().replace(" ", "").contains(",")){
+                            
+                            String opr = tabla.getValueAt(i, 3).toString().replace(" ", "");
+                            System.out.println("Operando= "+opr);
+                            
+                             String convertFinal = "";  
+                             
+                            String[] partes = opr.split(",");
+                            
+                            for (String elemento : partes){
+                                String convert;
+                            if(elemento.startsWith("%")){
+                                convert = Metodos.binAHexa(elemento.replace("%", ""));
+                                System.out.println("Valor de DC.B bintohexa = "+convert);
+                            }else if(elemento.startsWith("@")){
+                                convert = Metodos.OctAHexa(elemento.replace("@", ""));
+                                System.out.println("Valor de DC.B octtohexa = "+convert);
+                            }else if(elemento.startsWith("$")){
+                                convert = elemento.replace("$", "");
+                                System.out.println("Valor de DC.B sin $ = "+convert);
+                            }else{
+                                convert = Metodos.DecimalToHexadecimal(elemento);
+                                System.out.println("Valor de DC.B sin $ = "+convert);  
+                            }
+                             // Concatenar el resultado al final de la cadena
+                             convert = String.format("%02X", Long.parseLong(convert, 16));
+                             convertFinal += convert + " ";
+                            
+                            }
+                             // Eliminar el espacio adicional al final y establecer el resultado en la tabla
+    convertFinal = convertFinal.trim();
+    tabla.setValueAt(convertFinal, i, 6);
+                        }
+                    }
                     /*
                     //Etiquetas como Operando en los modos de direccionamiento DIR, EXT y IMM  
                     //Reconocer y establecer valores de etiqueta para DIR y EXT
