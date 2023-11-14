@@ -602,7 +602,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                             } //Fin de Origen < Destino
                             else if(Origen == Destino) { //Origen == Destino
                                 String PostbyteCalculado = Postbyte.replace("rr", "00"); //Reemplazar "rr" por el valor calculado
-                                tabla.setValueAt(PostbyteCalculado, i, 6); //Establecer postbyte en la tabla principal  
+                                tabla.setValueAt(PostbyteCalculado.toUpperCase(), i, 6); //Establecer postbyte en la tabla principal  
                             } //Fin de validar si Origen == Destino                           
                         } //Validar si las etiquetas concuerdan
                     } //Fin de Validar si Direccionamiento = REL(16b) && Postbyte termina con "qq rr" 
@@ -613,7 +613,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                            String cadena = tabla.getValueAt(i, 3).toString().replace("\"", "");//Se remplazan las comillas existentes por un epacio en blanco 
                            String cadenaasci = Metodos.cAHex(cadena);//Se convierten en hexadecimal 
                            String ValFinalHex = cadenaasci.replaceAll("(.{2})(?!$)", "$1 ");//Se separa la cadena de ASCII en hexadecimal por espacios
-                           tabla.setValueAt(ValFinalHex, i, 6); //Establecer postbyte en la tabla principal
+                           tabla.setValueAt(ValFinalHex.toUpperCase(), i, 6); //Establecer postbyte en la tabla principal
                         }  
                         if(tabla.getValueAt(i, 3).toString().replace(" ", "").contains(",")){
                             
@@ -646,7 +646,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                             }
                              // Eliminar el espacio adicional al final y establecer el resultado en la tabla
     convertFinal = convertFinal.trim();
-    tabla.setValueAt(convertFinal, i, 6);
+    tabla.setValueAt(convertFinal.toUpperCase(), i, 6);
                         }
                     }
               
@@ -670,7 +670,7 @@ public class ProyectoIntegradorP2_Equipo10 {
 
                             // Eliminar el espacio adicional al final y establecer el resultado en la tabla principal
                             String ValFinalHex = cadenaFormateada.toString().replaceAll("(.{2})(?!$)", "$1 ");
-                            tabla.setValueAt(ValFinalHex, i, 6);
+                            tabla.setValueAt(ValFinalHex.toUpperCase(), i, 6);
                         }  
                         if(tabla.getValueAt(i, 3).toString().replace(" ", "").contains(",")){
                             
@@ -703,7 +703,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                             }
                              // Eliminar el espacio adicional al final y establecer el resultado en la tabla
     convertFinal = convertFinal.trim();
-    tabla.setValueAt(convertFinal, i, 6);
+    tabla.setValueAt(convertFinal.toUpperCase(), i, 6);
                         }
 
                         
