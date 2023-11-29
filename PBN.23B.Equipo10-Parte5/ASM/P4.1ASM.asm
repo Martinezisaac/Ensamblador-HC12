@@ -1,0 +1,15 @@
+	ORG	0
+Et1:	LDAA	#$55	
+	LDX	#$1234
+	LDY	#%1100111
+Et1:	LDAA	85	
+	LDAA	$055
+	LDX	$20
+Valor1:	LDAA	@777	
+	LDAA	$FFFF
+	LDAA	$3800
+	ABA		
+	BGND	
+Et1:	END
+
+

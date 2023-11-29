@@ -1,0 +1,5 @@
+	ORG	0
+Et1:	LDAA	85	
+	LDAA	$055
+	LDX	$20
+	END
