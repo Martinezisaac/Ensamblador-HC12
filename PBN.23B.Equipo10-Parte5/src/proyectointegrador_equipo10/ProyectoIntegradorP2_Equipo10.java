@@ -14,6 +14,8 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,10 +32,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -81,7 +85,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             // Verificar archivo S19
             File archivoExistente3 = new File(ArchivoS19);  //Variable auxiliar
             if (archivoExistente3.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
-                archivoExistente3.delete(); //Eliminar LISTADO
+                archivoExistente3.delete(); //Eliminar S19
                 System.out.println("Archivo existente eliminado: " + ArchivoS19 + "\n"); //Mensaje de confirmacion 
             } //Fin de if
         
@@ -150,9 +154,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             int x = (screenSize.width - frame.getWidth()) / 2;
             int y = (screenSize.height - frame.getHeight()) / 2;
-            frame.setLocation(x, y);
-
-            frame.setVisible(true); //Hacer visible la tabla
+            frame.setLocation(x, y);           
             
             frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Evitar el cierre directo por defecto, cuando el usuario seleccione que no o seleccione la flecha de cierre entonces la tabla no se cierra
             
@@ -167,26 +169,54 @@ public class ProyectoIntegradorP2_Equipo10 {
                 //En caso de presionar que no, la ventana emergente se cierra y la tabla continua 
             } //Fin de windows Closing 
             }); //Fin de WindowsListener 
+            
+            // Crear un panel para los botones
+            JPanel panelBotones = new JPanel(new GridLayout(1, 3)); //Crear un panel 
+                     
+            // Cargar imágenes a cada boton
+            ImageIcon iconoReiniciar = new ImageIcon("Cargar.png");
+            ImageIcon iconoS19 = new ImageIcon("Obj.png");
+            ImageIcon iconoAbrirArchivos = new ImageIcon("File.png");
 
+            // Escalar las imágenes para que se ajusten al botón
+            Image imageReiniciar = iconoReiniciar.getImage().getScaledInstance(27, 27, Image.SCALE_SMOOTH);
+            Image imageS19 = iconoS19.getImage().getScaledInstance(27, 27, Image.SCALE_SMOOTH);
+            Image imageAbrirArchivos = iconoAbrirArchivos.getImage().getScaledInstance(27, 27, Image.SCALE_SMOOTH);           
+
+            //Creacion de botones
             //Crear boton para reinciar el programa y buscar otro archivo 
-            JButton BotonReiniciar = new JButton("Buscar otro ASM"); //Crear boton para buscar archivo nuevamente
+            JButton BotonReiniciar = new JButton("Cargar ASM", new ImageIcon(imageReiniciar));
+            JButton botonS19 = new JButton(new ImageIcon(imageS19));
+            
             Color ColorPersonalizado = new Color(220, 220, 220); // Color personalizado del boton: Color negro 
-            //BotonReiniciar.setForeground(Color.WHITE); // Color personalizado de la letra del boton: Color blanco
+            BotonReiniciar.setForeground(Color.BLACK); // Color personalizado de la letra del boton: Color blanco
             BotonReiniciar.setBackground(ColorPersonalizado); //Aplicar color al boton 
-            frame.add(BotonReiniciar, BorderLayout.SOUTH); //Agregar boton en la tabla en la parte inferior
+            //frame.add(BotonReiniciar, BorderLayout.SOUTH); //Agregar boton en la tabla en la parte inferior
+            
+            //Boton para abrir S19
+            JButton BotonS19 = new JButton("S19", new ImageIcon(imageS19)); //Crear boton para buscar archivo nuevamente
+            BotonS19.setBackground(ColorPersonalizado); //Aplicar color al boton 
             
             //Crear boton para reinciar el programa y buscar otro archivo 
-            JButton BotonAbrirArchivos = new JButton("Abrir LISTADO y TABSIM"); //Crear boton para buscar archivo nuevamente
-            Color ColorPersonalizado2 = new Color(220, 220, 220); // Color personalizado del boton: Color negro 
-            //BotonReiniciar.setForeground(Color.WHITE); // Color personalizado de la letra del boton: Color blanco
+            JButton BotonAbrirArchivos = new JButton("LST y TABSIM", new ImageIcon(imageAbrirArchivos)); //Crear boton para buscar archivo nuevamente
             BotonAbrirArchivos.setBackground(ColorPersonalizado); //Aplicar color al boton 
             frame.add(BotonAbrirArchivos, BorderLayout.WEST); //Agregar boton en la tabla en la parte inferior
-            
-            JTableHeader encabezado = tbl.getTableHeader(); //Asignar color a los headers 
+          
+            //Asignar color a los headers
+            JTableHeader encabezado = tbl.getTableHeader();
             encabezado.setForeground(Color.BLACK);
-            encabezado.setBackground(new Color(220, 220, 220));
+            encabezado.setBackground(new Color(132, 191, 227));
             
-            //tbl.setFont(new Font("Consolas", Font.PLAIN, 12)); //Asignar fuente a la tabla
+            //Asignar fuente a la tabla
+            tbl.setFont(new Font("Arial", Font.PLAIN, 12));
+            
+            // Agregar botones al panel                      
+            panelBotones.add(BotonS19);
+            panelBotones.add(BotonReiniciar);
+            panelBotones.add(BotonAbrirArchivos);
+            
+            frame.add(panelBotones, BorderLayout.SOUTH); //Mostrar panel con los botones 
+            frame.setVisible(true); //Hacer visible la tabla
             
             //Funcion para reiniciar el programa y abrirlo nuevamente en caso de apretar el boton para reiniciar 
             BotonReiniciar.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
@@ -964,7 +994,6 @@ public class ProyectoIntegradorP2_Equipo10 {
             ArchivoS19(S0, S1); //Funcion para escribir en el Archivo 
             
             // Abrir archivos TABSIM y LISTADO
-            //Funcion para reiniciar el programa y abrirlo nuevamente en caso de apretar el boton para reiniciar 
             BotonAbrirArchivos.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
                 @Override //Sobreescribir metodo
                 public void actionPerformed(ActionEvent u) { //Funcion para determinar la accion a realizar                  
@@ -975,18 +1004,46 @@ public class ProyectoIntegradorP2_Equipo10 {
 
                         Path filePathTABSIM = Paths.get("TABSIM.txt"); //Definir ruta del archivo 
                         Desktop.getDesktop().open(filePathTABSIM.toFile()); //Abrir el archivo TABSIM.txt
-                        
-                        Path filePathS19 = Paths.get("S19.obj"); //Definir ruta del archivo 
-                        Desktop.getDesktop().open(filePathS19.toFile()); //Abrir el archivo S19.obj
                     } //Fin de try 
                     catch (IOException e) {
                         e.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Ha ocurrido un Error, revise el archivo ASM", "Error", JOptionPane.INFORMATION_MESSAGE);
                         System.out.println("Error al crear el archivo");
-                    } //Fin de catch
-            
+                    } //Fin de catch            
                 } //Fin de action performed
             }); //Fin para reiniciar tabla
+            
+            //Funcion para abrir S19
+            BotonS19.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
+                @Override //Sobreescribir metodo
+                public void actionPerformed(ActionEvent S19) { //Funcion para determinar la accion a realizar                  
+                    try { //Impresion de los dos archivos 
+                        int respuesta = JOptionPane.showOptionDialog(null,"¿Quieres dejar la memoria libre para cargar otro programa?","Calcular S19",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Cerrar programa", "Dejar memoria libre"},"Cerrar programa");
+
+                        // Verificar la respuesta del usuario
+                        if (respuesta == JOptionPane.YES_OPTION) {
+                            // El usuario eligió "Cerrar programa"
+                            Path filePathS19 = Paths.get("S19.obj"); //Definir ruta del archivo 
+                            Desktop.getDesktop().open(filePathS19.toFile()); //Abrir el archivo S19.obj
+                        } //Fin de if  
+                        else if (respuesta == JOptionPane.NO_OPTION) {
+                            // El usuario eligió "Dejar memoria libre"
+                            Path filePathS19 = Paths.get("S19.obj"); //Definir ruta del archivo 
+                            Desktop.getDesktop().open(filePathS19.toFile()); //Abrir el archivo S19.obj
+                        } //Fin de else if
+                        else {
+                            // El usuario cerró el cuadro de diálogo o presionó ESC
+                            //No hace nada... 
+                        } //Fin de else   
+                    } //Fin de try 
+                    catch (IOException e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Ha ocurrido un Error, revise el archivo ASM", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println("Error al crear el archivo");
+                    } //Fin de catch         
+                } //Fin de action performed
+            }); //Fin para reiniciar tabla
+            
             
             /*
             try { //Impresion de los dos archivos
