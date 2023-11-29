@@ -990,19 +990,39 @@ public class ProyectoIntegradorP2_Equipo10 {
         } //Fin de else if 
     } //Fin de la funcion
     
-    public static String sumarHexadecimales(StringBuilder Postbytes) { //Funcion para sumar una linea de hexadecimales
-        // Dividir la línea en valores hexadecimales
-        String[] hexValores = Postbytes.toString().split("\\s+"); //Arreglo con Postbytes
-        int suma = 0; //Variable auxiliar para sumar 
    
-        for (String hexValor : hexValores) { // Sumar los valores hexadecimales convertidos a entero
-            suma += Integer.parseInt(hexValor, 16); //Acumulador 
-        } //Fin de for 
+  public static String sumarHexadecimales(StringBuilder Postbytes) {
+    // Dividir la línea en valores hexadecimales
+    String[] hexValores = Postbytes.toString().split("\\s+"); // Arreglo con Postbytes
+    int sumaTotal = 0; // Variable para almacenar la suma total
+    int contador = 0; // Contador para rastrear cada conjunto de 16 valores
 
-        // Convertir la suma a su representación hexadecimal
-        String sumaHexadecimal = Integer.toHexString(suma); //Convertir a hexadecimal 
-        return sumaHexadecimal.toUpperCase(); // Convertir a mayúsculas
-    } //Funcion para sumar hexadecimales 
+    for (String hexValor : hexValores) {
+        sumaTotal += Integer.parseInt(hexValor, 16); // Suma total
+
+        // Incrementar el contador
+        contador++;
+
+        // Verificar si se han procesado 16 valores
+        if (contador == 16) {
+            // Imprimir la suma parcial del conjunto de 16 valores
+            System.out.println("Suma parcial: " + Integer.toHexString(sumaTotal).toUpperCase());
+
+            // Reiniciar la suma y el contador para el próximo conjunto de 16 valores
+            sumaTotal = 0;
+            contador = 0;
+        }
+    }
+
+    // Imprimir la suma total si la cantidad de valores no es múltiplo de 16
+    if (contador > 0) {
+        System.out.println("Suma parcial: " + Integer.toHexString(sumaTotal).toUpperCase());
+    }
+
+    // Convertir la suma total a su representación hexadecimal
+    String sumaHexadecimal = Integer.toHexString(sumaTotal); // Convertir a hexadecimal 
+    return sumaHexadecimal.toUpperCase(); // Convertir a mayúsculas
+}
     
     public static String CheckSum(String ValorHexa) { //Funcion para devolver C1 de un hexadecimal
         int valorDecimal = Integer.parseInt(ValorHexa, 16); //Convertir a entero 
@@ -1017,5 +1037,5 @@ public class ProyectoIntegradorP2_Equipo10 {
         return complementoAUnoHex.substring(Math.max(complementoAUnoHex.length() - 2, 0)).toUpperCase();
         //return complementoAUnoHex.toUpperCase(); // Convertir a mayúsculas
     } //Fin de la funcion para hacer complemente a 1
-    
+        
 } //Fin de la clase principal
