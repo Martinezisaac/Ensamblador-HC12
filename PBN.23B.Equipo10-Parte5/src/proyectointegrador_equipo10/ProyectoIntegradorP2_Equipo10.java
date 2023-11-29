@@ -55,10 +55,13 @@ public class ProyectoIntegradorP2_Equipo10 {
         
         //Declaracion de variables auxiliares 
         String NombreArchivo = null; //Variable auxiliar para guardar el nombre del archivo 
+        String ValorORG = null; //Variable auxiliar para guardar el valor del ORG
+        String ValorEND = null; //Variable auxiliar para guardar el valor del END
         
         //Variables auxiliares para la creacion de archivos al final del procesamiento del ASM en su primera fase
         String ArchivoTABSIM = "TABSIM.txt"; //Declarar variable para archivo TABSIM
         String ArchivoLISTADO = "LISTADO.lst"; //Declarar variable para archivo LISTADO
+        String ArchivoS19 = "S19.obj"; //Declarar variable para archivo S19
         
             //Verificar si los archivos existen y eliminarlos en caso de que ya existan
             //Verificar archivo TABSIM
@@ -72,7 +75,14 @@ public class ProyectoIntegradorP2_Equipo10 {
             File archivoExistente2 = new File(ArchivoLISTADO);  //Variable auxiliar
             if (archivoExistente2.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
                 archivoExistente2.delete(); //Eliminar LISTADO
-                System.out.println("Archivo existente eliminado: " + ArchivoLISTADO + "\n"); //Mensaje de confirmacion 
+                System.out.println("Archivo existente eliminado: " + ArchivoLISTADO); //Mensaje de confirmacion 
+            } //Fin de if
+            
+            // Verificar archivo S19
+            File archivoExistente3 = new File(ArchivoS19);  //Variable auxiliar
+            if (archivoExistente3.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
+                archivoExistente3.delete(); //Eliminar LISTADO
+                System.out.println("Archivo existente eliminado: " + ArchivoS19 + "\n"); //Mensaje de confirmacion 
             } //Fin de if
         
         //Variables auxiliares
@@ -444,8 +454,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                     //System.out.println("EQU: " + linea.getEQUval()); //Impresion en consola
                     //System.out.println("EQU val = " + linea.getValor());
                 } //Fin de if 
-                
-                
+                               
                 //Devolver CONTLOC desde ORG sumando 
                 else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
                     try {
@@ -479,7 +488,12 @@ public class ProyectoIntegradorP2_Equipo10 {
                 
                 ArrayLinea.clear(); //Limpiar informacion de la linea para que no se duplique en el arraylist
                 
+                if(Linea != null && Linea.contains("ORG")) {
+                    ValorORG = linea.getValor();
+                } //Fin de if 
+                
                 if(Linea != null && Linea.contains("END")) { //Validar que la ultima linea sea el END
+                    ValorEND = linea.getValor();
                     break; //Salir del ciclo y terminar programa
                 } //Fin de if               
             } //Fin de while  
@@ -830,51 +844,126 @@ public class ProyectoIntegradorP2_Equipo10 {
             //Contenido de la tabla (1era Fase)
             System.out.println("\nTABLA (Fase 1) \n" + LineaCompleta.toString()); //Imprimir StringBuilder (Validamos el contenido de la tabla)
             //frame.setVisible(true); //Hacer visible la tabla
-            // Abrir archivos TABSIM y LISTADO
+                        
+            //Postbytes.append(" ");
+            //System.out.println(Postbytes); //Sirve para S1
+            //System.out.println(NombreArchivo); //Nombre del archivo 
+             
             
-            Postbytes.append(" ");
-            System.out.println(Postbytes);
-            System.out.println(NombreArchivo);
-            
-            StringBuilder resultadoHexadecimal = new StringBuilder();
-            
-        //Algoritmo para obtener los valores en hexadecimal con conversion ASCII
-        for (char caracter : NombreArchivo.toCharArray()) {
-            // Obtener el valor ASCII del carácter
-            int valorASCII = (int) caracter; //
 
-            // Convertir el valor a su representación hexadecimal
-            String valorHexadecimal = Integer.toHexString(valorASCII); //Convertir el valor a su representacion hexadecimal
-
-            // Agregar al resultado
-            resultadoHexadecimal.append(valorHexadecimal).append(" "); //Agregar el resultado en el Stringbuilder
-        } //Fin de for 
-
-        // Imprimir el resultado
-        System.out.println(resultadoHexadecimal.toString().trim());
+            // Imprimir el resultado
+            //System.out.println(resultadoHexadecimal.toString().trim());
         
-        String SUMA = sumarHexadecimales(Postbytes);
+            //String SUMA = sumarHexadecimales(Postbytes);
         
-        String C1 = CheckSum(SUMA);
+            //String C1 = CheckSum(SUMA);
         
-            System.out.println("total de la suma = " + SUMA);
-            System.out.println("C1 = " + C1);
+            //System.out.println("total de la suma = " + SUMA);
+            //System.out.println("C1 = " + C1);
+                  
             
-            //Calcular S19
-            //Calcular sn
-            //Calcular cc
-            //Calcular address
-            //Calcular data
-            //Calcular ck
+            S19 FileS19 = new S19(null, null, null, null, null); // Instanciar objeto S19 con variables inicializadas en null
+            
+            //String cantidadHexadecimales = contarHexadecimales(Postbytes);
+            //System.out.println(contarHexadecimales(Postbytes));
+            //System.out.println("Cantidad de hexadecimales: " + cantidadHexadecimales);
+            
+            
+            
             
             //Calcular S0
+            StringBuilder S0 = new StringBuilder();
+            StringBuilder Aux = new StringBuilder();
+            
+            //Algoritmo para obtener los valores en hexadecimal con conversion ASCII
+            StringBuilder resultadoHexadecimal = new StringBuilder();
+            for (char caracter : NombreArchivo.toCharArray()) {
+                // Obtener el valor ASCII del carácter
+                int valorASCII = (int) caracter;
+                String valorHexadecimal = Integer.toHexString(valorASCII).toUpperCase(); //Convertir el valor a su representacion hexadecimal
+                resultadoHexadecimal.append(valorHexadecimal).append(" "); //Agregar el resultado en el Stringbuilder
+            } //Fin de for 
+            
+            //Calcular Stipo, cc y address
+            FileS19.setSTipo("S0 "); //Calcular sn
+            FileS19.setCc(contarHexadecimales(resultadoHexadecimal) + " "); //Contar hexadecimales del nombre del archivo
+            FileS19.setAddress("00 00 "); //Definir Address
+            FileS19.setData(resultadoHexadecimal.toString()); //Obtener Data
+            
+            //Calcular checkSum
+            Aux.append(FileS19.getCc()).append(FileS19.getAddress()).append(FileS19.getData()); //StringBuilder con hexadecimales listos para sumarse
+            String SumaHexa = sumarHexadecimales(Aux); //Sumar Hexadecimales
+            FileS19.setCk(CheckSum(SumaHexa)); //Calcular CheckSum
+            //Impresion de S0     
+            S0.append(FileS19.getSTipo()).append(FileS19.getCc()).append(FileS19.getAddress()).append(FileS19.getData()).append(FileS19.getCk()); //Escribir S0          
             
             //Calcular S1
+            StringBuilder S1 = new StringBuilder();
+            //StringBuilder Aux1 = new StringBuilder();
             
+            String[] Elementos = Postbytes.toString().split(" ");           
+            ArrayList <ArrayList<String>> blocks = new ArrayList<>(); //Arraylist para almacenar bloques
+            
+            //Crear bloques de 16
+            for(int s = 0; s < Elementos.length; s += 16) { //Dividir en bloques de 16
+                ArrayList<String> block = new ArrayList<>();
+                for(int m = s; m < s + 16 && m < Elementos.length; m++) {
+                    block.add(Elementos[m]); //Crear bloque
+                } //Fin de for 
+                blocks.add(block);
+            } //Fin de for 
+            
+            for(ArrayList<String> block : blocks){
+                if(!block.isEmpty()) { //Validar si existen bloques vacios
+                    StringBuilder Aux1 = new StringBuilder(); //Reiniciar StrinBuilder por ciclo 
+                    String PrimerElemento = block.get(0); //Obtener primer elemento 
+                    int ContadorBytes = 0; //Contador de bytes
+                    
+                    for(int p = 0; p < block.size(); p++) {
+                        ContadorBytes += block.get(p).length()/2;
+                        Aux1.append(block.get(p)); //Guardar data en StringBuilder
+                    } //Fin de for
+                    
+                    String data = Aux1.toString(); //Pasar data a un Sring 
+                    data = data.replaceAll("(..)", "$1 "); //Separar de dos en dos
+                    
+                    ContadorBytes += 3; //Agregar Address y ck
+                    //System.out.println(PrimerElemento);
+                    String cc = String.format("%02x", ContadorBytes); //Rellenar con 0 en caso de necesitarlo
+                    //Aux1.append(ValorORG).append(block); //Stringbuilder con cc, address y data 
+                    StringBuilder AuxiliarCK = new StringBuilder(); //StringBuilderAuxiliar
+                    AuxiliarCK.append(cc.toUpperCase() + " ").append(ValorORG.replaceAll("(..)", "$1 ")).append(data); //Obtener cc, address y data                   
+                    
+                    String sumaHex = sumarHexadecimales(AuxiliarCK); //Sumar cc, address y data
+                    String ck = CheckSum(sumaHex); //Obtener ck
+                    block.set(0, "S1 " + cc.toUpperCase() + " " + ValorORG.replaceAll("(..)", "$1 ") + PrimerElemento); //Establecer bloque                
+                    ValorORG = Sumar10(ValorORG); //Sumar 10 
+                    //Sumar 10 al Address original
+                    
+                    for (String elemento : block) {
+                        S1.append(elemento).append(" "); //Agregar espacios por elemento insertado 
+                    } // Fin de for 
+                    S1.append(ck); //Agregar Checksum al Stringbuilder
+                    S1.append(System.lineSeparator()); //Separar cada bloque con una linea
+                } //Fin de if 
+            } //Fin de for 
+                    
+            //Impresion            
+            for(ArrayList<String>block:blocks){
+                for(String Elemento:block) {
+                    System.out.print(Elemento + " ");
+                } //Fin de for 
+                System.out.println("");
+            } //Fin de for 
+            
+
+            //System.out.println(S1);
             //Calcular S5
             
             //Calcular S9
-
+            ArchivoS19(S0, S1); //Funcion para escribir en el Archivo 
+            
+            // Abrir archivos TABSIM y LISTADO
             //Funcion para reiniciar el programa y abrirlo nuevamente en caso de apretar el boton para reiniciar 
             BotonAbrirArchivos.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
                 @Override //Sobreescribir metodo
@@ -886,6 +975,9 @@ public class ProyectoIntegradorP2_Equipo10 {
 
                         Path filePathTABSIM = Paths.get("TABSIM.txt"); //Definir ruta del archivo 
                         Desktop.getDesktop().open(filePathTABSIM.toFile()); //Abrir el archivo TABSIM.txt
+                        
+                        Path filePathS19 = Paths.get("S19.obj"); //Definir ruta del archivo 
+                        Desktop.getDesktop().open(filePathS19.toFile()); //Abrir el archivo S19.obj
                     } //Fin de try 
                     catch (IOException e) {
                         e.printStackTrace();
@@ -911,7 +1003,8 @@ public class ProyectoIntegradorP2_Equipo10 {
             } //Fin de catch
             */
              
-        } //Fin de try                        
+        } //Fin de try
+        
         catch (IOException e) { //Catch en caso de no poder abrir un archivo
             System.out.println("Error " + e.getMessage()); //Mensaje de error
             JOptionPane.showMessageDialog(null, "Ha ocurrido un Error, revise el archivo ASM", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -989,40 +1082,36 @@ public class ProyectoIntegradorP2_Equipo10 {
             } //Fin de catch 
         } //Fin de else if 
     } //Fin de la funcion
+     
+    private static void ArchivoS19(StringBuilder S0, StringBuilder S1) {
+        System.out.println("S19");
+        System.out.println(S0);
+        System.out.println(S1 + "\n");
+        
+        try (BufferedWriter w = new BufferedWriter(new FileWriter("S19.obj", true))) {            
+            w.write(S0.toString() + "\n"); //Escribir en archivo       
+            w.write(S1.toString());  
+        } //Fin de try
+        
+        catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error al crear el archivo");
+        } //Fin de catch
+    } //Fin de la funcion para escribir en archivo S19
     
+    public static String sumarHexadecimales(StringBuilder Postbytes) { //Funcion para sumar una linea de hexadecimales
+        // Dividir la línea en valores hexadecimales
+        String[] hexValores = Postbytes.toString().split("\\s+"); //Arreglo con Postbytes
+        int suma = 0; //Variable auxiliar para sumar 
    
-  public static String sumarHexadecimales(StringBuilder Postbytes) {
-    // Dividir la línea en valores hexadecimales
-    String[] hexValores = Postbytes.toString().split("\\s+"); // Arreglo con Postbytes
-    int sumaTotal = 0; // Variable para almacenar la suma total
-    int contador = 0; // Contador para rastrear cada conjunto de 16 valores
+        for (String hexValor : hexValores) { // Sumar los valores hexadecimales convertidos a entero
+            suma += Integer.parseInt(hexValor, 16); //Acumulador 
+        } //Fin de for 
 
-    for (String hexValor : hexValores) {
-        sumaTotal += Integer.parseInt(hexValor, 16); // Suma total
-
-        // Incrementar el contador
-        contador++;
-
-        // Verificar si se han procesado 16 valores
-        if (contador == 16) {
-            // Imprimir la suma parcial del conjunto de 16 valores
-            System.out.println("Suma parcial: " + Integer.toHexString(sumaTotal).toUpperCase());
-
-            // Reiniciar la suma y el contador para el próximo conjunto de 16 valores
-            sumaTotal = 0;
-            contador = 0;
-        }
-    }
-
-    // Imprimir la suma total si la cantidad de valores no es múltiplo de 16
-    if (contador > 0) {
-        System.out.println("Suma parcial: " + Integer.toHexString(sumaTotal).toUpperCase());
-    }
-
-    // Convertir la suma total a su representación hexadecimal
-    String sumaHexadecimal = Integer.toHexString(sumaTotal); // Convertir a hexadecimal 
-    return sumaHexadecimal.toUpperCase(); // Convertir a mayúsculas
-}
+        // Convertir la suma a su representación hexadecimal
+        String sumaHexadecimal = Integer.toHexString(suma); //Convertir a hexadecimal 
+        return sumaHexadecimal.toUpperCase(); // Convertir a mayúsculas
+    } //Funcion para sumar hexadecimales 
     
     public static String CheckSum(String ValorHexa) { //Funcion para devolver C1 de un hexadecimal
         int valorDecimal = Integer.parseInt(ValorHexa, 16); //Convertir a entero 
@@ -1037,5 +1126,27 @@ public class ProyectoIntegradorP2_Equipo10 {
         return complementoAUnoHex.substring(Math.max(complementoAUnoHex.length() - 2, 0)).toUpperCase();
         //return complementoAUnoHex.toUpperCase(); // Convertir a mayúsculas
     } //Fin de la funcion para hacer complemente a 1
-        
+    
+    public static String contarHexadecimales(StringBuilder Postbytes) {
+        // Dividir la línea en valores hexadecimales
+        String[] hexValores = Postbytes.toString().split("\\s+");
+
+        for (String hexValor : hexValores) {
+            System.out.print(hexValor + " "); //Agregar espacios 
+        } //Fin de for 
+        String cantidadHexadecimal = Integer.toHexString(hexValores.length + 3).toUpperCase();
+
+        // Asegurarse de que tenga al menos dos dígitos
+        cantidadHexadecimal = String.format("%02x", Integer.parseInt(cantidadHexadecimal, 16)).toUpperCase();
+
+        return cantidadHexadecimal;  // Convertir a mayúsculas y en hexadecimal, incluyendo ck
+    } //Fin de la funcion para contar hexadecimales
+    
+    public static String Sumar10(String valorHexadecimal) {
+        int valorDecimal = Integer.parseInt(valorHexadecimal, 16); //Convertir a decimal 
+        int resultadoDecimal = valorDecimal + 16; //Sumarle 16 en decimal (10 en hexadecimal)
+        String resultadoHexadecimal = Integer.toHexString(resultadoDecimal); //Convertir a hexadecimal
+        return resultadoHexadecimal.toUpperCase(); // Convertir a mayúsculas
+    } //Fin de la funcion para sumar 10
+    
 } //Fin de la clase principal
