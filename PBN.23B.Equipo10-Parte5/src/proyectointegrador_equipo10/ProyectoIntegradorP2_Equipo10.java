@@ -54,6 +54,7 @@ public class ProyectoIntegradorP2_Equipo10 {
     public static void main(String[] args) { //Inicio de Main
         
         //Declaracion de variables auxiliares 
+        String NombreArchivo = null; //Variable auxiliar para guardar el nombre del archivo 
         
         //Variables auxiliares para la creacion de archivos al final del procesamiento del ASM en su primera fase
         String ArchivoTABSIM = "TABSIM.txt"; //Declarar variable para archivo TABSIM
@@ -106,7 +107,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             
         try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) { //Intento para leer un archivo, el archivo debera contener un codigo en ensamblador para que el programa funcione de manera correcta    
             String Linea; //Variable auxiliar, todo lo que se lee en el archvio se guarda en este variable            
-           
+            NombreArchivo = fileChooser.getSelectedFile().getName(); //Obtener el nombre del archivo abierto 
             //Si el archivo se abre de manera correcta entonces entra al try y crea la tabla con la informacion del archivo .asm
             
             // Crear el modelo de datos para la JTable
@@ -449,8 +450,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 else if(linea.getTamaño() != null || linea.getTamaño() != "0") { //Validar si existe algo en tamaño 
                     try {
                         int conversion = Integer.parseInt(linea.getValor(), 16); //Variable auxiliar
-                    
-                    
+                                        
                     int tamañodecimal = Integer.parseInt(linea.getTamaño()); //Variable auxiliar 
                     int ValorDecimal = conversion + tamañodecimal; //Sumar variables auxiliares en decimal para posteriormente convertir a hexadecimal
 
@@ -484,6 +484,9 @@ public class ProyectoIntegradorP2_Equipo10 {
                 } //Fin de if               
             } //Fin de while  
             
+            String TodosPostbytes = null;
+            StringBuilder Postbytes = new StringBuilder();
+            
             /*
             Al termino del while la primera fase ha sido completada sin calcular los relativos de 8b, 9b, 16b, para ello se propone el siguiente algoritmo que consta de ciertas funciones
             para obtener y establecer valores en la misma tabla. Se decribe el funcionamiento de las funciones utilizadas:
@@ -512,7 +515,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 6 = Postbyte
             */
                        
-            for(int i = 0; i < tabla.getRowCount(); i++) { //for para contenido de la tabla
+            for(int i = 0; i < tabla.getRowCount(); i++) { //for para contenido de la tabla               
                 for(int u = 0; u <= numlineas-1; u++) { //Fin de for para contenido de TABSIM
                                      
                 ArchivoSalvacion tabsim = new ArchivoSalvacion("TABSIM.txt"); //Objeto con archivo TABSIM
@@ -707,7 +710,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                             convertFinal = convertFinal.trim();
                             tabla.setValueAt(convertFinal.toUpperCase(), i, 6);
                         }          
-                    }//Fin de validar si el postbyte termina DC.W
+                    }//Fin de validar si el postbyte termina DC.W                   
                     
                     /*
                     //Etiquetas como Operando en los modos de direccionamiento DIR, EXT y IMM  
@@ -771,11 +774,18 @@ public class ProyectoIntegradorP2_Equipo10 {
                     } //Fin de if
                 */
                 } //Fin de Validar si en operando existe una etiqueta ya registrada en TABSIM
-            } //Fin de for Tabla   
-            
-            
-            //ESPACIO PARA ALGORITMO PARA VALIDAR NUEVAMEBTE CONTLOC 
-                //Es necesario validar el CONTOLOC para modificar los tamaños modificados en el algoritmo anterior 
+                
+                //Obtener Postbyte de la tabla                   
+                    if(tabla.getValueAt(i, 6).equals("") || tabla.getValueAt(i, 6).toString().equalsIgnoreCase("Error Postbyte")){
+                        //Evitar Postbytes nulos o con errores 
+                    } //Fin de if para evitar nulos y errores
+                    else { //Guardar Postbytes que si tengan hexadecimales 
+                        TodosPostbytes = tabla.getValueAt(i, 6).toString() + " "; //
+                        System.out.println(TodosPostbytes); //Impresion de los Postbyte en orden
+                        Postbytes.append(TodosPostbytes); //Guardar Postbytes en StringBuilder en una sola linea 
+                    } //Fin de else 
+                    
+            } //Fin de for para contenido de la tabla  
                                
             //Impresion del arraylist con las etiquetas
             System.out.println("ETIQUETAS"); //Indicar impresion del TABSIM
@@ -822,6 +832,49 @@ public class ProyectoIntegradorP2_Equipo10 {
             //frame.setVisible(true); //Hacer visible la tabla
             // Abrir archivos TABSIM y LISTADO
             
+            Postbytes.append(" ");
+            System.out.println(Postbytes);
+            System.out.println(NombreArchivo);
+            
+            StringBuilder resultadoHexadecimal = new StringBuilder();
+            
+        //Algoritmo para obtener los valores en hexadecimal con conversion ASCII
+        for (char caracter : NombreArchivo.toCharArray()) {
+            // Obtener el valor ASCII del carácter
+            int valorASCII = (int) caracter; //
+
+            // Convertir el valor a su representación hexadecimal
+            String valorHexadecimal = Integer.toHexString(valorASCII); //Convertir el valor a su representacion hexadecimal
+
+            // Agregar al resultado
+            resultadoHexadecimal.append(valorHexadecimal).append(" "); //Agregar el resultado en el Stringbuilder
+        } //Fin de for 
+
+        // Imprimir el resultado
+        System.out.println(resultadoHexadecimal.toString().trim());
+        
+        String SUMA = sumarHexadecimales(Postbytes);
+        
+        String C1 = CheckSum(SUMA);
+        
+            System.out.println("total de la suma = " + SUMA);
+            System.out.println("C1 = " + C1);
+            
+            //Calcular S19
+            //Calcular sn
+            //Calcular cc
+            //Calcular address
+            //Calcular data
+            //Calcular ck
+            
+            //Calcular S0
+            
+            //Calcular S1
+            
+            //Calcular S5
+            
+            //Calcular S9
+
             //Funcion para reiniciar el programa y abrirlo nuevamente en caso de apretar el boton para reiniciar 
             BotonAbrirArchivos.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
                 @Override //Sobreescribir metodo
@@ -936,4 +989,33 @@ public class ProyectoIntegradorP2_Equipo10 {
             } //Fin de catch 
         } //Fin de else if 
     } //Fin de la funcion
+    
+    public static String sumarHexadecimales(StringBuilder Postbytes) { //Funcion para sumar una linea de hexadecimales
+        // Dividir la línea en valores hexadecimales
+        String[] hexValores = Postbytes.toString().split("\\s+"); //Arreglo con Postbytes
+        int suma = 0; //Variable auxiliar para sumar 
+   
+        for (String hexValor : hexValores) { // Sumar los valores hexadecimales convertidos a entero
+            suma += Integer.parseInt(hexValor, 16); //Acumulador 
+        } //Fin de for 
+
+        // Convertir la suma a su representación hexadecimal
+        String sumaHexadecimal = Integer.toHexString(suma); //Convertir a hexadecimal 
+        return sumaHexadecimal.toUpperCase(); // Convertir a mayúsculas
+    } //Funcion para sumar hexadecimales 
+    
+    public static String CheckSum(String ValorHexa) { //Funcion para devolver C1 de un hexadecimal
+        int valorDecimal = Integer.parseInt(ValorHexa, 16); //Convertir a entero 
+        int complementoAUnoDecimal = ~valorDecimal; // Aplicar el complemento a uno
+        String complementoAUnoHex = Integer.toHexString(complementoAUnoDecimal); //Convertir a hexadecimal 
+
+        while (complementoAUnoHex.length() < ValorHexa.length()) { //Rellenar con 0 en caso de necesitarlo 
+            complementoAUnoHex = "0" + complementoAUnoHex; 
+        } //Fin de while
+
+        //complementoAUnoHex.substring(Math.max(complementoAUnoHex.length() - 2,0));
+        return complementoAUnoHex.substring(Math.max(complementoAUnoHex.length() - 2, 0)).toUpperCase();
+        //return complementoAUnoHex.toUpperCase(); // Convertir a mayúsculas
+    } //Fin de la funcion para hacer complemente a 1
+    
 } //Fin de la clase principal
