@@ -820,7 +820,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                     } //Fin de if para evitar nulos y errores
                     else { //Guardar Postbytes que si tengan hexadecimales 
                         TodosPostbytes = tabla.getValueAt(i, 6).toString() + " "; //
-                        System.out.println(TodosPostbytes); //Impresion de los Postbyte en orden
+                        //System.out.println(TodosPostbytes); //Impresion de los Postbyte en orden
                         Postbytes.append(TodosPostbytes); //Guardar Postbytes en StringBuilder en una sola linea 
                     } //Fin de else 
                     
@@ -869,33 +869,21 @@ public class ProyectoIntegradorP2_Equipo10 {
             //Contenido de la tabla (1era Fase)
             System.out.println("\nTABLA (Fase 1) \n" + LineaCompleta.toString()); //Imprimir StringBuilder (Validamos el contenido de la tabla)
             //frame.setVisible(true); //Hacer visible la tabla
-                        
+                
+            //Pruebas de calculo
             //Postbytes.append(" ");
             //System.out.println(Postbytes); //Sirve para S1
             //System.out.println(NombreArchivo); //Nombre del archivo 
-             
-            
-
             // Imprimir el resultado
-            //System.out.println(resultadoHexadecimal.toString().trim());
-        
-            //String SUMA = sumarHexadecimales(Postbytes);
-        
-            //String C1 = CheckSum(SUMA);
-        
+            //System.out.println(resultadoHexadecimal.toString().trim());       
+            //String SUMA = sumarHexadecimales(Postbytes);      
+            //String C1 = CheckSum(SUMA);       
             //System.out.println("total de la suma = " + SUMA);
             //System.out.println("C1 = " + C1);
                   
             
             S19 FileS19 = new S19(null, null, null, null, null); // Instanciar objeto S19 con variables inicializadas en null
-            
-            //String cantidadHexadecimales = contarHexadecimales(Postbytes);
-            //System.out.println(contarHexadecimales(Postbytes));
-            //System.out.println("Cantidad de hexadecimales: " + cantidadHexadecimales);
-            
-            
-            
-            
+
             //Calcular S0
             StringBuilder S0 = new StringBuilder();
             StringBuilder Aux = new StringBuilder();
@@ -1040,13 +1028,13 @@ public class ProyectoIntegradorP2_Equipo10 {
                 @Override //Sobreescribir metodo
                 public void actionPerformed(ActionEvent S19) { //Funcion para determinar la accion a realizar                  
                     try { //Impresion de los dos archivos 
-                        int respuesta = JOptionPane.showOptionDialog(null,"¿Quieres dejar la memoria libre para cargar otro programa?","Calcular S19",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Cerrar programa", "Dejar memoria libre"},"Cerrar programa");
+                        int respuesta = JOptionPane.showOptionDialog(null,"Seleccione una opción para calcular S9","Calcular S19",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Cerrar programa", "Dejar memoria libre"},"Cerrar programa");
                         
                         // Verificar archivo S19
                         File archivoExistente3 = new File(ArchivoS19);  //Variable auxiliar
                         if (archivoExistente3.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
                             archivoExistente3.delete(); //Eliminar S19
-                            System.out.println("Archivo existente eliminado: " + ArchivoS19 + "\n"); //Mensaje de confirmacion 
+                            //System.out.println("Archivo existente eliminado: " + ArchivoS19 + "\n"); //Mensaje de confirmacion 
                         } //Fin de if
                         
                         // Verificar la respuesta del usuario
@@ -1242,7 +1230,9 @@ public class ProyectoIntegradorP2_Equipo10 {
     public static String Sumar10(String valorHexadecimal) {
         int valorDecimal = Integer.parseInt(valorHexadecimal, 16); //Convertir a decimal 
         int resultadoDecimal = valorDecimal + 16; //Sumarle 16 en decimal (10 en hexadecimal)
-        String resultadoHexadecimal = Integer.toHexString(resultadoDecimal); //Convertir a hexadecimal
+        //String resultadoHexadecimal = Integer.toHexString(resultadoDecimal); //Convertir a hexadecimal
+        
+        String resultadoHexadecimal = String.format("%04X", resultadoDecimal); //Completar ADDR 0s en caso de necesitarlo 
         return resultadoHexadecimal.toUpperCase(); // Convertir a mayúsculas
     } //Fin de la funcion para sumar 10
     
