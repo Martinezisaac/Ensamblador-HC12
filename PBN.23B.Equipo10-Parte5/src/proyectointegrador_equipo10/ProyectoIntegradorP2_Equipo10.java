@@ -27,8 +27,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,14 +83,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                 archivoExistente2.delete(); //Eliminar LISTADO
                 System.out.println("Archivo existente eliminado: " + ArchivoLISTADO); //Mensaje de confirmacion 
             } //Fin de if
-            
-            // Verificar archivo S19
-            File archivoExistente3 = new File(ArchivoS19);  //Variable auxiliar
-            if (archivoExistente3.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
-                archivoExistente3.delete(); //Eliminar S19
-                System.out.println("Archivo existente eliminado: " + ArchivoS19 + "\n"); //Mensaje de confirmacion 
-            } //Fin de if
-        
+
         //Variables auxiliares
         StringBuilder LineaCompleta = new StringBuilder(); //Declarar variable para aguardar el procesamiento de la linea leida por ASM
         int numlineas = 0; //Declarar variable para determinar el numero de lineas cada que existe una etiqueta
@@ -1011,7 +1006,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             
             //Calcular Stipo, cc y address
             FileS19.setSTipo("S9 "); //Calcular sn
-            FileS19.setCc("03" + " "); //Definir CC
+            FileS19.setCc("03 "); //Definir CC
             FileS19.setAddress(ValorEND.replaceAll("(.{2})(?!$)", "$1 ")+" ");
             //Calcular checkSum
             Auss9.append(FileS19.getCc()).append(FileS19.getAddress()); //StringBuilder con hexadecimales listos para sumarse
@@ -1019,9 +1014,6 @@ public class ProyectoIntegradorP2_Equipo10 {
             FileS19.setCk(CheckSum(SumaHexas9)); //Calcular CheckSum
             //Impresion de S5    
             s9.append(FileS19.getSTipo()).append(FileS19.getCc()).append(FileS19.getAddress()).append(FileS19.getCk()); //Escribir S5
-            
-             ArchivoS19(S0, S1, S5, s9); //Funcion para escribir en el Archivo 
-            
             
             // Abrir archivos TABSIM y LISTADO
             BotonAbrirArchivos.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
@@ -1049,22 +1041,36 @@ public class ProyectoIntegradorP2_Equipo10 {
                 public void actionPerformed(ActionEvent S19) { //Funcion para determinar la accion a realizar                  
                     try { //Impresion de los dos archivos 
                         int respuesta = JOptionPane.showOptionDialog(null,"¿Quieres dejar la memoria libre para cargar otro programa?","Calcular S19",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,new Object[]{"Cerrar programa", "Dejar memoria libre"},"Cerrar programa");
-
+                        
+                        // Verificar archivo S19
+                        File archivoExistente3 = new File(ArchivoS19);  //Variable auxiliar
+                        if (archivoExistente3.exists()) { //Si el archivo LISTADO, entonces se elimina para que se cree nuevamente y actualizar los cambios con cada ejecucion
+                            archivoExistente3.delete(); //Eliminar S19
+                            System.out.println("Archivo existente eliminado: " + ArchivoS19 + "\n"); //Mensaje de confirmacion 
+                        } //Fin de if
+                        
                         // Verificar la respuesta del usuario
                         if (respuesta == JOptionPane.YES_OPTION) {
                             // El usuario eligió "Cerrar programa"
+                            //Forma facil de calcular S9
+                            StringBuilder S9facil = new StringBuilder();
+                            S9facil.append("S9 ").append("03 ").append("00 00 ").append("FC"); //Escribir S5
+                            ArchivoS19(S0, S1, S5, S9facil); //Funcion para escribir en el Archivo
                             Path filePathS19 = Paths.get("S19.obj"); //Definir ruta del archivo 
                             Desktop.getDesktop().open(filePathS19.toFile()); //Abrir el archivo S19.obj
+                            //Files.write(filePathS19, "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING); //Reiniciar el archivo 
                         } //Fin de if  
                         else if (respuesta == JOptionPane.NO_OPTION) {
                             // El usuario eligió "Dejar memoria libre"
+                            ArchivoS19(S0, S1, S5, s9); //Funcion para escribir en el Archivo
                             Path filePathS19 = Paths.get("S19.obj"); //Definir ruta del archivo 
                             Desktop.getDesktop().open(filePathS19.toFile()); //Abrir el archivo S19.obj
+                            //Files.write(filePathS19, "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING); //Reiniciar el archivo 
                         } //Fin de else if
                         else {
                             // El usuario cerró el cuadro de diálogo o presionó ESC
                             //No hace nada... 
-                        } //Fin de else   
+                        } //Fin de else                         
                     } //Fin de try 
                     catch (IOException e) {
                         e.printStackTrace();
@@ -1170,19 +1176,18 @@ public class ProyectoIntegradorP2_Equipo10 {
         } //Fin de else if 
     } //Fin de la funcion
      
-    private static void ArchivoS19(StringBuilder S0, StringBuilder S1, StringBuilder S5, StringBuilder s9) {
+    private static void ArchivoS19(StringBuilder S0, StringBuilder S1, StringBuilder S5, StringBuilder S9) {
         System.out.println("S19");
         System.out.println(S0);
         System.out.print(S1);
         System.out.println(S5);
-        System.out.print(s9+ "\n");
-        
+        System.out.print(S9);      
         
         try (BufferedWriter w = new BufferedWriter(new FileWriter("S19.obj", true))) {            
             w.write(S0.toString() + "\n"); //Escribir en archivo       
             w.write(S1.toString()); 
-            w.write(S5.toString());
-            w.write(s9.toString());
+            w.write(S5.toString()  + "\n");
+            w.write(S9.toString());
         } //Fin de try
         
         catch (IOException e) {
