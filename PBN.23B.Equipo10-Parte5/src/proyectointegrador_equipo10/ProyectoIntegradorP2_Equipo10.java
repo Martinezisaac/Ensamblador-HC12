@@ -981,17 +981,31 @@ public class ProyectoIntegradorP2_Equipo10 {
             //Impresion            
             for(ArrayList<String>block:blocks){
                 for(String Elemento:block) {
-                    System.out.print(Elemento + " ");
+                    System.out.print(Elemento + " ");  
                 } //Fin de for 
                 System.out.println("");
             } //Fin de for 
             
-
             //System.out.println(S1);
             //Calcular S5
+            StringBuilder S5 = new StringBuilder();
+            StringBuilder AuxS5 = new StringBuilder();
             
+            //Calcular Stipo, cc y address
+            FileS19.setSTipo("S5 "); //Calcular sn
+            FileS19.setCc("03" + " "); //Definir CC
+            int s1num = blocks.size();
+            String ValFinalS5 = String.format("%04X", s1num).replaceAll("(.{2})(?!$)", "$1 ");
+            FileS19.setAddress(ValFinalS5 +" "); //Definir Address
+            //Calcular checkSum
+            AuxS5.append(FileS19.getCc()).append(FileS19.getAddress()); //StringBuilder con hexadecimales listos para sumarse
+            String SumaHexaS5 = sumarHexadecimales(AuxS5); //Sumar Hexadecimales
+            FileS19.setCk(CheckSum(SumaHexaS5)); //Calcular CheckSum
+            //Impresion de S5    
+            S5.append(FileS19.getSTipo()).append(FileS19.getCc()).append(FileS19.getAddress()).append(FileS19.getCk()); //Escribir S5
             //Calcular S9
-            ArchivoS19(S0, S1); //Funcion para escribir en el Archivo 
+            
+            ArchivoS19(S0, S1, S5); //Funcion para escribir en el Archivo 
             
             // Abrir archivos TABSIM y LISTADO
             BotonAbrirArchivos.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
@@ -1140,14 +1154,16 @@ public class ProyectoIntegradorP2_Equipo10 {
         } //Fin de else if 
     } //Fin de la funcion
      
-    private static void ArchivoS19(StringBuilder S0, StringBuilder S1) {
+    private static void ArchivoS19(StringBuilder S0, StringBuilder S1, StringBuilder S5) {
         System.out.println("S19");
         System.out.println(S0);
-        System.out.println(S1 + "\n");
+        System.out.print(S1);
+        System.out.println(S5+ "\n");
         
         try (BufferedWriter w = new BufferedWriter(new FileWriter("S19.obj", true))) {            
             w.write(S0.toString() + "\n"); //Escribir en archivo       
-            w.write(S1.toString());  
+            w.write(S1.toString()); 
+            w.write(S5.toString());
         } //Fin de try
         
         catch (IOException e) {
