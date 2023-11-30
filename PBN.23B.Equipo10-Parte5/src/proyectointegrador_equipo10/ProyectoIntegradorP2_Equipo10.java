@@ -966,6 +966,7 @@ public class ProyectoIntegradorP2_Equipo10 {
                     
                     String sumaHex = sumarHexadecimales(AuxiliarCK); //Sumar cc, address y data
                     String ck = CheckSum(sumaHex); //Obtener ck
+                    System.out.println("");
                     block.set(0, "S1 " + cc.toUpperCase() + " " + ValorORG.replaceAll("(..)", "$1 ") + PrimerElemento); //Establecer bloque                
                     ValorORG = Sumar10(ValorORG); //Sumar 10 
                     //Sumar 10 al Address original
@@ -1003,9 +1004,25 @@ public class ProyectoIntegradorP2_Equipo10 {
             FileS19.setCk(CheckSum(SumaHexaS5)); //Calcular CheckSum
             //Impresion de S5    
             S5.append(FileS19.getSTipo()).append(FileS19.getCc()).append(FileS19.getAddress()).append(FileS19.getCk()); //Escribir S5
-            //Calcular S9
             
-            ArchivoS19(S0, S1, S5); //Funcion para escribir en el Archivo 
+            //Calcular S9
+            StringBuilder s9 = new StringBuilder();
+            StringBuilder Auss9 = new StringBuilder();
+            
+            //Calcular Stipo, cc y address
+            FileS19.setSTipo("S9 "); //Calcular sn
+            FileS19.setCc("03" + " "); //Definir CC
+            
+           FileS19.setAddress(ValorEND +" "); //Definir Address
+            //Calcular checkSum
+            Auss9.append(FileS19.getCc()).append(FileS19.getAddress()); //StringBuilder con hexadecimales listos para sumarse
+            String SumaHexas9 = sumarHexadecimales(Auss9); //Sumar Hexadecimales
+            FileS19.setCk(CheckSum(SumaHexas9)); //Calcular CheckSum
+            //Impresion de S5    
+            s9.append(FileS19.getSTipo()).append(FileS19.getCc()).append(FileS19.getAddress()).append(FileS19.getCk()); //Escribir S5
+            
+             ArchivoS19(S0, S1, S5, s9); //Funcion para escribir en el Archivo 
+            
             
             // Abrir archivos TABSIM y LISTADO
             BotonAbrirArchivos.addActionListener(new ActionListener() { //Agregar un WindowsListener al boton de reiniciar
@@ -1154,16 +1171,19 @@ public class ProyectoIntegradorP2_Equipo10 {
         } //Fin de else if 
     } //Fin de la funcion
      
-    private static void ArchivoS19(StringBuilder S0, StringBuilder S1, StringBuilder S5) {
+    private static void ArchivoS19(StringBuilder S0, StringBuilder S1, StringBuilder S5, StringBuilder s9) {
         System.out.println("S19");
         System.out.println(S0);
         System.out.print(S1);
-        System.out.println(S5+ "\n");
+        System.out.println(S5);
+        System.out.print(s9+ "\n");
+        
         
         try (BufferedWriter w = new BufferedWriter(new FileWriter("S19.obj", true))) {            
             w.write(S0.toString() + "\n"); //Escribir en archivo       
             w.write(S1.toString()); 
             w.write(S5.toString());
+            w.write(s9.toString());
         } //Fin de try
         
         catch (IOException e) {
