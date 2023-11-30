@@ -1012,8 +1012,7 @@ public class ProyectoIntegradorP2_Equipo10 {
             //Calcular Stipo, cc y address
             FileS19.setSTipo("S9 "); //Calcular sn
             FileS19.setCc("03" + " "); //Definir CC
-            
-           FileS19.setAddress(ValorEND +" "); //Definir Address
+            FileS19.setAddress(ValorEND.replaceAll("(.{2})(?!$)", "$1 ")+" ");
             //Calcular checkSum
             Auss9.append(FileS19.getCc()).append(FileS19.getAddress()); //StringBuilder con hexadecimales listos para sumarse
             String SumaHexas9 = sumarHexadecimales(Auss9); //Sumar Hexadecimales
