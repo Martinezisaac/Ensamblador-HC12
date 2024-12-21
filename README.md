@@ -75,9 +75,12 @@ Manejo de instrucciones y operandos no válidos.
 - No es un número válido de acuerdo con su sistema decimal
 
 ### Ejemplo de números imposibles de calcular
-- Operando -> #$FFt | "t" no es parte de los hexadecimales
-- Operando -> #ABC | El número está en sistema hexadecimal y no tiene su prefijo
-- Operando -> #FFFF | El número es mayor a 65536 en sistema decimal, por lo que causa un desbordamiento de memoria 
+| **Operando**    | **Descripción**                                                                                                 |
+|-----------------|-----------------------------------------------------------------------------------------------------------------|
+| `#$FFt`          | `"t"` no es parte de los hexadecimales. El operando está en formato hexadecimal, pero "t" no es un valor válido. |
+| `#ABC`           | El número está en sistema hexadecimal y no tiene su prefijo (se debe representar como `$ABC`).                 |
+| `#FFFF`          | El número es mayor a 65536 en sistema decimal, lo que causa un desbordamiento de memoria.                        |
+
 <br> <br>
 
 
