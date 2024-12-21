@@ -99,4 +99,4 @@ Manejo de instrucciones y operandos no válidos.
 4. Proporciona un archivo ensamblador válido para procesar las instrucciones del HC12 (en la carpeta ASM se proporcionan un conjunto de archivos para probar).
 
 ## Funcionamiento:
-![https:markdown-videos.deta.dev//youtube.com/video/tO-ZP9a9r44](https://youtube.com/video/tO-ZP9a9r44)
+[![](https:markdown-videos.deta.dev//youtube.com/video/tO-ZP9a9r44)](https://youtube.com/video/tO-ZP9a9r44)
