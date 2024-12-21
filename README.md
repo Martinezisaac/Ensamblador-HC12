@@ -10,7 +10,6 @@ El ensamblador HC12 es un lenguaje de programación de bajo nivel específico pa
 El proyecto tiene fines educativos y busca ayudar a entender los principios de un ensamblador, las operaciones del procesador HC12, y la gestión de sus instrucciones en bajo nivel.
 <br> <br>
 
-
 ## Funcionalidades principales:
 Lectura de archivos de entrada:
 
@@ -98,3 +97,6 @@ Manejo de instrucciones y operandos no válidos.
 2. Carga el proyecto en tu IDE favorito.
 3. Compila y ejecuta la clase principal, el programa terminado se encuentra disponible dentro de la carpeta "Parte 5". También es posible utilizar los archivos .JAR para ejecutar de manera directa.  
 4. Proporciona un archivo ensamblador válido para procesar las instrucciones del HC12 (en la carpeta ASM se proporcionan un conjunto de archivos para probar).
+
+## Funcionamiento:
+![Ensamblador HC12](media/HC12_video.mp4)
