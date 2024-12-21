@@ -7,7 +7,7 @@ El ensamblador HC12 es un lenguaje de programación de bajo nivel específico pa
 
 ## Objetivo:
 El proyecto tiene fines educativos y busca ayudar a entender los principios de un ensamblador, las operaciones del procesador HC12, y la gestión de sus instrucciones en bajo nivel.
-
+<br> <br>
 
 
 ## Funcionalidades principales:
@@ -16,14 +16,14 @@ Lectura de archivos de entrada:
 1. Soporte para archivos con código fuente en formato ensamblador (ASM).
 2. Identificación de etiquetas, códigos operando, tamaño y modo de direccionamiento.
 3. Cálculo del postbyte:
-
+<br> <br>
 
 
 ## Descripción de Prefijos para los sistemas númericos
 | **Binario** | **Octal** | **Hexadecimal** | **Decimal** |
 | ----- | ------------- | ------------ | --- | 
 | % | @ | $ | No tiene símbolo |  
-
+<br> <br>
 
 
 ## Determinación del postbyte según las instrucciones específicas del HC12.
@@ -35,7 +35,7 @@ Lectura de archivos de entrada:
 | **Modo de direccionamiento**  | ADDR               | Especifica cómo se obtiene la dirección o el operando para una instrucción. En el HC12, existen diferentes tipos de modos de direccionamiento que determinan cómo se accede a los datos. |
 | **Tamaño**                    | SIZE            | Cantidad de bytes que ocupa una instrucción en memoria.                         |
 | **Postbyte**                  | POSTBYTE        | Define la longitud de la instrucción en hexadecimal.                           |
-
+<br> <br>
 
 
 ## Tipos de modos de direccionamiento 
@@ -54,7 +54,7 @@ Lectura de archivos de entrada:
 | **Indexado Acumulador Indirecto**   | [D,IDX]         | Solo el registro `D` antes de la coma y un registro válido (X, Y, SP, PC) después, con corchetes.                                                  | JMP [D,PC], ADCA [D,X]              |
 | **Relativo**                        | REL             | El operando es una etiqueta que cumple las reglas de escritura de etiquetas, y la instrucción puede ser de 8 o 16 bits.                           | LBRA DOS_2, BRA Tres                |
 | **Relativo con Ciclo**              | REL             | El operando incluye un registro (A, B, D, X, Y, SP) seguido de una etiqueta.                                                                      | IBNE A, Tres                         |
-
+<br> <br>
 
 
 ## Detección de errores de sintaxis en el código ensamblador.
@@ -77,7 +77,7 @@ Manejo de instrucciones y operandos no válidos.
 - Operando -> #$FFt | "t" no es parte de los hexadecimales
 - Operando -> #ABC | El número está en sistema hexadecimal y no tiene su prefijo
 - Operando -> #FFFF | El número es mayor a 65536 en sistema decimal, por lo que causa un desbordamiento de memoria 
-
+<br> <br>
 
 
 ## Requisitos del sistema:
@@ -85,7 +85,7 @@ Manejo de instrucciones y operandos no válidos.
 2. Un editor de texto o IDE (como IntelliJ IDEA o Eclipse) para ejecutar el proyecto.
 3. Archivos ASM
 4. Es posible descargar la carpeta de "Ejecutables" y "ASM". Los ejecutables son archivos .JAR que se podrán ejecutar de manera directa sin utilizar una IDE, el uso de este programa requiere de archivos ASM, mismos que se proporcionan en el repositorio, la carpeta "ASM" cuenta con varios archivos para probar el programa, con diferentes modos de direccionamiento, incluso con errores, para hacer uso se recomienda leer los manueles y ver los ejemplos proporcionados 
-
+<br> <br>
 
 
 ## Cómo usar:
