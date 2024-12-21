@@ -4,7 +4,7 @@ El ensamblador HC12 es un lenguaje de programación de bajo nivel específico pa
 <br> <br>
 
 ![Ensamblador HC12](media/HC12.jpg)
-
+<br> <br>
 
 ## Objetivo:
 El proyecto tiene fines educativos y busca ayudar a entender los principios de un ensamblador, las operaciones del procesador HC12, y la gestión de sus instrucciones en bajo nivel.
@@ -82,6 +82,7 @@ Manejo de instrucciones y operandos no válidos.
 | `#ABC`           | El número está en sistema hexadecimal y no tiene su prefijo (se debe representar como `$ABC`).                 |
 | `#FFFF`          | El número es mayor a 65536 en sistema decimal, lo que causa un desbordamiento de memoria.                        |
 
+![Error Ensamblador HC12](media/HC12_Errors.jpg)
 <br> <br>
 
 
