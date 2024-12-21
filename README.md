@@ -18,6 +18,8 @@ Lectura de archivos de entrada:
 | % | @ | $ | No tiene símbolo |  
 
 ## Determinación del postbyte según las instrucciones específicas del HC12.
+| **Elemento**                  | **Abreviatura** | **Descripción** |
+|-------------------------------|-----------------|---------------------------------------------------------------------------------|
 | **Contador de programa**      | CONTLOC         | Mantiene la sumatoria de acuerdo a las instrucciones proporcionadas.            |
 | **Etiqueta**                  | ETQ             | Etiquetas encontradas en el archivo ASM.                                        |
 | **Código Operando**           | OPR             | Número decimal, binario, octal o hexadecimal.                                  |
