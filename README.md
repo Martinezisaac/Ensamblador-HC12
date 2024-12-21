@@ -14,14 +14,14 @@ Lectura de archivos de entrada:
 
 ##Descripción de Prefijos para los sistemas númericos
 | Binario | Octal |  Hexadecimal |  Decimal |
-| ----- | ------------- | ------------ |  
+| ----- | ------------- | ------------ | --- | 
 | % | @ | $ | No tiene símbolo |  
 
 ## Determinación del postbyte según las instrucciones específicas del HC12.
 | Contador de programa | CONTLOC | Mantiene la sumatoria de acuerdo a las instrucciones proporcionadas | 
 | Etiqueta | ETQ | Etiquetas encontradas en el archivo ASM | 
 | Código Operando | OPR | Número decimal, binario, octal o hexadecimal | 
-| Modo de direccionamiento | especifica cómo se obtiene la dirección o el operando para una instrucción. En el HC12, existen diferentes tipos de modos de direccionamiento que determinan cómo se accede a los datos | 
+| Modo de direccionamiento | ADDR | especifica cómo se obtiene la dirección o el operando para una instrucción. En el HC12, existen diferentes tipos de modos de direccionamiento que determinan cómo se accede a los datos | 
 | Tamaño | SIZE | Cantidad de bytes que ocupa una instrucción en memoria | 
 | Postbyte | POSTBYTE | Define la longitud de la instrucción en hexadecimal | 
 
