@@ -99,4 +99,4 @@ Manejo de instrucciones y operandos no válidos.
 4. Proporciona un archivo ensamblador válido para procesar las instrucciones del HC12 (en la carpeta ASM se proporcionan un conjunto de archivos para probar).
 
 ## Funcionamiento:
-![Ensamblador HC12](media/HC12_video.mp4)
+![Ensamblador HC12](https://youtu.be/tO-ZP9a9r44)
