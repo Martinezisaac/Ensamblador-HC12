@@ -13,17 +13,17 @@ Lectura de archivos de entrada:
 3. Cálculo del postbyte:
 
 ##Descripción de Prefijos para los sistemas númericos
-| Binario | Octal |  Hexadecimal |  Decimal |
+| **Binario** | **Octal** | **Hexadecimal** | **Decimal** |
 | ----- | ------------- | ------------ | --- | 
 | % | @ | $ | No tiene símbolo |  
 
 ## Determinación del postbyte según las instrucciones específicas del HC12.
-| Contador de programa | CONTLOC | Mantiene la sumatoria de acuerdo a las instrucciones proporcionadas | 
-| Etiqueta | ETQ | Etiquetas encontradas en el archivo ASM | 
-| Código Operando | OPR | Número decimal, binario, octal o hexadecimal | 
-| Modo de direccionamiento | ADDR | especifica cómo se obtiene la dirección o el operando para una instrucción. En el HC12, existen diferentes tipos de modos de direccionamiento que determinan cómo se accede a los datos | 
-| Tamaño | SIZE | Cantidad de bytes que ocupa una instrucción en memoria | 
-| Postbyte | POSTBYTE | Define la longitud de la instrucción en hexadecimal | 
+| **Contador de programa**      | CONTLOC         | Mantiene la sumatoria de acuerdo a las instrucciones proporcionadas.            |
+| **Etiqueta**                  | ETQ             | Etiquetas encontradas en el archivo ASM.                                        |
+| **Código Operando**           | OPR             | Número decimal, binario, octal o hexadecimal.                                  |
+| **Modo de direccionamiento**  | ADDR               | Especifica cómo se obtiene la dirección o el operando para una instrucción. En el HC12, existen diferentes tipos de modos de direccionamiento que determinan cómo se accede a los datos. |
+| **Tamaño**                    | SIZE            | Cantidad de bytes que ocupa una instrucción en memoria.                         |
+| **Postbyte**                  | POSTBYTE        | Define la longitud de la instrucción en hexadecimal.                           |
 
 ## Tipos de modos de direccionamiento 
 
@@ -31,7 +31,7 @@ Lectura de archivos de entrada:
 Manejo de instrucciones y operandos no válidos.
 1. En caso de que exista un error el programa encontrará y marcara el error:
    
-| Contador de programa | Operando |  ADDR |  Postbyte |
+| **Contador de programa** | **Operando** |  **ADDR** |  **Postbyte** |
 | ------------ | ------------ | ------------ | ------------ | 
 | Desbordamiento | Error OPR | Error DIR | Error Postbyte |
 | Número imposible de calcular | #$FFt | Código operando erróneo | Número imposible de calcular | 
