@@ -23,8 +23,8 @@ Lectura de archivos de entrada:
 | **Binario** | **Octal** | **Hexadecimal** | **Decimal** |
 | ----- | ------------- | ------------ | --- | 
 | % | @ | $ | No tiene símbolo |  
+---
 <br> <br>
-
 
 ## Determinación del postbyte según las instrucciones específicas del HC12.
 | **Elemento**                  | **Abreviatura** | **Descripción** |
@@ -36,6 +36,7 @@ Lectura de archivos de entrada:
 | **Tamaño**                    | SIZE            | Cantidad de bytes que ocupa una instrucción en memoria.                         |
 | **Postbyte**                  | POSTBYTE        | Define la longitud de la instrucción en hexadecimal.                           |
 ---
+<br> <br>
 
 
 ## Tipos de modos de direccionamiento 
