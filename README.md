@@ -82,6 +82,7 @@ Manejo de instrucciones y operandos no válidos.
 | `#ABC`           | El número está en sistema hexadecimal y no tiene su prefijo (se debe representar como `$ABC`).                 |
 | `#FFFF`          | El número es mayor a 65536 en sistema decimal, lo que causa un desbordamiento de memoria.                        |
 <br>
+
 ![Error Ensamblador HC12](media/HC12_Errors.jpg)
 <br> <br>
 
