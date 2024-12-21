@@ -23,7 +23,7 @@ Lectura de archivos de entrada:
 | **Binario** | **Octal** | **Hexadecimal** | **Decimal** |
 | ----- | ------------- | ------------ | --- | 
 | % | @ | $ | No tiene símbolo |  
----
+
 <br> <br>
 
 ## Determinación del postbyte según las instrucciones específicas del HC12.
@@ -35,7 +35,7 @@ Lectura de archivos de entrada:
 | **Modo de direccionamiento**  | ADDR               | Especifica cómo se obtiene la dirección o el operando para una instrucción. En el HC12, existen diferentes tipos de modos de direccionamiento que determinan cómo se accede a los datos. |
 | **Tamaño**                    | SIZE            | Cantidad de bytes que ocupa una instrucción en memoria.                         |
 | **Postbyte**                  | POSTBYTE        | Define la longitud de la instrucción en hexadecimal.                           |
----
+
 <br> <br>
 
 
@@ -55,8 +55,8 @@ Lectura de archivos de entrada:
 | **Indexado Acumulador Indirecto**   | [D,IDX]         | Solo el registro `D` antes de la coma y un registro válido (X, Y, SP, PC) después, con corchetes.                                                  | JMP [D,PC], ADCA [D,X]              |
 | **Relativo**                        | REL             | El operando es una etiqueta que cumple las reglas de escritura de etiquetas, y la instrucción puede ser de 8 o 16 bits.                           | LBRA DOS_2, BRA Tres                |
 | **Relativo con Ciclo**              | REL             | El operando incluye un registro (A, B, D, X, Y, SP) seguido de una etiqueta.                                                                      | IBNE A, Tres                         |
----
 
+<br> <br>
 
 ## Detección de errores de sintaxis en el código ensamblador.
 Manejo de instrucciones y operandos no válidos.
