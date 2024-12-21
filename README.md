@@ -1,11 +1,11 @@
 # HC12
 
 El ensamblador HC12 es un lenguaje de programación de bajo nivel específico para los microcontroladores de la familia HC12 (también conocida como HCS12) de Freescale Semiconductor, que anteriormente formaba parte de Motorola. Estos microcontroladores son utilizados en una amplia gama de aplicaciones embebidas debido a su capacidad y versatilidad. Este proyecto implementa un ensamblador para el procesador HC12, diseñado en Java, que realiza las operaciones esenciales para interpretar y ejecutar instrucciones en este microcontrolador. Es ideal para quienes desean comprender mejor el funcionamiento del ensamblador y cómo interactúa con las instrucciones de bajo nivel.
----
+
 
 ## Objetivo:
 El proyecto tiene fines educativos y busca ayudar a entender los principios de un ensamblador, las operaciones del procesador HC12, y la gestión de sus instrucciones en bajo nivel.
----
+
 
 ## Funcionalidades principales:
 Lectura de archivos de entrada:
@@ -13,7 +13,7 @@ Lectura de archivos de entrada:
 1. Soporte para archivos con código fuente en formato ensamblador (ASM).
 2. Identificación de etiquetas, códigos operando, tamaño y modo de direccionamiento.
 3. Cálculo del postbyte:
---- 
+
 
 ## Descripción de Prefijos para los sistemas númericos
 | **Binario** | **Octal** | **Hexadecimal** | **Decimal** |
