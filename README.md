@@ -97,6 +97,3 @@ Manejo de instrucciones y operandos no válidos.
 2. Carga el proyecto en tu IDE favorito.
 3. Compila y ejecuta la clase principal, el programa terminado se encuentra disponible dentro de la carpeta "Parte 5". También es posible utilizar los archivos .JAR para ejecutar de manera directa.  
 4. Proporciona un archivo ensamblador válido para procesar las instrucciones del HC12 (en la carpeta ASM se proporcionan un conjunto de archivos para probar).
-
-## Funcionamiento:
-[![Texto alternativo del video](https://img.youtube.com/vi/tO-ZP9a9r44/0.jpg)](https://youtu.be/tO-ZP9a9r44)
